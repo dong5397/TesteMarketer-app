@@ -1,5 +1,11 @@
+import Header from "../components/Header";
+
 function Sub1() {
-  return <>서브 페이지</>;
+  return (
+    <>
+      <Header />
+    </>
+  );
 }
 
 export default Sub1;

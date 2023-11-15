@@ -1,9 +1,12 @@
-import { useState } from "react";
-
+import Home from "./page/Home";
+import Sub1 from "./page/Sub1";
 function App() {
-  const [count, setCount] = useState(0);
-
-  return <>hello</>;
+  return (
+    <>
+      <Home />;
+      <Sub1 />
+    </>
+  );
 }
 
 export default App;

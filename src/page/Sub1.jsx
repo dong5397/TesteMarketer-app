@@ -1,11 +1,5 @@
-import Header from "../components/Header";
-
 function Sub1() {
-  return (
-    <>
-      <Header />
-    </>
-  );
+  return <></>;
 }
 
 export default Sub1;

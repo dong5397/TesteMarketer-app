@@ -1,10 +1,11 @@
-import Header from "../components/Header";
+import Sidebar from "./Sidebar";
 
 function Home() {
   return (
     <>
-      <Header />
-      <div>메인페이지 내용</div>
+      <div>
+        <Sidebar></Sidebar>
+      </div>
     </>
   );
 }

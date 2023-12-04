@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import MenuButton from "./MenuButton";
 
 function Header() {
   return (
@@ -12,11 +13,8 @@ function Header() {
           />
         </Link>
       </Cell>
-      <Cell className="right">
-        <Link to={"/sub1"}>서브1</Link>
-        <Link to={"/sub2"}>서브2</Link>
-        <Link to={"/sub3"}>서브3</Link>
-      </Cell>
+
+      <MenuButton />
     </Container>
   );
 }

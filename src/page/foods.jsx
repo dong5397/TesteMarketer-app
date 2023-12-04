@@ -1,4 +1,4 @@
-function Sidebar() {
+function foods() {
   return (
     <>
       <div>음식점 사진</div>
@@ -6,4 +6,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;
+export default foods;

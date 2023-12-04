@@ -1,10 +1,10 @@
-import Sidebar from "./Sidebar";
+import Foods from "./foods";
 
 function Home() {
   return (
     <>
       <div>
-        <Sidebar></Sidebar>
+        <Foods></Foods>
       </div>
     </>
   );

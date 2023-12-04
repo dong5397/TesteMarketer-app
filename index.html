@@ -7,9 +7,11 @@
     <title>대전 맛집</title>
     <style>
       #map {
+        position: fixed;
+        bottom: 0;
+        right: 0;
         width: 70%;
-        height: 1000px;
-        float: right;
+        height: 80%;
       }
     </style>
     <script
@@ -20,17 +22,17 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    <div id="map"></div>
     <script>
       window.onload = function () {
-        var mapContainer = document.getElementById("map"), // 지도를 표시할 div
+        var mapContainer = document.getElementById("map"),
           mapOption = {
-            center: new kakao.maps.LatLng(36.3504, 127.3845), // 지도의 중심좌표를 대전으로 설정
-            level: 8, // 지도의 확대 레벨
+            center: new kakao.maps.LatLng(36.3504, 127.3845),
+            level: 8,
           };
 
-        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOption);
       };
     </script>
+    <div id="map"></div>
   </body>
 </html>

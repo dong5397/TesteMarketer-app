@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
 import styled from "styled-components";
-
+import KakaoLogin from "./KakoLogin";
 function MenuButton() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -17,7 +17,7 @@ function MenuButton() {
       </Button>
       <MenuList isOpen={isOpen}>
         <MenuItem>
-          <MenuLink to="/sub1">로그인</MenuLink>
+          <MenuLink to="/login">로그인</MenuLink>
         </MenuItem>
         <MenuItem>
           <MenuLink to="/sub2">내정보</MenuLink>
@@ -78,6 +78,3 @@ const MenuLink = styled(Link)`
     color: #007bff;
   }
 `;
-//위의 코드에서는 `MenuList` 컴포넌트의 `align-items` 속성을 `flex-start`로 수정하여 메뉴 항목들이 왼쪽으로 정렬되도록 변경되었습니다.
-
-//이렇게 코드를 수정하시면 메뉴 버튼을 눌렀을 때 메뉴가 왼쪽으로 나타날 것입니다. 필요에 따라 추가적인 스타일링을 적용하시면 됩니다. 만약 여전히 원하는 결과를 얻지 못하신다면, 코드와 함께 원하시는 메뉴 버튼의 모습을 자세히 설명해주시면 더 도움을 드릴 수 있을 것입니다.

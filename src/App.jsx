@@ -3,6 +3,7 @@ import Home from "./page/Home";
 import Sub1 from "./page/Sub1";
 import Header from "./components/Header";
 import NavigationBar from "./components/NavigationBar";
+import KakaoLogin from "./components/KakoLogin";
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
       <NavigationBar />
       <Routes>
         <Route index element={<Home />} />
-        <Route path="sub1" element={<Sub1 />} />
+        <Route path="login" element={<KakaoLogin />} />
       </Routes>
     </BrowserRouter>
   );

@@ -15,7 +15,7 @@ const RestaurantList = () => {
               Authorization: "KakaoAK 92be558050bf327c8f008ccd01021afd",
             },
             params: {
-              query: searchTerm,
+              query: searchTerm + " 대전",
             },
           }
         );
@@ -35,6 +35,15 @@ const RestaurantList = () => {
     setSearchTerm(e.target.value);
   };
 
+  // 음식점만 필터링하여 반환하는 함수
+  const filterRestaurants = () => {
+    return restaurants.filter((restaurant) => {
+      // 여기에 음식점 필터링 조건을 작성합니다.
+      // 예시: 카테고리가 "음식점"인 경우에만 필터링
+      return restaurant.category_group_code === "FD6";
+    });
+  };
+
   return (
     <div>
       <input
@@ -47,7 +56,7 @@ const RestaurantList = () => {
       {restaurants.length === 0 ? (
         <p>검색 결과가 없습니다.</p>
       ) : (
-        restaurants.map((restaurant) => (
+        filterRestaurants().map((restaurant) => (
           <div key={restaurant.id}>
             <h2>{restaurant.place_name}</h2>
             <p>{restaurant.road_address_name}</p>

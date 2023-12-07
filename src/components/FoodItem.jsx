@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import FoodDetail from "../page/FoodDetail";
+import FoodDetail from "../page/FoodDetail"; // FoodDetail 컴포넌트를 import합니다.
+
+// 이후 코드...
 
 const FoodItem = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -46,9 +48,7 @@ const FoodItem = () => {
 
           {selectedRestaurant && selectedRestaurant.id === restaurant.id && (
             <RestaurantDetails>
-              {/* 세부 정보를 표시하는 내용 */}
               <FoodDetail selectedRestaurant={selectedRestaurant} />{" "}
-              {/* FoodDetail 컴포넌트를 렌더링합니다. */}
             </RestaurantDetails>
           )}
         </Card>

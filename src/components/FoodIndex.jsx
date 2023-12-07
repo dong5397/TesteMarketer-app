@@ -15,7 +15,7 @@ const Title = styled.h2`
 `;
 
 const InfoText = styled.p`
-  font-size: 50px;
+  font-size: 30px;
   color: #666;
   margin-bottom: 4px;
 `;

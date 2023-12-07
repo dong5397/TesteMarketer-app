@@ -45,7 +45,7 @@ const Button = styled.button`
 `;
 
 const MenuIcon = styled(FaBars)`
-  font-size: 24px;
+  font-size: 50px;
   color: #333333;
 `;
 

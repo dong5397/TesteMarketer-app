@@ -31,8 +31,8 @@ const Container = styled.div`
 
 const Cell = styled.div`
   display: flex;
-  align-items: center;
-  gap: 3rem;
+  align-items: cen;
+  gap: 2rem;
   &.right {
     font-size: 1.3rem;
     cursor: pointer;

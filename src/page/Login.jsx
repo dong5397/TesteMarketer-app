@@ -3,6 +3,8 @@ import Modal from "react-modal";
 import styled from "styled-components";
 import KakaoLogin from "../components/KakoLogin";
 
+Modal.setAppElement("#root");
+
 function Login() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -43,7 +45,7 @@ const Button = styled.button`
 `;
 
 const Title = styled.h2`
-  margin-bottom: 20px;
+  margin-bottom: 100px;
   font-size: 24px;
   text-align: center;
 `;
@@ -63,7 +65,7 @@ const modalStyles = {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
   },
   content: {
     backgroundColor: "#ffffff",

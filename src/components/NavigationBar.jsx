@@ -21,8 +21,8 @@ function NavigationBar() {
 export default NavigationBar;
 
 const StyledNavigationBar = styled.nav`
-  background-color: #2c3e50;
-  border-bottom: 1px solid #fff; /* 아래선 스타일 추가 */
+  background-color: #808080; // 변경된 부분
+  border-bottom: 2px solid #fff; // 변경된 부분
   display: flex;
   justify-content: flex-start;
 `;
@@ -31,16 +31,16 @@ const Container = styled.div`
   max-width: 960px;
   margin: 0 auto;
   padding: 0 20px;
-  height: 64px;
+  height: 70px; // 변경된 부분
   display: flex;
   align-items: center;
 `;
 
 const NavLink = styled(Link)`
-  color: #fff;
+  color: #ffffff; // 변경된 부분
   text-decoration: none;
-  padding: 0 60px;
-  line-height: 64px;
+  padding: 0 40px; // 변경된 부분
+  line-height: 70px; // 변경된 부분
   transition: color 0.3s ease;
 
   &:hover {

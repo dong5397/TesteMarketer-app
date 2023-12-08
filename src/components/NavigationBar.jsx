@@ -9,7 +9,7 @@ function NavigationBar() {
         <div>
           <NavLink to="/">홈</NavLink>
           <NavLink to="/search">검색</NavLink>
-          <NavLink to="/services">맛 설정 모드</NavLink>
+          <NavLink to="/service">맛 설정 모드</NavLink>
           <NavLink to="/rank">맛 집 랭킹</NavLink>
           <NavLink to="/cuminte">커뮤니티</NavLink>
         </div>

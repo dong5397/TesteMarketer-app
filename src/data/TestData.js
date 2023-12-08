@@ -9,6 +9,12 @@ const restaurants = [
     reviewCount: 120,
     category: "한식",
     openingHours: "09:00 - 22:00",
+    taste: {
+      sweet: 3,
+      salty: 2,
+      sour: 4,
+      bitter: 1,
+    },
   },
   {
     id: 2,
@@ -20,6 +26,12 @@ const restaurants = [
     reviewCount: 200,
     category: "중식",
     openingHours: "10:00 - 23:00",
+    taste: {
+      sweet: 4,
+      salty: 3,
+      sour: 2,
+      bitter: 1,
+    },
   },
   {
     id: 3,
@@ -31,6 +43,12 @@ const restaurants = [
     reviewCount: 350,
     category: "양식",
     openingHours: "12:00 - 21:00",
+    taste: {
+      sweet: 2,
+      salty: 3,
+      sour: 4,
+      bitter: 1,
+    },
   },
   {
     id: 4,
@@ -42,6 +60,12 @@ const restaurants = [
     reviewCount: 80,
     category: "일식",
     openingHours: "11:30 - 22:30",
+    taste: {
+      sweet: 1,
+      salty: 4,
+      sour: 3,
+      bitter: 2,
+    },
   },
   {
     id: 5,
@@ -53,6 +77,12 @@ const restaurants = [
     reviewCount: 150,
     category: "퓨전",
     openingHours: "10:00 - 22:00",
+    taste: {
+      sweet: 2,
+      salty: 4,
+      sour: 3,
+      bitter: 1,
+    },
   },
   {
     id: 6,
@@ -64,6 +94,12 @@ const restaurants = [
     reviewCount: 65,
     category: "카페",
     openingHours: "08:00 - 23:00",
+    taste: {
+      sweet: 3,
+      salty: 1,
+      sour: 2,
+      bitter: 4,
+    },
   },
   {
     id: 7,
@@ -75,6 +111,12 @@ const restaurants = [
     reviewCount: 95,
     category: "베이커리",
     openingHours: "09:00 - 21:00",
+    taste: {
+      sweet: 1,
+      salty: 3,
+      sour: 2,
+      bitter: 4,
+    },
   },
   {
     id: 8,
@@ -86,6 +128,12 @@ const restaurants = [
     reviewCount: 120,
     category: "분식",
     openingHours: "11:00 - 22:00",
+    taste: {
+      sweet: 2,
+      salty: 3,
+      sour: 1,
+      bitter: 4,
+    },
   },
   {
     id: 9,
@@ -97,6 +145,12 @@ const restaurants = [
     reviewCount: 230,
     category: "패스트푸드",
     openingHours: "10:30 - 22:30",
+    taste: {
+      sweet: 3,
+      salty: 2,
+      sour: 4,
+      bitter: 1,
+    },
   },
   {
     id: 10,
@@ -108,6 +162,12 @@ const restaurants = [
     reviewCount: 180,
     category: "디저트",
     openingHours: "11:00 - 21:00",
+    taste: {
+      sweet: 4,
+      salty: 1,
+      sour: 2,
+      bitter: 3,
+    },
   },
   {
     id: 11,
@@ -119,6 +179,12 @@ const restaurants = [
     reviewCount: 78,
     category: "BBQ",
     openingHours: "12:00 - 00:00",
+    taste: {
+      sweet: 2,
+      salty: 3,
+      sour: 1,
+      bitter: 4,
+    },
   },
   {
     id: 12,
@@ -130,6 +196,12 @@ const restaurants = [
     reviewCount: 110,
     category: "피자",
     openingHours: "11:00 - 22:00",
+    taste: {
+      sweet: 3,
+      salty: 1,
+      sour: 4,
+      bitter: 2,
+    },
   },
   {
     id: 13,
@@ -141,6 +213,12 @@ const restaurants = [
     reviewCount: 96,
     category: "빵집",
     openingHours: "08:00 - 21:00",
+    taste: {
+      sweet: 2,
+      salty: 3,
+      sour: 4,
+      bitter: 1,
+    },
   },
   {
     id: 14,
@@ -152,6 +230,12 @@ const restaurants = [
     reviewCount: 158,
     category: "술집",
     openingHours: "17:00 - 02:00",
+    taste: {
+      sweet: 1,
+      salty: 4,
+      sour: 3,
+      bitter: 2,
+    },
   },
   {
     id: 15,
@@ -163,6 +247,12 @@ const restaurants = [
     reviewCount: 202,
     category: "기타",
     openingHours: "10:00 - 22:00",
+    taste: {
+      sweet: 4,
+      salty: 1,
+      sour: 2,
+      bitter: 3,
+    },
   },
   {
     id: 16,
@@ -174,6 +264,12 @@ const restaurants = [
     reviewCount: 130,
     category: "치킨",
     openingHours: "14:00 - 02:00",
+    taste: {
+      sweet: 3,
+      salty: 2,
+      sour: 4,
+      bitter: 1,
+    },
   },
   {
     id: 17,
@@ -185,6 +281,12 @@ const restaurants = [
     reviewCount: 155,
     category: "한식",
     openingHours: "10:00 - 22:00",
+    taste: {
+      sweet: 2,
+      salty: 3,
+      sour: 4,
+      bitter: 1,
+    },
   },
   {
     id: 18,
@@ -196,6 +298,12 @@ const restaurants = [
     reviewCount: 180,
     category: "중식",
     openingHours: "09:00 - 21:00",
+    taste: {
+      sweet: 3,
+      salty: 1,
+      sour: 2,
+      bitter: 4,
+    },
   },
   {
     id: 19,
@@ -207,6 +315,12 @@ const restaurants = [
     reviewCount: 210,
     category: "양식",
     openingHours: "10:30 - 22:00",
+    taste: {
+      sweet: 2,
+      salty: 3,
+      sour: 4,
+      bitter: 1,
+    },
   },
   {
     id: 20,
@@ -218,6 +332,13 @@ const restaurants = [
     reviewCount: 220,
     category: "디저트",
     openingHours: "11:00 - 23:00",
+    taste: {
+      sweet: 4,
+      salty: 2,
+      sour: 1,
+      bitter: 3,
+    },
   },
 ];
 export default restaurants;
+// Repeat the above pattern for each restaurant

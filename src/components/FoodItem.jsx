@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import restaurants from "../data/TestData"; // 수정된 부분
+import restaurants from "../data/TestData";
 import styled from "styled-components";
 import FoodDetail from "../page/FoodDetail";
 

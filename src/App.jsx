@@ -4,9 +4,10 @@ import Header from "./components/Header";
 import NavigationBar from "./components/NavigationBar";
 import KakaoLogin from "./components/KakoLogin";
 import Search from "./page/Search";
-import FoodItem from "./components/FoodItem";
+
 import Rank from "./page/Rank";
-import MenuButton from "./components/MenuButton";
+
+import Service from "./page/Service";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="search" element={<Search />} />
         <Route path="login" element={<KakaoLogin />} />
         <Route path="rank" element={<Rank />} />
+        <Route path="service" element={<Service />} />
       </Routes>
     </BrowserRouter>
   );

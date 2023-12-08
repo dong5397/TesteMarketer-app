@@ -3,9 +3,20 @@ import styled from "styled-components";
 import restaurants from "../data/TestData";
 import RangeSlider from "../components/Services/RangeSlider";
 
-// Service 컴포넌트 정의
+// 모달 컴포넌트
+const Modal = ({ children, onClose }) => {
+  return (
+    <ModalBackground onClick={onClose}>
+      <ModalContent onClick={(e) => e.stopPropagation()}>
+        {children}
+        <button onClick={onClose}>닫기</button>
+      </ModalContent>
+    </ModalBackground>
+  );
+};
+
+// Service 컴포넌트
 const Service = () => {
-  // 각 맛에 대한 상태 초기값 설정
   const [taste, setTaste] = useState({
     sweet: 0,
     salty: 0,
@@ -13,48 +24,41 @@ const Service = () => {
     bitter: 0,
   });
 
-  // 식당을 찾는 함수
+  const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const findRestaurant = () => {
+    // taste와 가장 가까운 식당을 찾음
     let closestRestaurant = null;
-    let closestDistance = Infinity;
+    let minDiff = Infinity;
 
-    for (const restaurant of restaurants) {
-      const distance = Object.keys(taste).reduce(
-        (sum, key) => sum + Math.abs(restaurant.taste[key] - taste[key]),
-        0
-      );
-
-      // 현재 식당과 사용자의 맛 선호도 간의 차이(distance)가 현재까지의 최소거리보다 작으면 현재식당 업데이트.
-      // 현재까지의 최소 거리보다 작으면 업데이트
-      if (distance < closestDistance) {
+    for (let restaurant of restaurants) {
+      let diff = 0;
+      for (let tasteKey in taste) {
+        diff += Math.abs(taste[tasteKey] - restaurant.taste[tasteKey]);
+      }
+      if (diff < minDiff) {
+        minDiff = diff;
         closestRestaurant = restaurant;
-        closestDistance = distance;
       }
     }
-
-    // 찾은 식당 정보를 alert로 띄우기
-    if (closestRestaurant) {
-      alert(`가장 유사한 식당: ${closestRestaurant.name}`);
-    } else {
-      alert("가장 가까운 식당을 찾을 수 없습니다.");
-    }
-
     return closestRestaurant;
   };
 
-  // 검색 버튼 클릭 시 호출되는 함수
   const handleSearch = () => {
     const closestRestaurant = findRestaurant();
-    // 결과 표시: 모달 또는 다른 UI 컴포넌트를 사용하여 식당 세부 정보 표시
-    console.log("결과:", closestRestaurant);
+    setSelectedRestaurant(closestRestaurant);
+    setIsModalOpen(true);
   };
 
-  // 맛 저장 함수
   const handleSave = (tasteKey, value) => {
     setTaste((taste) => ({ ...taste, [tasteKey]: value }));
   };
 
-  // Service 컴포넌트 UI
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <Container>
       <Circle className="sweet">단맛</Circle>
@@ -68,9 +72,24 @@ const Service = () => {
       <Btn className="search" onClick={handleSearch}>
         검색
       </Btn>
+      {isModalOpen && selectedRestaurant && (
+        <Modal onClose={handleCloseModal}>
+          <h1>{selectedRestaurant.name}</h1>
+          <h2>주소: {selectedRestaurant.address}</h2>
+          <h2>전화번호: {selectedRestaurant.phone}</h2>
+          <h2>영업 시간: {selectedRestaurant.openingHours}</h2>
+          <h2>맛: {selectedRestaurant.tasteInfo}</h2>
+          <h2>카테고리: {selectedRestaurant.category}</h2>
+          <h2>별 점: {selectedRestaurant.rating}</h2>
+        </Modal>
+      )}
     </Container>
   );
 };
+
+// 나머지 스타일 컴포넌트...
+
+export default Service;
 
 const Circle = styled.h1`
   background-color: ${(props) => {
@@ -84,6 +103,7 @@ const Circle = styled.h1`
       return "#CD853F";
     }
   }};
+
   color: #fff;
   border-radius: 50%;
   padding: 10%;
@@ -130,4 +150,20 @@ const Btn = styled.button`
   }
 `;
 // Service 컴포넌트를 내보냄
-export default Service;
+const ModalBackground = styled.div`
+  position: fixed;
+  top: ;
+  left: 50px;
+  width: 50%;
+  height: 50%;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+`;
+
+const ModalContent = styled.div`
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+`;

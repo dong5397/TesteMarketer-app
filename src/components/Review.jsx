@@ -33,6 +33,6 @@ function Review({ onSubmit }) {
 export default Review;
 
 const StyledTextarea = styled.textarea`
-  width: 500px;
+  width: 300px;
   height: 200px;
 `;

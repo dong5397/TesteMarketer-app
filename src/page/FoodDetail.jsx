@@ -87,7 +87,7 @@ const ReviewText = styled.p`
 
 const StyledModal = styled(Modal)`
   position: absolute;
-  top: 30%;
+  top: 40%;
   left: 10%;
   transform: translate(-50%, -50%);
   width: 400px; // 변경된 부분

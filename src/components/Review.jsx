@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 
 function Review({ onSubmit }) {
   const [reviewText, setReviewText] = useState(""); // 리뷰 텍스트를 관리할 상태 값
@@ -18,8 +19,7 @@ function Review({ onSubmit }) {
   return (
     <form onSubmit={handleSubmit}>
       <label>
-        리뷰:
-        <textarea
+        <StyledTextarea
           name="review"
           value={reviewText}
           onChange={handleTextChange}
@@ -31,3 +31,8 @@ function Review({ onSubmit }) {
 }
 
 export default Review;
+
+const StyledTextarea = styled.textarea`
+  width: 500px;
+  height: 200px;
+`;

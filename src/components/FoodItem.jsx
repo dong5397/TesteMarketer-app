@@ -1,79 +1,59 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState } from "react";
+import restaurants from "../data/TestData"; // 수정된 부분
 import styled from "styled-components";
-import FoodDetail from "../page/FoodDetail"; // FoodDetail 컴포넌트를 import합니다.
-
-// 이후 코드...
+import FoodDetail from "../page/FoodDetail";
 
 const FoodItem = () => {
-  const [restaurants, setRestaurants] = useState([]);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
   const handleRestaurantClick = (restaurant) => {
     setSelectedRestaurant(restaurant);
   };
 
-  useEffect(() => {
-    const getRestaurants = async () => {
-      try {
-        const response = await axios.get(
-          "https://dapi.kakao.com/v2/local/search/keyword.json",
-          {
-            headers: {
-              Authorization: "KakaoAK 92be558050bf327c8f008ccd01021afd",
-            },
-            params: {
-              query: "대전 맛집",
-            },
-          }
-        );
-
-        setRestaurants(response.data.documents);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getRestaurants();
-  }, []);
-
   return (
-    <Container>
+    <div>
       {restaurants.map((restaurant) => (
-        <Card
+        <Box
           key={restaurant.id}
           onClick={() => handleRestaurantClick(restaurant)}
         >
-          <h2>{restaurant.place_name}</h2>
+          <h2>{restaurant.name}</h2>
+
+          <p>주소: {restaurant.address}</p>
 
           {selectedRestaurant && selectedRestaurant.id === restaurant.id && (
             <RestaurantDetails>
-              <FoodDetail selectedRestaurant={selectedRestaurant} />{" "}
+              <FoodDetail selectedRestaurant={selectedRestaurant} />
             </RestaurantDetails>
           )}
-        </Card>
+        </Box>
       ))}
-    </Container>
+    </div>
   );
 };
 
 export default FoodItem;
 
-const Container = styled.div`
-  padding: 0 3rem 3rem;
-`;
-
-const Card = styled.div`
-  background-color: #f1f1f1;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  width: 500px; /* 가로 길이 조정 */
-  cursor: pointer;
+const Box = styled.div`
+  width: 400px;
+  border: 1px solid black;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
+  h2,
+  p,
+  pre {
+    font-size: 20px;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+  }
 `;
 
 const RestaurantDetails = styled.div`
   background-color: #fff;
-  padding: 1rem;
-  margin-top: 1rem;
   border: 1px solid #ccc;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
 `;

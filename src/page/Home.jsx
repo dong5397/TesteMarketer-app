@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import FoodItem from "../components/FoodItem";
-
+import MenuButton from "../components/MenuButton";
 function Home() {
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
@@ -13,12 +13,12 @@ function Home() {
       <div>
         <FoodItem onRestaurantClick={handleRestaurantClick} />
       </div>
+
       {selectedRestaurant && (
         <div>
           <h2>{selectedRestaurant.name}</h2>
           <p>{selectedRestaurant.address}</p>
           <p>{selectedRestaurant.phone}</p>
-          {/* 추가적인 식당 정보를 여기에 표시할 수 있습니다. */}
         </div>
       )}
     </>

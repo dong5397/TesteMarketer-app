@@ -81,6 +81,10 @@ const Service = () => {
           <h2>맛: {selectedRestaurant.tasteInfo}</h2>
           <h2>카테고리: {selectedRestaurant.category}</h2>
           <h2>별 점: {selectedRestaurant.rating}</h2>
+          <ModalImage
+            src={selectedRestaurant.Image}
+            alt={selectedRestaurant.name}
+          />
         </Modal>
       )}
     </Container>
@@ -152,7 +156,7 @@ const Btn = styled.button`
 // Service 컴포넌트를 내보냄
 const ModalBackground = styled.div`
   position: fixed;
-  top: ;
+  top: 20px;
   left: 50px;
   width: 50%;
   height: 50%;
@@ -166,4 +170,8 @@ const ModalContent = styled.div`
   background-color: white;
   padding: 20px;
   border-radius: 10px;
+`;
+const ModalImage = styled.img`
+  width: 50%; // 이미지 크기를 조절합니다. 원하는 크기로 변경 가능합니다.
+  height: 50%; // 높이를 자동으로 설정하여 이미지 비율을 유지합니다.
 `;

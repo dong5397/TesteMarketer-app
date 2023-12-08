@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-function Review({ onSubmit }) {
-  const [reviewText, setReviewText] = useState(""); // 리뷰 텍스트를 관리할 상태 값
+function Review({ onSubmit, restaurantId }) {
+  const [reviewText, setReviewText] = useState(
+    localStorage.getItem(restaurantId) || ""
+  );
 
   // 폼 제출 이벤트 핸들러
   const handleSubmit = (event) => {
     event.preventDefault();
+    localStorage.setItem(restaurantId, reviewText); // 리뷰 텍스트를 로컬 스토리지에 저장
     onSubmit(reviewText);
-    setReviewText(""); // 리뷰 텍스트 초기화
   };
 
   // 리뷰 텍스트 변경 이벤트 핸들러

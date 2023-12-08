@@ -1,3 +1,10 @@
+import Juk from "../assets/Juk.jpg";
+import Ramen from "../assets/ramen.jpg";
+import KimchiSoup from "../assets/KimchiSoup.jpg";
+import redricecake from "../assets/redricecake.jpg";
+import rameayeon from "../assets/rameayeon.jpg";
+import gimbap from "../assets/gimbap.jpg";
+
 const restaurants = [
   {
     id: 1,
@@ -9,6 +16,7 @@ const restaurants = [
     reviewCount: 120,
     category: "한식",
     openingHours: "09:00 - 22:00",
+    Image: KimchiSoup,
     taste: {
       sweet: 3,
       salty: 2,
@@ -26,6 +34,7 @@ const restaurants = [
     reviewCount: 200,
     category: "중식",
     openingHours: "10:00 - 23:00",
+    Image: Ramen,
     taste: {
       sweet: 4,
       salty: 3,
@@ -43,6 +52,7 @@ const restaurants = [
     reviewCount: 350,
     category: "양식",
     openingHours: "12:00 - 21:00",
+    Image: Juk,
     taste: {
       sweet: 2,
       salty: 3,
@@ -60,6 +70,7 @@ const restaurants = [
     reviewCount: 80,
     category: "일식",
     openingHours: "11:30 - 22:30",
+    Image: redricecake,
     taste: {
       sweet: 1,
       salty: 4,
@@ -77,6 +88,7 @@ const restaurants = [
     reviewCount: 150,
     category: "퓨전",
     openingHours: "10:00 - 22:00",
+    Image: gimbap,
     taste: {
       sweet: 2,
       salty: 4,
@@ -94,6 +106,7 @@ const restaurants = [
     reviewCount: 65,
     category: "카페",
     openingHours: "08:00 - 23:00",
+    Image: rameayeon,
     taste: {
       sweet: 3,
       salty: 1,

@@ -7,9 +7,6 @@ const RangeSlider = ({ onSave }) => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-  };
-
-  const handleSave = () => {
     onSave(value);
   };
 
@@ -29,7 +26,6 @@ const RangeSlider = ({ onSave }) => {
         min={0}
         max={4}
       />
-      <button onClick={handleSave}>저장</button>
     </Box>
   );
 };

@@ -8,9 +8,8 @@ function FoodDetail({ selectedRestaurant }) {
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
   const [isReviewModalOpen, setReviewModalOpen] = useState(false);
   const [reviews, setReviews] = useState(
-    JSON.parse(localStorage.getItem("reviews")) || []
+    JSON.parse(localStorage.getItem("reviews")) || {}
   );
-  const [nextId, setNextId] = useState(1);
 
   useEffect(() => {
     localStorage.setItem("reviews", JSON.stringify(reviews));
@@ -25,13 +24,21 @@ function FoodDetail({ selectedRestaurant }) {
   };
 
   const handleReviewSubmit = (reviewText) => {
-    setReviews([...reviews, { id: nextId, text: reviewText }]);
-    setNextId(nextId + 1);
+    const restaurantReviews = reviews[selectedRestaurant.id] || [];
+    setReviews({
+      ...reviews,
+      [selectedRestaurant.id]: [...restaurantReviews, reviewText],
+    });
     setReviewModalOpen(false);
   };
 
-  const handleReviewDelete = (id) => {
-    setReviews(reviews.filter((review) => review.id !== id));
+  const handleReviewDelete = (reviewText) => {
+    setReviews({
+      ...reviews,
+      [selectedRestaurant.id]: reviews[selectedRestaurant.id].filter(
+        (review) => review !== reviewText
+      ),
+    });
   };
 
   return (
@@ -54,14 +61,15 @@ function FoodDetail({ selectedRestaurant }) {
         contentLabel="Selected Restaurant"
       >
         {selectedRestaurant && <FoodIndex restaurant={selectedRestaurant} />}
-        {reviews.map((review) => (
-          <div key={review.id}>
-            <ReviewText>리뷰: {review.text}</ReviewText>
-            <button onClick={() => handleReviewDelete(review.id)}>
-              삭제하기
-            </button>
-          </div>
-        ))}
+        {reviews[selectedRestaurant.id] &&
+          reviews[selectedRestaurant.id].map((review, index) => (
+            <div key={index}>
+              <ReviewText>리뷰: {review}</ReviewText>
+              <button onClick={() => handleReviewDelete(review)}>
+                삭제하기
+              </button>
+            </div>
+          ))}
       </StyledModal>
 
       <StyledModal
@@ -69,7 +77,12 @@ function FoodDetail({ selectedRestaurant }) {
         onRequestClose={() => setReviewModalOpen(false)}
         contentLabel="Write a Review"
       >
-        <Review onSubmit={handleReviewSubmit} />
+        {selectedRestaurant && (
+          <Review
+            onSubmit={handleReviewSubmit}
+            restaurantId={selectedRestaurant.id}
+          />
+        )}
       </StyledModal>
     </div>
   );
@@ -90,7 +103,7 @@ const StyledModal = styled(Modal)`
   top: 40%;
   left: 10%;
   transform: translate(-50%, -50%);
-  width: 400px; // 변경된 부분
+  width: 400px;
   height: 700px;
   background: white;
   border: 1px solid #ccc;

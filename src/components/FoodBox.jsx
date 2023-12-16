@@ -35,11 +35,11 @@ const FoodBox = () => {
 export default FoodBox;
 
 const Box = styled.div`
-  width: 440px;
+  width: 450px;
   border: 1px solid black;
   padding: 20px;
   margin-top: 20px;
-  margin-left: 20px;
+  margin-left: 10px;
   border-radius: 10px;
   h2,
   p,

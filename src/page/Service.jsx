@@ -123,7 +123,8 @@ const Circle = styled.h1`
 const Container = styled.div`
   width: 18%;
   height: 100%;
-  padding: 10px;
+  padding: 50px;
+  margin-left: 30px;
   background-color: #f2f2f2;
   border-radius: 50px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);

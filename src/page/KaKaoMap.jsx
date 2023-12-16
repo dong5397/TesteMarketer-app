@@ -69,7 +69,7 @@ const MapContainer = styled.div`
   position: fixed;
   top: 200px;
   bottom: 0;
-  left: 1100px;
+  left: 1200px;
   width: 60%;
   height: 70%;
   transform: translateX(-50%);

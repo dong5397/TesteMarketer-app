@@ -3,7 +3,6 @@ import testData from "../data/TestData";
 import styled from "styled-components";
 
 function Rank() {
-  const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState(testData);
 
   useEffect(() => {
@@ -11,25 +10,8 @@ function Rank() {
     setSearchResults(sortedTestData.slice(0, 10));
   }, []);
 
-  const handleInputChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleSearch = () => {
-    const results = testData.filter(
-      (restaurant) =>
-        restaurant.name.includes(searchTerm) || // 식당 이름으로 검색
-        restaurant.category.includes(searchTerm) // 카테고리로 검색
-    );
-
-    const sortedResults = [...results].sort((a, b) => b.rating - a.rating);
-    setSearchResults(sortedResults.slice(0, 10));
-    console.log("검색 결과:", sortedResults.slice(0, 10));
-  };
-
   return (
     <div>
-      {/* 검색 결과를 출력하는 로직 추가 */}
       {searchResults.map((result) => (
         <Box key={result.id}>
           <h2>#{result.category}</h2>

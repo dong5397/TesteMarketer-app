@@ -1,27 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Image = styled.img`
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  margin-top: 16px;
-`;
-
-const Title = styled.h2`
-  font-size: 50px;
-  color: #333;
-  margin-bottom: 8px;
-`;
-
-const InfoText = styled.p`
-  font-size: 30px;
-  color: #666;
-  margin-bottom: 4px;
-`;
-
 function FoodIndex({ restaurant }) {
-  // prop 이름 변경
   return (
     <div>
       <Title>{restaurant.name}</Title>
@@ -36,3 +16,15 @@ function FoodIndex({ restaurant }) {
 }
 
 export default FoodIndex;
+
+const Title = styled.h2`
+  font-size: 50px;
+  color: #333;
+  margin-bottom: 8px;
+`;
+
+const InfoText = styled.p`
+  font-size: 30px;
+  color: #666;
+  margin-bottom: 4px;
+`;

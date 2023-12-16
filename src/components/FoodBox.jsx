@@ -3,7 +3,7 @@ import restaurants from "../data/TestData";
 import styled from "styled-components";
 import FoodDetail from "../page/FoodDetail";
 
-const FoodItem = () => {
+const FoodBox = () => {
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
   const handleRestaurantClick = (restaurant) => {
@@ -17,9 +17,8 @@ const FoodItem = () => {
           key={restaurant.id}
           onClick={() => handleRestaurantClick(restaurant)}
         >
-          <h2>{restaurant.name}</h2>
-
-          <p>주소: {restaurant.address}</p>
+          <h2>식당 이름: {restaurant.name}</h2>
+          <p> 주소 : {restaurant.address}</p>
 
           {selectedRestaurant && selectedRestaurant.id === restaurant.id && (
             <RestaurantDetails>
@@ -33,13 +32,14 @@ const FoodItem = () => {
   );
 };
 
-export default FoodItem;
+export default FoodBox;
 
 const Box = styled.div`
-  width: 400px;
+  width: 440px;
   border: 1px solid black;
   padding: 20px;
   margin-top: 20px;
+  margin-left: 20px;
   border-radius: 10px;
   h2,
   p,

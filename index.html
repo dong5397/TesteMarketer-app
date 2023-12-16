@@ -5,62 +5,18 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>대전 맛집</title>
-    <style>
-      #map {
-        position: fixed;
-        top: 40; /* 변경된 부분 */
-        bottom: 0;
-        left: 50%;
-        width: 60%;
-        transform: translateX(-50%);
-        height: 80%;
-      }
-    </style>
-    <script
-      type="text/javascript"
-      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4d90cac7ec413eb4aec50eac7135504d"
-    ></script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-    <script>
-      window.onload = function () {
-        var mapContainer = document.getElementById("map"),
-          mapOption = {
-            center: new kakao.maps.LatLng(36.3504, 127.3845),
-            level: 8,
-          };
-
-        var map = new kakao.maps.Map(mapContainer, mapOption);
-
-        var restaurantPositions = [
-          new kakao.maps.LatLng(36.3504, 127.3845),
-          new kakao.maps.LatLng(36.3506, 127.385),
-        ];
-
-        for (var i = 0; i < restaurantPositions.length; i++) {
-          var marker = new kakao.maps.Marker({
-            position: restaurantPositions[i],
-          });
-          marker.setMap(map);
-        }
-      };
-    </script>
-
-    <div id="map"></div>
-
+    <style></style>
     <script
       src="https://t1.kakaocdn.net/kakao_js_sdk/2.5.0/kakao.min.js"
       crossorigin="anonymous"
     ></script>
-
     <script>
-      // SDK를 초기화 합니다. 사용할 앱의 JavaScript 키를 설정해야 합니다.
       Kakao.init("92be558050bf327c8f008ccd01021afd");
-
-      // SDK 초기화 여부를 판단합니다.
       console.log(Kakao.isInitialized());
     </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

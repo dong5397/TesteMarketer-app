@@ -5,8 +5,8 @@ import styled from "styled-components";
 import Review from "../components/Review";
 
 function FoodDetail({ selectedRestaurant }) {
-  const [isDetailModalOpen, setDetailModalOpen] = useState(false);
-  const [isReviewModalOpen, setReviewModalOpen] = useState(false);
+  const [isModalOpen, setDetailModalOpen] = useState(false);
+  const [isRevieOpen, setReviewModalOpen] = useState(false);
   const [reviews, setReviews] = useState(
     JSON.parse(localStorage.getItem("reviews")) || {}
   );
@@ -15,14 +15,16 @@ function FoodDetail({ selectedRestaurant }) {
     localStorage.setItem("reviews", JSON.stringify(reviews));
   }, [reviews]);
 
+  // 모달: useState 의 상태를 false에서 true로 바꿈
   const handleDetailClick = () => {
     setDetailModalOpen(true);
   };
 
+  // 리뷰: useState 의 상태를 false에서 true로 바꿈
   const handleReviewClick = () => {
     setReviewModalOpen(true);
   };
-
+  // 리뷰 등록
   const handleReviewSubmit = (reviewText) => {
     const restaurantReviews = reviews[selectedRestaurant.id] || [];
     setReviews({
@@ -31,7 +33,7 @@ function FoodDetail({ selectedRestaurant }) {
     });
     setReviewModalOpen(false);
   };
-
+  // 리뷰 삭제
   const handleReviewDelete = (reviewText) => {
     setReviews({
       ...reviews,
@@ -55,8 +57,9 @@ function FoodDetail({ selectedRestaurant }) {
           </p>
         </div>
       )}
+      {/* 식당 정보를 보기위한 모달 */}
       <StyledModal
-        isOpen={isDetailModalOpen}
+        isOpen={isModalOpen}
         onRequestClose={() => setDetailModalOpen(false)}
         contentLabel="Selected Restaurant"
       >
@@ -71,18 +74,12 @@ function FoodDetail({ selectedRestaurant }) {
             </div>
           ))}
       </StyledModal>
-
+      {/* 리뷰 작성을 하기위한 모달 */}
       <StyledModal
-        isOpen={isReviewModalOpen}
+        isOpen={isRevieOpen}
         onRequestClose={() => setReviewModalOpen(false)}
-        contentLabel="Write a Review"
       >
-        {selectedRestaurant && (
-          <Review
-            onSubmit={handleReviewSubmit}
-            restaurantId={selectedRestaurant.id}
-          />
-        )}
+        {selectedRestaurant && <Review onSubmit={handleReviewSubmit} />}
       </StyledModal>
     </div>
   );

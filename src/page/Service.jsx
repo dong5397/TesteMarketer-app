@@ -158,8 +158,8 @@ const ModalBackground = styled.div`
   position: fixed;
   top: 20px;
   left: 50px;
-  width: 50%;
-  height: 50%;
+  width: 30%;
+  height: 30%;
 
   display: flex;
   justify-content: flex-start;

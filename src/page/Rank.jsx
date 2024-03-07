@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
-import testData from "../data/TestData";
 import styled from "styled-components";
 
 function Rank() {
-  const [searchResults, setSearchResults] = useState(testData);
+  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    const sortedTestData = [...testData].sort((a, b) => b.rating - a.rating);
-    setSearchResults(sortedTestData.slice(0, 10));
+    fetch("https://teste-backend.fly.dev/api/v1/restaurants")
+      .then((response) => response.json())
+      .then((data) => {
+        const sortedData = [...data].sort((a, b) => b.rating - a.rating);
+        setSearchResults(sortedData.slice(0, 10));
+      });
   }, []);
 
   return (

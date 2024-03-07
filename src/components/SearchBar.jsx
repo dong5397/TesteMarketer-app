@@ -1,14 +1,18 @@
-import React, { useState } from "react";
-import testData from "../data/TestData";
-
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Modal from "react-modal";
 
 const RestaurantList = () => {
-  const [restaurants, setRestaurants] = useState(testData);
+  const [restaurants, setRestaurants] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  useEffect(() => {
+    fetch("https://teste-backend.fly.dev/api/v1/restaurants")
+      .then((response) => response.json())
+      .then((data) => setRestaurants(data));
+  }, []);
 
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value);

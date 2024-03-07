@@ -14,7 +14,6 @@ function App() {
       <Header />
       <KakaoMap />
       <NavigationBar />
-
       <Routes>
         <Route index element={<Home />} />
         <Route path="search" element={<Search />} />

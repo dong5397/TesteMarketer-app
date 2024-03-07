@@ -1,4 +1,5 @@
-import FoodBox from "../components/FoodBox";
+import React from "react";
+import FoodBox from "./FoodBox";
 
 function Home() {
   const handleRestaurantClick = (restaurant) => {

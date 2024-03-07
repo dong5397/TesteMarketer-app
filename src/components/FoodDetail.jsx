@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from "react";
-import FoodIndex from "../components/FoodIndex";
+import FoodIndex from "./FoodIndex";
 import Modal from "react-modal";
 import styled from "styled-components";
-import Review from "../components/Review";
+import Review from "./Review";
 
 function FoodDetail({ selectedRestaurant }) {
   const [isModalOpen, setDetailModalOpen] = useState(false);
-  const [isRevieOpen, setReviewModalOpen] = useState(false);
-  const [reviews, setReviews] = useState(
-    JSON.parse(localStorage.getItem("reviews")) || {}
-  );
+  const [isReviewOpen, setReviewModalOpen] = useState(false);
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    localStorage.setItem("reviews", JSON.stringify(reviews));
-  }, [reviews]);
+    const fetchReviews = async () => {
+      const response = await fetch(
+        `https://teste-backend.fly.dev/api/v1/restaurants/${selectedRestaurant.id}/reviews`
+      );
+      const data = await response.json();
+      setReviews(data);
+    };
+
+    fetchReviews();
+  }, [selectedRestaurant]);
 
   // 모달: useState 의 상태를 false에서 true로 바꿈
   const handleDetailClick = () => {
@@ -24,23 +30,45 @@ function FoodDetail({ selectedRestaurant }) {
   const handleReviewClick = () => {
     setReviewModalOpen(true);
   };
+
   // 리뷰 등록
-  const handleReviewSubmit = (reviewText) => {
-    const restaurantReviews = reviews[selectedRestaurant.id] || [];
-    setReviews({
-      ...reviews,
-      [selectedRestaurant.id]: [...restaurantReviews, reviewText],
-    });
-    setReviewModalOpen(false);
+  const handleReviewSubmit = async (reviewText) => {
+    const response = await fetch(
+      `https://teste-backend.fly.dev/api/v1/reviews`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          restaurant_id: selectedRestaurant.id,
+          review_text: reviewText,
+          user_id: 1, // 사용자 인증 시스템이 없으므로 임시로 1을 사용
+        }),
+      }
+    );
+
+    if (response.ok) {
+      const newReview = await response.json();
+      setReviews((prevReviews) => [...prevReviews, newReview]);
+      setReviewModalOpen(false);
+    }
   };
+
   // 리뷰 삭제
-  const handleReviewDelete = (reviewText) => {
-    setReviews({
-      ...reviews,
-      [selectedRestaurant.id]: reviews[selectedRestaurant.id].filter(
-        (review) => review !== reviewText
-      ),
-    });
+  const handleReviewDelete = async (reviewId) => {
+    const response = await fetch(
+      `https://teste-backend.fly.dev/api/v1/reviews/${reviewId}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (response.ok) {
+      setReviews((prevReviews) =>
+        prevReviews.filter((review) => review.id !== reviewId)
+      );
+    }
   };
 
   return (
@@ -64,19 +92,18 @@ function FoodDetail({ selectedRestaurant }) {
         contentLabel="Selected Restaurant"
       >
         {selectedRestaurant && <FoodIndex restaurant={selectedRestaurant} />}
-        {reviews[selectedRestaurant.id] &&
-          reviews[selectedRestaurant.id].map((review, index) => (
-            <div key={index}>
-              <ReviewText>리뷰: {review}</ReviewText>
-              <button onClick={() => handleReviewDelete(review)}>
-                삭제하기
-              </button>
-            </div>
-          ))}
+        {reviews.map((review, index) => (
+          <div key={index}>
+            <ReviewText>리뷰: {review.text}</ReviewText>
+            <button onClick={() => handleReviewDelete(review.id)}>
+              삭제하기
+            </button>
+          </div>
+        ))}
       </StyledModal>
       {/* 리뷰 작성을 하기위한 모달 */}
       <StyledModal
-        isOpen={isRevieOpen}
+        isOpen={isReviewOpen}
         onRequestClose={() => setReviewModalOpen(false)}
       >
         {selectedRestaurant && <Review onSubmit={handleReviewSubmit} />}

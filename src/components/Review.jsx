@@ -1,16 +1,33 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-function Review({ onSubmit, restaurantId }) {
-  const [reviewText, setReviewText] = useState(
-    localStorage.getItem(restaurantId) || ""
-  );
+function Review({ onSubmit }) {
+  const [reviewText, setReviewText] = useState("");
 
   // 폼 제출 이벤트 핸들러
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    localStorage.setItem(restaurantId, reviewText); // 리뷰 텍스트를 로컬 스토리지에 저장
-    onSubmit(reviewText);
+
+    const response = await fetch(
+      `https://teste-backend.fly.dev/api/v1/reviews`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          restaurant_id: restaurantId,
+          review_text: reviewText,
+          user_id: 1, // 사용자 인증 시스템이 없으므로 임시로 1을 사용
+        }),
+      }
+    );
+
+    if (response.ok) {
+      const newReview = await response.json();
+      onSubmit(newReview);
+      setReviewText("");
+    }
   };
 
   // 리뷰 텍스트 변경 이벤트 핸들러

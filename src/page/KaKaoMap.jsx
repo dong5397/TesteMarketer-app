@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import restaurants from "../data/TestData";
 import Modal from "react-modal";
 import FoodIndex from "../components/FoodIndex";
 
@@ -8,6 +7,7 @@ Modal.setAppElement("#root");
 
 const KakaoMap = () => {
   const [kakao, setKakao] = useState(null);
+  const [restaurants, setRestaurants] = useState([]);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
   useEffect(() => {
@@ -16,6 +16,12 @@ const KakaoMap = () => {
     script.src =
       "https://dapi.kakao.com/v2/maps/sdk.js?appkey=4d90cac7ec413eb4aec50eac7135504d&autoload=false";
     document.head.appendChild(script);
+  }, []);
+
+  useEffect(() => {
+    fetch("https://teste-backend.fly.dev/api/v1/restaurants")
+      .then((response) => response.json())
+      .then((data) => setRestaurants(data));
   }, []);
 
   useEffect(() => {
@@ -46,7 +52,7 @@ const KakaoMap = () => {
         });
       });
     }
-  }, [kakao]);
+  }, [kakao, restaurants]);
 
   return (
     <div>

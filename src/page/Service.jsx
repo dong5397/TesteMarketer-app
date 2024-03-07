@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import restaurants from "../data/TestData";
 import RangeSlider from "../components/Services/RangeSlider";
 
 // 모달 컴포넌트
@@ -17,6 +16,7 @@ const Modal = ({ children, onClose }) => {
 
 // Service 컴포넌트
 const Service = () => {
+  const [restaurants, setRestaurants] = useState([]);
   const [taste, setTaste] = useState({
     sweet: 0,
     salty: 0,
@@ -27,8 +27,13 @@ const Service = () => {
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  useEffect(() => {
+    fetch("https://teste-backend.fly.dev/api/v1/restaurants")
+      .then((response) => response.json())
+      .then((data) => setRestaurants(data));
+  }, []);
+
   const findRestaurant = () => {
-    // taste와 가장 가까운 식당을 찾음
     let closestRestaurant = null;
     let minDiff = Infinity;
 
@@ -82,7 +87,7 @@ const Service = () => {
           <h2>카테고리: {selectedRestaurant.category}</h2>
           <h2>별 점: {selectedRestaurant.rating}</h2>
           <ModalImage
-            src={selectedRestaurant.Image}
+            src={selectedRestaurant.image}
             alt={selectedRestaurant.name}
           />
         </Modal>

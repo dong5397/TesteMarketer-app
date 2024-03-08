@@ -4,36 +4,53 @@ import FoodDetail from "../components/FoodDetail";
 
 const FoodBox = () => {
   const [restaurants, setRestaurants] = useState([]);
+  const [selectedRestaurantId, setSelectedRestaurantId] = useState(null);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
   useEffect(() => {
     fetch("https://teste-backend.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
-      .then((data) => setRestaurants(data));
+      .then((data) => {
+        setRestaurants(Array.isArray(data) ? data : [data]);
+      });
   }, []);
 
-  const handleRestaurantClick = (restaurant) => {
-    setSelectedRestaurant(restaurant);
+  useEffect(() => {
+    if (selectedRestaurantId) {
+      fetch(
+        `https://teste-backend.fly.dev/api/v1/restaurants/${selectedRestaurantId}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          setSelectedRestaurant(data);
+        });
+    }
+  }, [selectedRestaurantId]);
+
+  const handleRestaurantClick = (restaurantId) => {
+    setSelectedRestaurantId(restaurantId);
   };
 
   return (
     <div>
-      {restaurants.map((restaurant) => (
-        <Box
-          key={restaurant.id}
-          onClick={() => handleRestaurantClick(restaurant)}
-        >
-          <h2>식당 이름: {restaurant.name}</h2>
-          <p> 주소 : {restaurant.address}</p>
+      {restaurants.map((restaurant, index) =>
+        restaurant.restaurants_id ? (
+          <Box
+            key={index}
+            onClick={() => handleRestaurantClick(restaurant.restaurants_id)}
+          >
+            <h2>식당 이름: {restaurant.restaurants_name}</h2>
+            <p>주소: {restaurant.address}</p>
+            <img src={restaurant.image} alt={restaurant.restaurants_name} />
+          </Box>
+        ) : null
+      )}
 
-          {selectedRestaurant && selectedRestaurant.id === restaurant.id && (
-            <RestaurantDetails>
-              <FoodDetail selectedRestaurant={selectedRestaurant} />
-            </RestaurantDetails>
-          )}
-          <img src={restaurant.Image} alt={restaurant.name} />
-        </Box>
-      ))}
+      {selectedRestaurant && (
+        <RestaurantDetails>
+          <FoodDetail selectedRestaurant={selectedRestaurant} />
+        </RestaurantDetails>
+      )}
     </div>
   );
 };
@@ -48,17 +65,13 @@ const Box = styled.div`
   margin-left: 10px;
   border-radius: 10px;
   h2,
-  p,
-  pre {
+  p {
     font-size: 20px;
-    padding: 20px;
-    margin-top: 20px;
-    border-radius: 10px;
+    padding: 10px;
   }
   img {
-    /* Box 내부의 모든 img 태그에 적용됩니다 */
-    max-width: 90%; /* 이미지의 최대 너비를 Box의 너비로 제한합니다 */
-    height: auto; /* 너비에 맞춰 자동으로 높이를 조정합니다 */
+    max-width: 90%;
+    height: auto;
   }
 `;
 

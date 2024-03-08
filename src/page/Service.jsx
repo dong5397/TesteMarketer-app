@@ -30,17 +30,23 @@ const Service = () => {
   useEffect(() => {
     fetch("https://teste-backend.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
-      .then((data) => setRestaurants(data));
+      .then((data) => {
+        setRestaurants(Array.isArray(data) ? data : [data]);
+      });
   }, []);
 
   const findRestaurant = () => {
-    let closestRestaurant = null;
+    if (restaurants.length === 0) {
+      return null;
+    }
+
+    let closestRestaurant = restaurants[0];
     let minDiff = Infinity;
 
     for (let restaurant of restaurants) {
       let diff = 0;
       for (let tasteKey in taste) {
-        diff += Math.abs(taste[tasteKey] - restaurant.taste[tasteKey]);
+        diff += Math.abs(taste[tasteKey] - restaurant.taste_level); // 수정된 부분
       }
       if (diff < minDiff) {
         minDiff = diff;
@@ -79,16 +85,14 @@ const Service = () => {
       </Btn>
       {isModalOpen && selectedRestaurant && (
         <Modal onClose={handleCloseModal}>
-          <h1>{selectedRestaurant.name}</h1>
+          <h1>{selectedRestaurant.restaurants_name}</h1>
           <h2>주소: {selectedRestaurant.address}</h2>
           <h2>전화번호: {selectedRestaurant.phone}</h2>
-          <h2>영업 시간: {selectedRestaurant.openingHours}</h2>
-          <h2>맛: {selectedRestaurant.tasteInfo}</h2>
-          <h2>카테고리: {selectedRestaurant.category}</h2>
+          <h2>영업 시간: {selectedRestaurant.opening_hours}</h2>
           <h2>별 점: {selectedRestaurant.rating}</h2>
           <ModalImage
             src={selectedRestaurant.image}
-            alt={selectedRestaurant.name}
+            alt={selectedRestaurant.restaurants_name}
           />
         </Modal>
       )}

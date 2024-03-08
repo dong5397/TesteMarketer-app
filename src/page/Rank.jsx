@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 function Rank() {
@@ -8,25 +8,26 @@ function Rank() {
     fetch("https://teste-backend.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
       .then((data) => {
-        const sortedData = [...data].sort((a, b) => b.rating - a.rating);
-        setSearchResults(sortedData.slice(0, 10));
+        if (data && Array.isArray(data.data)) {
+          const sortedData = [...data.data].sort((a, b) => b.rating - a.rating);
+
+          setSearchResults(sortedData.slice(0, 10));
+        } else {
+          console.error("API 응답에 문제가 있습니다:", data);
+        }
       });
   }, []);
 
   return (
     <div>
-      {searchResults.map((result) => (
-        <Box key={result.id}>
-          <h2>#{result.category}</h2>
-          <p>식당: {result.name}</p>
-          <p>주소: {result.address}</p>
-          <p>오픈 시간: {result.openingHours}</p>
-          <pre>
-            별점: {result.rating} 리뷰 수: {result.reviewCount}
-          </pre>
-          <img src={result.Image} alt={result.name} />
-        </Box>
-      ))}
+      <h1>Top 10 Restaurants</h1>
+      <ul>
+        {searchResults.map((restaurant) => (
+          <li key={restaurant.restaurants_id}>
+            {restaurant.restaurants_name} - Rating: {restaurant.rating}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -39,7 +40,6 @@ const Box = styled.div`
   padding: 20px;
   margin-top: 20px;
   border-radius: 10px;
-  // 추가된 부분: 리뷰 텍스트에 적용된 스타일
   p,
   pre,
   h2 {
@@ -49,8 +49,7 @@ const Box = styled.div`
     border-radius: 10px;
   }
   img {
-    /* Box 내부의 모든 img 태그에 적용됩니다 */
-    max-width: 90%; /* 이미지의 최대 너비를 Box의 너비로 제한합니다 */
-    height: auto; /* 너비에 맞춰 자동으로 높이를 조정합니다 */
+    max-width: 90%;
+    height: auto;
   }
 `;

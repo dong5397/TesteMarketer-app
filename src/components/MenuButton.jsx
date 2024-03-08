@@ -56,9 +56,8 @@ const MenuList = styled.div`
   padding: 8px;
   border: 1px solid #cccccc;
   border-radius: 4px;
-  display: ${(props) => (props.isOpen ? "flex" : "none")};
+  display: ${(props) => (props.isOpen ? "flex" : "none")}; // 수정된 부분
   flex-direction: column;
-  flex-direction: row;
   align-items: flex-start; // 왼쪽 정렬을 위해 flex-start로 수정합니다.
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 `;

@@ -21,7 +21,19 @@ const KakaoMap = () => {
   useEffect(() => {
     fetch("https://teste-backend.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
-      .then((data) => setRestaurants(data));
+      .then((data) => {
+        // data가 배열이 아닌 객체이고, 실제 식당 데이터가 data.restaurants에 담겨있다고 가정
+        if (data && Array.isArray(data.restaurants)) {
+          setRestaurants(data.restaurants);
+        } else {
+          // data가 배열이 아니라면 배열로 바꿔준다.
+          if (data && !Array.isArray(data)) {
+            setRestaurants([data]);
+          } else {
+            console.error("Unexpected data format: ", data);
+          }
+        }
+      });
   }, []);
 
   useEffect(() => {

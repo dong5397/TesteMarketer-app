@@ -1,7 +1,8 @@
+// FoodDetail.jsx
 import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import FoodIndex from "./FoodIndex";
 import Modal from "react-modal";
-import styled from "styled-components";
 import Review from "./Review";
 
 function FoodDetail({ selectedRestaurant }) {
@@ -11,11 +12,17 @@ function FoodDetail({ selectedRestaurant }) {
 
   useEffect(() => {
     const fetchReviews = async () => {
-      const response = await fetch(
-        `https://teste-backend.fly.dev/api/v1/restaurants/${selectedRestaurant.id}/reviews`
-      );
-      const data = await response.json();
-      setReviews(data);
+      if (selectedRestaurant) {
+        const response = await fetch(
+          `https://teste-backend.fly.dev/api/v1/restaurants/${selectedRestaurant.restaurant.restaurants_id}/reviews`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setReviews(data);
+        } else {
+          // 요청이 실패하면 빈 배열을 리뷰 목록으로 설정하거나 오류 처리
+        }
+      }
     };
 
     fetchReviews();
@@ -33,25 +40,32 @@ function FoodDetail({ selectedRestaurant }) {
 
   // 리뷰 등록
   const handleReviewSubmit = async (reviewText) => {
-    const response = await fetch(
-      `https://teste-backend.fly.dev/api/v1/reviews`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          restaurant_id: selectedRestaurant.id,
-          review_text: reviewText,
-          user_id: 1, // 사용자 인증 시스템이 없으므로 임시로 1을 사용
-        }),
-      }
-    );
+    try {
+      const response = await fetch(
+        `https://teste-backend.fly.dev/api/v1/reviews`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            restaurant_id: selectedRestaurant.restaurant.restaurants_id,
+            review_text: reviewText,
+            // user_id: 1, // 사용자 인증 시스템이 없으므로 임시로 1을 사용
+          }),
+        }
+      );
 
-    if (response.ok) {
+      if (!response.ok) {
+        throw new Error("Failed to submit review");
+      }
+
       const newReview = await response.json();
       setReviews((prevReviews) => [...prevReviews, newReview]);
       setReviewModalOpen(false);
+    } catch (error) {
+      console.error("Error submitting review:", error.message);
+      // 필요에 따라 오류 처리 로직 추가
     }
   };
 
@@ -74,7 +88,7 @@ function FoodDetail({ selectedRestaurant }) {
   return (
     <div>
       {selectedRestaurant && (
-        <div>
+        <div key={selectedRestaurant.restaurant.restaurants_id}>
           <p>
             세부 정보:{" "}
             <button onClick={handleDetailClick}>세부 정보 보기</button>
@@ -91,9 +105,14 @@ function FoodDetail({ selectedRestaurant }) {
         onRequestClose={() => setDetailModalOpen(false)}
         contentLabel="Selected Restaurant"
       >
-        {selectedRestaurant && <FoodIndex restaurant={selectedRestaurant} />}
-        {reviews.map((review, index) => (
-          <div key={index}>
+        {selectedRestaurant && (
+          <FoodIndex
+            key={selectedRestaurant.restaurant.restaurants_id}
+            restaurant={selectedRestaurant}
+          />
+        )}
+        {reviews.map((review) => (
+          <div key={review.id}>
             <ReviewText>리뷰: {review.text}</ReviewText>
             <button onClick={() => handleReviewDelete(review.id)}>
               삭제하기
@@ -106,7 +125,12 @@ function FoodDetail({ selectedRestaurant }) {
         isOpen={isReviewOpen}
         onRequestClose={() => setReviewModalOpen(false)}
       >
-        {selectedRestaurant && <Review onSubmit={handleReviewSubmit} />}
+        {selectedRestaurant && (
+          <Review
+            key={selectedRestaurant.restaurant.restaurants_id}
+            onSubmit={handleReviewSubmit}
+          />
+        )}
       </StyledModal>
     </div>
   );
@@ -132,8 +156,7 @@ const StyledModal = styled(Modal)`
   background: white;
   border: 1px solid #ccc;
   overflow: auto;
-  webkitoverflowscrolling: touch;
-  borderradius: 4px;
+
   outline: none;
   padding: 20px;
 `;

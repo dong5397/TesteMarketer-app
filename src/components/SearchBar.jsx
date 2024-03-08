@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Modal from "react-modal";
 
+Modal.setAppElement("#root");
+
 const RestaurantList = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -11,7 +13,9 @@ const RestaurantList = () => {
   useEffect(() => {
     fetch("https://teste-backend.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
-      .then((data) => setRestaurants(data));
+      .then((data) => {
+        setRestaurants(Array.isArray(data) ? data : [data]);
+      });
   }, []);
 
   const handleInputChange = (e) => {
@@ -24,9 +28,8 @@ const RestaurantList = () => {
   };
 
   const filteredRestaurants = restaurants.filter((restaurant) =>
-    restaurant.name.includes(searchTerm)
+    restaurant && restaurant.name ? restaurant.name.includes(searchTerm) : false
   );
-
   return (
     <Container>
       <input

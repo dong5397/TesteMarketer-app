@@ -33,19 +33,13 @@ const FoodBox = () => {
 
   return (
     <div>
-      {restaurants.map((restaurant, index) =>
-        restaurant.restaurants_id ? (
-          <Box
-            key={index}
-            onClick={() => handleRestaurantClick(restaurant.restaurants_id)}
-          >
-            <h2>식당 이름: {restaurant.restaurants_name}</h2>
-            <p>주소: {restaurant.address}</p>
-            <img src={restaurant.image} alt={restaurant.restaurants_name} />
-          </Box>
-        ) : null
-      )}
-
+      {restaurants.map((restaurant, index) => (
+        <Box key={index} onClick={() => handleRestaurantClick(restaurant.id)}>
+          <h2>식당 이름: {restaurant.restaurant_name}</h2>
+          <p>주소: {restaurant.address}</p>
+          <img src={restaurant.image} alt={restaurant.restaurant_name} />
+        </Box>
+      ))}
       {selectedRestaurant && (
         <RestaurantDetails>
           <FoodDetail selectedRestaurant={selectedRestaurant} />
@@ -54,7 +48,6 @@ const FoodBox = () => {
     </div>
   );
 };
-
 export default FoodBox;
 
 const Box = styled.div`
@@ -64,11 +57,13 @@ const Box = styled.div`
   margin-top: 20px;
   margin-left: 10px;
   border-radius: 10px;
+
   h2,
   p {
     font-size: 20px;
     padding: 10px;
   }
+
   img {
     max-width: 90%;
     height: auto;

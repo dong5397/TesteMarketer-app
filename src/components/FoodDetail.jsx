@@ -12,16 +12,27 @@ function FoodDetail({ selectedRestaurant }) {
 
   useEffect(() => {
     const fetchReviews = async () => {
-      if (selectedRestaurant) {
-        const response = await fetch(
-          `https://teste-backend.fly.dev/api/v1/restaurants/${selectedRestaurant.restaurant.restaurants_id}/reviews`
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setReviews(data);
-        } else {
-          // 요청이 실패하면 빈 배열을 리뷰 목록으로 설정하거나 오류 처리
+      if (selectedRestaurant && selectedRestaurant.restaurants_id) {
+        try {
+          const response = await fetch(
+            `https://teste-backend.fly.dev/api/v1/restaurants/${selectedRestaurant.restaurants_id}/reviews`
+          );
+          if (response.ok) {
+            const data = await response.json();
+            setReviews(data);
+          } else {
+            // 요청이 실패하면 빈 배열을 리뷰 목록으로 설정하거나 오류 처리
+            console.error("Failed to fetch reviews:", response.statusText);
+            setReviews([]);
+          }
+        } catch (error) {
+          console.error("Error fetching reviews:", error.message);
+          setReviews([]);
         }
+      } else {
+        // 선택된 레스토랑이 없는 경우
+        console.warn("No selected restaurant to fetch reviews");
+        setReviews([]);
       }
     };
 
@@ -39,6 +50,7 @@ function FoodDetail({ selectedRestaurant }) {
   };
 
   // 리뷰 등록
+  // FoodDetail.jsx에 리뷰 등록 함수 수정
   const handleReviewSubmit = async (reviewText) => {
     try {
       const response = await fetch(
@@ -49,15 +61,19 @@ function FoodDetail({ selectedRestaurant }) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            restaurant_id: selectedRestaurant.restaurant.restaurants_id,
+            restaurants_id: selectedRestaurant.restaurants_id, // 수정된 부분
             review_text: reviewText,
-            // user_id: 1, // 사용자 인증 시스템이 없으므로 임시로 1을 사용
+            review_date: new Date().toISOString().slice(0, 10),
+            user_id: 1,
           }),
         }
       );
 
       if (!response.ok) {
-        throw new Error("Failed to submit review");
+        // 여기서 response 상태에 따라 다른 처리를 할 수 있습니다.
+        throw new Error(
+          `Server responded with ${response.status}: ${response.statusText}`
+        );
       }
 
       const newReview = await response.json();
@@ -65,7 +81,7 @@ function FoodDetail({ selectedRestaurant }) {
       setReviewModalOpen(false);
     } catch (error) {
       console.error("Error submitting review:", error.message);
-      // 필요에 따라 오류 처리 로직 추가
+      alert("리뷰 제출에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -88,7 +104,7 @@ function FoodDetail({ selectedRestaurant }) {
   return (
     <div>
       {selectedRestaurant && (
-        <div key={selectedRestaurant.restaurant.restaurants_id}>
+        <div key={selectedRestaurant.restaurants_id}>
           <p>
             세부 정보:{" "}
             <button onClick={handleDetailClick}>세부 정보 보기</button>
@@ -107,14 +123,14 @@ function FoodDetail({ selectedRestaurant }) {
       >
         {selectedRestaurant && (
           <FoodIndex
-            key={selectedRestaurant.restaurant.restaurants_id}
+            key={selectedRestaurant.restaurants_id}
             restaurant={selectedRestaurant}
           />
         )}
         {reviews.map((review) => (
-          <div key={review.id}>
-            <ReviewText>리뷰: {review.text}</ReviewText>
-            <button onClick={() => handleReviewDelete(review.id)}>
+          <div key={review.restaurant_id}>
+            <ReviewText>리뷰: {review.review_text}</ReviewText>
+            <button onClick={() => handleReviewDelete(review.restaurant_id)}>
               삭제하기
             </button>
           </div>
@@ -127,7 +143,7 @@ function FoodDetail({ selectedRestaurant }) {
       >
         {selectedRestaurant && (
           <Review
-            key={selectedRestaurant.restaurant.restaurants_id}
+            key={selectedRestaurant.restaurants_id}
             onSubmit={handleReviewSubmit}
           />
         )}

@@ -11,7 +11,7 @@ const FoodBox = () => {
     fetch("https://teste-backend.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
       .then((data) => {
-        setRestaurants(Array.isArray(data) ? data : [data]);
+        setRestaurants(Array.isArray(data.data) ? data.data : [data.data]);
       });
   }, []);
 
@@ -22,7 +22,7 @@ const FoodBox = () => {
       )
         .then((response) => response.json())
         .then((data) => {
-          setSelectedRestaurant(data);
+          setSelectedRestaurant(data.data);
         });
     }
   }, [selectedRestaurantId]);

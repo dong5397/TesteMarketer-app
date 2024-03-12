@@ -14,7 +14,7 @@ const RestaurantList = () => {
     fetch("https://teste-backend.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
       .then((data) => {
-        setRestaurants(Array.isArray(data) ? data : [data]);
+        setRestaurants(Array.isArray(data.data) ? data.data : [data.data]);
       });
   }, []);
 
@@ -28,7 +28,9 @@ const RestaurantList = () => {
   };
 
   const filteredRestaurants = restaurants.filter((restaurant) =>
-    restaurant && restaurant.name ? restaurant.name.includes(searchTerm) : false
+    restaurant.restaurant && restaurant.restaurant.name
+      ? restaurant.restaurant.name.includes(searchTerm)
+      : false
   );
   return (
     <Container>
@@ -44,12 +46,12 @@ const RestaurantList = () => {
       ) : (
         filteredRestaurants.map((restaurant) => (
           <RestaurantItem
-            key={restaurant.id}
-            onClick={() => handleRestaurantClick(restaurant)}
+            key={restaurant.restaurant.id}
+            onClick={() => handleRestaurantClick(restaurant.restaurant)}
           >
-            <h2>{restaurant.name}</h2>
-            <p>{restaurant.address}</p>
-            <p>{restaurant.phone}</p>
+            <h2>{restaurant.restaurant.name}</h2>
+            <p>{restaurant.restaurant.address}</p>
+            <p>{restaurant.restaurant.phone}</p>
           </RestaurantItem>
         ))
       )}

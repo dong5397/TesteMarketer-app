@@ -12,7 +12,7 @@ function FoodDetail({ selectedRestaurant }) {
 
   useEffect(() => {
     const fetchReviews = async () => {
-      if (selectedRestaurant && selectedRestaurant.restaurants_id) {
+      if (selectedRestaurant?.restaurants_id) {
         try {
           const response = await fetch(
             `https://teste-backend.fly.dev/api/v1/restaurants/${selectedRestaurant.restaurants_id}/reviews`
@@ -21,18 +21,19 @@ function FoodDetail({ selectedRestaurant }) {
             const data = await response.json();
             setReviews(data);
           } else {
-            // 요청이 실패하면 빈 배열을 리뷰 목록으로 설정하거나 오류 처리
             console.error("Failed to fetch reviews:", response.statusText);
             setReviews([]);
+            // 여기에 사용자에게 오류 메시지를 표시하는 로직을 추가할 수 있습니다.
           }
         } catch (error) {
           console.error("Error fetching reviews:", error.message);
           setReviews([]);
+          // 여기에 사용자에게 오류 메시지를 표시하는 로직을 추가할 수 있습니다.
         }
       } else {
-        // 선택된 레스토랑이 없는 경우
         console.warn("No selected restaurant to fetch reviews");
         setReviews([]);
+        // 선택된 레스토랑이 없는 경우에 대한 사용자 알림을 추가할 수 있습니다.
       }
     };
 

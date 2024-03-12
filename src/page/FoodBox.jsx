@@ -57,13 +57,17 @@ const FoodBox = () => {
 
 export default FoodBox;
 
-const Box = styled.div`
+const BaseBox = styled.div`
   width: 450px;
   border: 1px solid black;
   padding: 20px;
   margin-top: 20px;
-  margin-left: 10px;
   border-radius: 10px;
+  background-color: #fff;
+`;
+
+const Box = styled(BaseBox)`
+  margin-left: 10px;
   h2,
   p {
     font-size: 20px;
@@ -75,10 +79,6 @@ const Box = styled.div`
   }
 `;
 
-const RestaurantDetails = styled.div`
-  background-color: #fff;
-  border: 1px solid #ccc;
-  padding: 20px;
-  margin-top: 20px;
-  border-radius: 10px;
+const RestaurantDetails = styled(BaseBox)`
+  border-color: #ccc;
 `;

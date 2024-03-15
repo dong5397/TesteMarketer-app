@@ -7,62 +7,58 @@ function LoginDetail() {
   const [modalIsOpen, setModalIsOpen] = useState(true);
   const navigate = useNavigate();
 
-  function closeModal() {
-    setModalIsOpen(false);
-    navigate("/");
-  }
-
-  function navigateToRegister() {
-    navigate("/Joinmembership");
-  }
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  function create_token(e) {
-    e.preventDefault(); // 폼 제출을 방지합니다.
+  const closeModal = () => {
+    setModalIsOpen(false);
+    navigate("/");
+  };
 
-    fetch(`/api/v1/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("네트워크 응답이 올바르지 않습니다.");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.resultCode === "S-1") {
-          const token = data.token;
-          const userName = data.userName;
-
-          document.cookie = `token=${token};path=/`;
-          localStorage.setItem("userName", userName);
-
-          alert("로그인 성공!");
-          closeModal();
-        } else {
-          alert("로그인 실패: " + data.msg);
-        }
-      })
-      .catch((error) => {
-        alert("로그인 실패: " + error.message);
+  const handleLoginSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch("/api/v1/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
       });
-  }
+      if (!response.ok) {
+        throw new Error("네트워크 응답이 올바르지 않습니다.");
+      }
+      const data = await response.json();
+      if (data.resultCode === "S-1") {
+        const token = data.token;
+        const userName = data.data.userName;
+
+        document.cookie = `token=${token};path=/`;
+        localStorage.setItem("userName", userName);
+
+        alert("로그인 성공!");
+        closeModal();
+      } else {
+        alert("로그인 실패: " + data.msg);
+      }
+    } catch (error) {
+      alert("로그인 실패: " + error.message);
+    }
+  };
+
+  const navigateToRegister = () => {
+    navigate("/Joinmembership");
+  };
 
   return (
     <div>
       <StyledModal isOpen={modalIsOpen} contentLabel="로그인 모달">
         <CloseButton onClick={closeModal}>X</CloseButton>
         <h2>로그인</h2>
-        <form onSubmit={create_token}>
+        <form onSubmit={handleLoginSubmit}>
           <Input
             type="text"
             id="email"

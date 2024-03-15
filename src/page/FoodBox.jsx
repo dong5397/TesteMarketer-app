@@ -27,8 +27,8 @@ const FoodBox = () => {
     }
   }, [selectedRestaurantId]);
 
-  const handleRestaurantClick = (restaurantId) => {
-    setSelectedRestaurantId(restaurantId);
+  const handleRestaurantClick = (restaurant_Id) => {
+    setSelectedRestaurantId(restaurants_Id);
   };
 
   return (

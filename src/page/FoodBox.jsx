@@ -56,16 +56,13 @@ const BaseBox = styled.div`
   padding: 20px;
   margin-top: 20px;
   border-radius: 10px;
-<<<<<<< HEAD
 
-=======
   background-color: #fff;
 `;
 
 const Box = styled(BaseBox)`
   margin-left: 10px;
->>>>>>> 4b76e29 (리뷰 오류)
-  h2,
+
   p {
     font-size: 20px;
     padding: 10px;

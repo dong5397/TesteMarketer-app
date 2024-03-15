@@ -23,8 +23,8 @@ const KakaoMap = () => {
       .then((response) => response.json())
       .then((data) => {
         // data가 배열이 아닌 객체이고, 실제 식당 데이터가 data.restaurants에 담겨있다고 가정
-        if (data && Array.isArray(data.restaurants)) {
-          setRestaurants(data.restaurants);
+        if (data && Array.isArray(data.data)) {
+          setRestaurants(data.data);
         } else {
           // data가 배열이 아니라면 배열로 바꿔준다.
           if (data && !Array.isArray(data)) {

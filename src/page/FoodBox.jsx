@@ -35,9 +35,9 @@ const FoodBox = () => {
     <div>
       {restaurants.map((restaurant, index) => (
         <Box key={index} onClick={() => handleRestaurantClick(restaurant.id)}>
-          <h2>식당 이름: {restaurant.restaurant_name}</h2>
+          <h2>식당 이름: {restaurant.restaurants_name}</h2>
           <p>주소: {restaurant.address}</p>
-          <img src={restaurant.image} alt={restaurant.restaurant_name} />
+          <img src={restaurant.image} alt={restaurant.restaurants_name} />
         </Box>
       ))}
       {selectedRestaurant && (

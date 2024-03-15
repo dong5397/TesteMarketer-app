@@ -11,22 +11,24 @@ function MenuButton() {
   };
 
   return (
-    <Container>
-      <Button onClick={handleClick}>
-        <MenuIcon />
-      </Button>
-      <MenuList isOpen={isOpen}>
-        <MenuItem>
-          <MenuLink to="/login">로그인</MenuLink>
-        </MenuItem>
-        <MenuItem>
-          <MenuLink to="/sub2">내정보</MenuLink>
-        </MenuItem>
-        <MenuItem>
-          <MenuLink to="/sub3">개발자들</MenuLink>
-        </MenuItem>
-      </MenuList>
-    </Container>
+    <>
+      <Container>
+        <Button onClick={handleClick}>
+          <MenuIcon />
+        </Button>
+        <MenuList isOpen={isOpen}>
+          <MenuItem>
+            <MenuLink to="/Login">로그인창</MenuLink>
+          </MenuItem>
+          <MenuItem>
+            <MenuLink to="/Joinmembership"> 회원가입</MenuLink>
+          </MenuItem>
+          <MenuItem>
+            <MenuLink to="/sub3">개발자들</MenuLink>
+          </MenuItem>
+        </MenuList>
+      </Container>
+    </>
   );
 }
 

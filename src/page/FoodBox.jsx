@@ -8,7 +8,7 @@ const FoodBox = () => {
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
   useEffect(() => {
-    fetch("https://teste-backend.fly.dev/api/v1/restaurants")
+    fetch("https://makter-testbackend.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
       .then((data) => {
         setRestaurants(Array.isArray(data.data) ? data.data : [data.data]);
@@ -18,7 +18,7 @@ const FoodBox = () => {
   useEffect(() => {
     if (selectedRestaurantId) {
       fetch(
-        `https://teste-backend.fly.dev/api/v1/restaurants/${selectedRestaurantId}`
+        `https://makter-testbackend.fly.dev/api/v1/restaurants/${selectedRestaurantId}`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -27,14 +27,14 @@ const FoodBox = () => {
     }
   }, [selectedRestaurantId]);
 
-  const handleRestaurantClick = (restaurant_Id) => {
-    setSelectedRestaurantId(restaurants_Id);
+  const handleRestaurantClick = (Id) => {
+    setSelectedRestaurantId(Id);
   };
 
   return (
     <div>
       {restaurants.map((restaurant, index) => (
-        <Box key={index} onClick={() => handleRestaurantClick(restaurant.id)}>
+        <Box key={index} onClick={() => handleRestaurantClick(restaurant.restaurants_id)}>
           <h2>식당 이름: {restaurant.restaurants_name}</h2>
           <p>주소: {restaurant.address}</p>
           <img src={restaurant.image} alt={restaurant.restaurants_name} />

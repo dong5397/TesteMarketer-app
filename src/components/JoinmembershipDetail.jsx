@@ -29,7 +29,7 @@ function JoinmembershipDetail() {
     }
     try {
       const response = await fetch(
-        "https://teste-backend.fly.dev/api/v1/users",
+        "https://makter-testbackend.fly.dev/api/v1/users",
         {
           method: "POST",
           headers: {

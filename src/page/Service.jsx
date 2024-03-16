@@ -28,7 +28,7 @@ const Service = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    fetch("https://teste-backend.fly.dev/api/v1/restaurants")
+    fetch("https://makter-testbackend.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
       .then((data) => {
         setRestaurants(Array.isArray(data) ? data : [data]);

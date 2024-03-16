@@ -14,7 +14,7 @@ function Review({ onSubmit, restaurant_id }) {
 
     try {
       const response = await fetch(
-        `https://teste-backend.fly.dev/api/v1/reviews`,
+        `https://makter-testbackend.fly.dev/api/v1/reviews`,
         {
           method: "POST",
           headers: {

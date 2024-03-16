@@ -19,7 +19,7 @@ const KakaoMap = () => {
   }, []);
 
   useEffect(() => {
-    fetch("https://teste-backend.fly.dev/api/v1/restaurants")
+    fetch("https://makter-testbackend.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
       .then((data) => {
         // data가 배열이 아닌 객체이고, 실제 식당 데이터가 data.restaurants에 담겨있다고 가정

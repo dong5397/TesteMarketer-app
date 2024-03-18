@@ -28,20 +28,17 @@ function JoinmembershipDetail() {
       return;
     }
     try {
-      const response = await fetch(
-        "https://makter-testbackend.fly.dev/api/v1/users",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: formData.username,
-            email: formData.email,
-            password: formData.password,
-          }),
-        }
-      );
+      const response = await fetch("https://testbackmak.fly.dev/api/v1/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
       if (response.ok) {
         const data = await response.json();
         alert("회원가입 성공: " + data.msg);

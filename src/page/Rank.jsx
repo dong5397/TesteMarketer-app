@@ -5,7 +5,7 @@ function Rank() {
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    fetch("https://makter-testbackend.fly.dev/api/v1/restaurants")
+    fetch("https://testbackmak.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
       .then((data) => {
         if (data && Array.isArray(data.data)) {

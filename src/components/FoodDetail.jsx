@@ -15,7 +15,7 @@ function FoodDetail({ selectedRestaurant }) {
       if (selectedRestaurant?.restaurants_id) {
         try {
           const response = await fetch(
-            `https://testbackmak.fly.dev/api/v1/restaurants/${selectedRestaurant.restaurants_id}/reviews`
+            `https://maktertest.fly.dev/api/v1/restaurants/${selectedRestaurant.restaurants_id}/reviews`
           );
           if (response.ok) {
             const data = await response.json();
@@ -55,7 +55,7 @@ function FoodDetail({ selectedRestaurant }) {
   const handleReviewSubmit = async (reviewText) => {
     try {
       const response = await fetch(
-        `https://testbackmak.fly.dev/api/v1/reviews`,
+        `https://maktertest.fly.dev/api/v1/reviews`,
         {
           method: "POST",
           headers: {
@@ -89,7 +89,7 @@ function FoodDetail({ selectedRestaurant }) {
   // 리뷰 삭제
   const handleReviewDelete = async (reviewId) => {
     const response = await fetch(
-      `https://testbackmak.fly.dev/api/v1/reviews/${reviewId}`,
+      `https://maktertest.fly.dev/api/v1/reviews/${reviewId}`,
       {
         method: "DELETE",
       }

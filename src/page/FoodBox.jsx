@@ -8,7 +8,7 @@ const FoodBox = () => {
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
   useEffect(() => {
-    fetch("https://testbackmak.fly.dev/api/v1/restaurants")
+    fetch("https://maktertest.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
       .then((data) => {
         setRestaurants(Array.isArray(data.data) ? data.data : [data.data]);
@@ -18,7 +18,7 @@ const FoodBox = () => {
   useEffect(() => {
     if (selectedRestaurantId) {
       fetch(
-        `https://testbackmak.fly.dev/api/v1/restaurants/${selectedRestaurantId}`
+        `https://maktertest.fly.dev/api/v1/restaurants/${selectedRestaurantId}`
       )
         .then((response) => response.json())
         .then((data) => {

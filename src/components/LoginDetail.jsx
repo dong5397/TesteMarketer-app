@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
@@ -7,79 +7,37 @@ function LoginDetail() {
   const [modalIsOpen, setModalIsOpen] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setusername] = useState("");
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const is_logined = localStorage.getItem("is_logined");
-    const username = localStorage.getItem("userName");
-    setusername(username);
-
-    if (is_logined) {
-      setIsLoggedIn(true);
-    }
-  }, []);
 
   const closeModal = () => {
     setModalIsOpen(false);
     navigate("/");
   };
 
-  const handleLoginSubmit = async (event) => {
+  const handleLoginSubmit = (event) => {
     event.preventDefault();
-    try {
-      const response = await fetch(
-        "http://localhost:3000/api/v1/login_process",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
+    fetch("http://localhost:8123/api/v1/login", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          window.open("/", "_self");
+        } else {
+          throw new Error("로그인 실패");
         }
-      );
-      if (!response.ok) {
-        throw new Error("네트워크 응답이 올바르지 않습니다.");
-      }
-      const data = await response.json();
-      if (data.resultCode === "S-1") {
-        const userName = data.data.userName;
-        const is_logined = data.data.is_logined;
-        localStorage.setItem("userName", userName);
-        localStorage.setItem("is_logined", is_logined);
-        setIsLoggedIn(true); // Set isLoggedIn to true upon successful login
-        alert("로그인 성공!");
-        closeModal();
-      } else {
-        alert("로그인 실패: " + data.msg);
-      }
-    } catch (error) {
-      alert("로그인 실패: " + error.message);
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      const response = await fetch("https://maktertest.fly.dev/api/v1/logout", {
-        method: "POST",
+      })
+      .catch((error) => {
+        console.error("로그인 실패:", error);
+        // 로그인 실패 처리
       });
-      if (response.ok) {
-        // 로그아웃 성공
-        localStorage.removeItem("userName"); // 사용자 정보 삭제
-        setIsLoggedIn(false); // 로그인 상태 변경
-        alert("로그아웃 성공!");
-      } else {
-        // 로그아웃 실패
-        throw new Error("로그아웃 실패");
-      }
-    } catch (error) {
-      console.error("로그아웃 에러:", error);
-      alert("로그아웃 실패: " + error.message);
-    }
   };
 
   const navigateToRegister = () => {
@@ -88,37 +46,29 @@ function LoginDetail() {
 
   return (
     <div>
-      {isLoggedIn ? (
-        <StyledModal isOpen={modalIsOpen} contentLabel="로그인 모달">
-          <CloseButton onClick={closeModal}>X</CloseButton>
-          <h4>{username}님은 이미 로그인중입니다. 로그아웃 하시겠습니까?</h4>
-          <Button onClick={handleLogout}>로그아웃</Button>
-        </StyledModal>
-      ) : (
-        <StyledModal isOpen={modalIsOpen} contentLabel="로그인 모달">
-          <CloseButton onClick={closeModal}>X</CloseButton>
-          <h2>로그인</h2>
-          <form onSubmit={handleLoginSubmit}>
-            <Input
-              type="text"
-              id="email"
-              placeholder="이메일 주소"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <Input
-              type="password"
-              id="password"
-              placeholder="비밀번호"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Button type="submit">로그인</Button>
-            <div />
-            <Button onClick={navigateToRegister}>회원가입 하기</Button>
-          </form>
-        </StyledModal>
-      )}
+      <StyledModal isOpen={modalIsOpen} contentLabel="로그인 모달">
+        <CloseButton onClick={closeModal}>X</CloseButton>
+        <h2>로그인</h2>
+        <form onSubmit={handleLoginSubmit}>
+          <Input
+            type="text"
+            id="email"
+            placeholder="이메일 주소"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            type="password"
+            id="password"
+            placeholder="비밀번호"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button type="submit">로그인</Button>
+          <div />
+          <Button onClick={navigateToRegister}>회원가입 하기</Button>
+        </form>
+      </StyledModal>
     </div>
   );
 }

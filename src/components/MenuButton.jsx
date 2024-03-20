@@ -1,13 +1,71 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
 import styled from "styled-components";
 
 function MenuButton() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    const fetchLoginStatus = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8123/api/v1/login/success",
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setIsLogin(true);
+          setUser(data);
+        } else {
+          setIsLogin(false);
+        }
+      } catch (error) {
+        console.error("Error fetching login success data:", error);
+        setIsLogin(false);
+      }
+    };
+    fetchLoginStatus();
+  }, []);
 
   const handleClick = () => {
     setIsOpen(!isOpen);
+  };
+
+  const accessToken = () => {
+    fetch("http://localhost:8123/api/v1/accesstoken", {
+      method: "GET",
+      credentials: "include",
+    });
+  };
+
+  const refreshToken = () => {
+    fetch("http://localhost:8123/api/v1/refreshtoken", {
+      method: "GET",
+      credentials: "include",
+    });
+  };
+
+  const logout = () => {
+    fetch("http://localhost:8123/api/v1/logout", {
+      method: "POST",
+      credentials: "include",
+    })
+      .then((response) => {
+        if (response.ok) {
+          window.open("/", "_self");
+        } else {
+          throw new Error("Failed to logout");
+        }
+      })
+      .catch((error) => {
+        console.error("Error during logout:", error);
+      });
   };
 
   return (
@@ -17,14 +75,27 @@ function MenuButton() {
           <MenuIcon />
         </Button>
         <MenuList isOpen={isOpen}>
+          {!isLogin ? (
+            <MenuItem>
+              <MenuLink to="/Login">로그인</MenuLink>
+            </MenuItem>
+          ) : (
+            <MenuItem>
+              <MenuLink onClick={logout}>{user.username}님 로그아웃</MenuLink>
+            </MenuItem>
+          )}
+
           <MenuItem>
-            <MenuLink to="/Login">로그인창</MenuLink>
-          </MenuItem>
-          <MenuItem>
-            <MenuLink to="/Joinmembership"> 회원가입</MenuLink>
+            <MenuLink to="/Joinmembership">회원가입</MenuLink>
           </MenuItem>
           <MenuItem>
             <MenuLink to="/sub3">개발자들</MenuLink>
+          </MenuItem>
+          <MenuItem>
+            <MenuLink onClick={accessToken}>accessToken</MenuLink>
+          </MenuItem>
+          <MenuItem>
+            <MenuLink onClick={refreshToken}>refreshToken</MenuLink>
           </MenuItem>
         </MenuList>
       </Container>

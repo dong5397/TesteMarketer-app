@@ -12,7 +12,7 @@ function MenuButton() {
     const fetchLoginStatus = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8123/api/v1/login/success",
+          "https://makterteste.fly.dev/api/v1/login/success",
           {
             method: "GET",
             credentials: "include",
@@ -38,21 +38,21 @@ function MenuButton() {
   };
 
   const accessToken = () => {
-    fetch("http://localhost:8123/api/v1/accesstoken", {
+    fetch("https://makterteste.fly.dev/api/v1/accesstoken", {
       method: "GET",
       credentials: "include",
     });
   };
 
   const refreshToken = () => {
-    fetch("http://localhost:8123/api/v1/refreshtoken", {
+    fetch("https://makterteste.fly.dev/api/v1/refreshtoken", {
       method: "GET",
       credentials: "include",
     });
   };
 
   const logout = () => {
-    fetch("http://localhost:8123/api/v1/logout", {
+    fetch("https://makterteste.fly.dev/api/v1/logout", {
       method: "POST",
       credentials: "include",
     })
@@ -81,10 +81,9 @@ function MenuButton() {
             </MenuItem>
           ) : (
             <MenuItem>
-              <MenuLink onClick={logout}>{user.username}님 로그아웃</MenuLink>
+              <MenuLink onClick={logout}>로그아웃</MenuLink>
             </MenuItem>
           )}
-
           <MenuItem>
             <MenuLink to="/Joinmembership">회원가입</MenuLink>
           </MenuItem>

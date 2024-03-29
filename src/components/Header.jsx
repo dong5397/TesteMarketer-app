@@ -15,7 +15,6 @@ function Header({ userName }) {
         </Link>
       </Cell>
       {userName ? <p>안녕하세요, {userName}님</p> : <p></p>}
-      <MenuButton />
     </Container>
   );
 }

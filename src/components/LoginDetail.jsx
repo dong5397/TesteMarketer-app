@@ -16,7 +16,7 @@ function LoginDetail() {
 
   const handleLoginSubmit = (event) => {
     event.preventDefault();
-    fetch("https://maktertest.fly.dev/api/v1/login", {
+    fetch("http://localhost:3000/api/v1/login", {
       method: "POST",
       credentials: "include",
       headers: {

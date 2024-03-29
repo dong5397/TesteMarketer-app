@@ -15,7 +15,7 @@ function FoodDetail({ selectedRestaurant }) {
       if (selectedRestaurant?.restaurants_id) {
         try {
           const response = await fetch(
-            `https://maktertest.fly.dev/api/v1/restaurants/${selectedRestaurant.restaurants_id}/reviews`
+            `http://localhost:3000/api/v1/restaurants/${selectedRestaurant.restaurants_id}/reviews`
           );
           if (response.ok) {
             const data = await response.json();
@@ -54,21 +54,18 @@ function FoodDetail({ selectedRestaurant }) {
   // FoodDetail.jsx에 리뷰 등록 함수 수정
   const handleReviewSubmit = async (reviewText) => {
     try {
-      const response = await fetch(
-        `https://maktertest.fly.dev/api/v1/reviews`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            restaurants_id: selectedRestaurant.restaurants_id, // 수정된 부분
-            review_text: reviewText,
-            review_date: new Date().toISOString().slice(0, 10),
-            user_id: 1,
-          }),
-        }
-      );
+      const response = await fetch(`http://localhost:3000/api/v1/reviews`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          restaurants_id: selectedRestaurant.restaurants_id, // 수정된 부분
+          review_text: reviewText,
+          review_date: new Date().toISOString().slice(0, 10),
+          user_id: 1,
+        }),
+      });
 
       if (!response.ok) {
         // 여기서 response 상태에 따라 다른 처리를 할 수 있습니다.
@@ -89,7 +86,7 @@ function FoodDetail({ selectedRestaurant }) {
   // 리뷰 삭제
   const handleReviewDelete = async (reviewId) => {
     const response = await fetch(
-      `https://maktertest.fly.dev/api/v1/reviews/${reviewId}`,
+      `http://localhost:3000/api/v1/reviews/${reviewId}`,
       {
         method: "DELETE",
       }

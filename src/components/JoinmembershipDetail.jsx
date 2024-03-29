@@ -28,7 +28,7 @@ function JoinmembershipDetail() {
       return;
     }
     try {
-      const response = await fetch("https://maktertest.fly.dev/api/v1/users", {
+      const response = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

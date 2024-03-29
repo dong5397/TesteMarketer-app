@@ -28,10 +28,11 @@ const RestaurantList = () => {
   };
 
   const filteredRestaurants = restaurants.filter((restaurant) =>
-    restaurant.restaurant && restaurant.restaurant.name
-      ? restaurant.restaurant.name.includes(searchTerm)
+    restaurant.restaurants_name && restaurant.address
+      ? restaurant.restaurants_name.includes(searchTerm)
       : false
   );
+
   return (
     <Container>
       <input
@@ -46,12 +47,12 @@ const RestaurantList = () => {
       ) : (
         filteredRestaurants.map((restaurant) => (
           <RestaurantItem
-            key={restaurant.restaurant.id}
-            onClick={() => handleRestaurantClick(restaurant.restaurant)}
+            key={restaurant.restaurants_id}
+            onClick={() => handleRestaurantClick(restaurant)}
           >
-            <h2>{restaurant.restaurant.name}</h2>
-            <p>{restaurant.restaurant.address}</p>
-            <p>{restaurant.restaurant.phone}</p>
+            <h2>{restaurant.restaurants_name}</h2>
+            <p>{restaurant.address}</p>
+            <p>{restaurant.phone}</p>
           </RestaurantItem>
         ))
       )}
@@ -62,16 +63,13 @@ const RestaurantList = () => {
       >
         {selectedRestaurant && (
           <div>
-            <h1>{selectedRestaurant.name}</h1>
+            <h1>{selectedRestaurant.restaurants_name}</h1>
             <h2>주소: {selectedRestaurant.address}</h2>
             <h2>전화번호: {selectedRestaurant.phone}</h2>
-            <h2>영업 시간: {selectedRestaurant.openingHours}</h2>
-            <h2>맛: {selectedRestaurant.tasteInfo}</h2>
-            <h2>카테고리: {selectedRestaurant.category}</h2>
-            <h2>별 점: {selectedRestaurant.rating}</h2>
+            <h2>영업 시간: {selectedRestaurant.opening_hours}</h2>
             <ModalImage
-              src={selectedRestaurant.Image}
-              alt={selectedRestaurant.name}
+              src={selectedRestaurant.image}
+              alt={selectedRestaurant.restaurants_name}
             />
           </div>
         )}

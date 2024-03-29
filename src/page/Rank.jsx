@@ -23,9 +23,12 @@ function Rank() {
       <h1>Top 10 Restaurants</h1>
       <ul>
         {searchResults.map((restaurant) => (
-          <li key={restaurant.restaurants_id}>
-            {restaurant.restaurants_name} - Rating: {restaurant.rating}
-          </li>
+          <Box key={restaurant.restaurants_id}>
+            <li>
+              {restaurant.restaurants_name} - 평점: {restaurant.rating}
+              <img src={restaurant.image} alt={restaurant.restaurants_name} />
+            </li>
+          </Box>
         ))}
       </ul>
     </div>

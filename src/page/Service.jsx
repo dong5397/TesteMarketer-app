@@ -28,10 +28,10 @@ const Service = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    fetch("https://maktertest.fly.dev/api/v1/restaurants")
+    fetch("https://makterteste.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
       .then((data) => {
-        setRestaurants(Array.isArray(data) ? data : [data]);
+        setRestaurants(Array.isArray(data.data) ? data.data : [data.data]);
       });
   }, []);
 

@@ -7,7 +7,7 @@ const RangeSlider = ({ onSave }) => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    onSave(value);
+    onSave(newValue); // 수정된 부분
   };
 
   return (

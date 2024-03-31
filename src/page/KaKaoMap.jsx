@@ -67,32 +67,44 @@ const KakaoMap = () => {
   }, [kakao, restaurants]);
 
   return (
-    <div>
+    <Container>
       <MapContainer id="map" />
       {selectedRestaurant && (
         <StyledModal
           isOpen={true}
-          onRequestClose={() => setSelectedRestaurant(null)}
+          onRequ  estClose={() => setSelectedRestaurant(null)}
         >
           <FoodIndex restaurant={selectedRestaurant} />
         </StyledModal>
       )}
-    </div>
+    </Container>
   );
 };
 
 export default KakaoMap;
 
-const MapContainer = styled.div`
-  position: fixed;
-  top: 200px;
-  bottom: 0;
-  left: 1200px;
-  width: 60%;
-  height: 70%;
-  transform: translateX(-50%);
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 700px;
 `;
 
+const MapContainer = styled.div`
+  position: absolute;
+  top: 60%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  width: 1300px;
+  height: 600px;
+  border: 1px solid rgba(0, 0, 0, 0.1); /* 테두리 추가 */
+  border-radius: 10px; /* 테두리 둥글게 만듦 */
+  background-image: linear-gradient(
+    to bottom right,
+    #ffffff,
+    #f0f0f0
+  ); /* 그라데이션 효과 추가 */
+`;
 const StyledModal = styled(Modal)`
   position: fixed;
   top: 50%;

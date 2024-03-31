@@ -1,20 +1,56 @@
+import { useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import MenuButton from "./MenuButton";
 
-function Header({ userName }) {
+
+
+function Header({ setAuth }) {
+
+  const [name, setName] = useState("")
+
+  async function getName() {
+    try {
+      const response = await fetch("http://localhost:3000/dashboard/", {
+        method: "GET",
+        headers: { token: localStorage.token }
+      });
+
+      const parseRes = await response.json();
+      console.log(parseRes)
+
+      setName(parseRes.user_name)
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
+  useEffect(() => {
+    getName()
+  },[])
+
+  const logout_sucessfully = () => toast("로그아웃 성공!");
+
+  function logout(e)  {
+    e.preventDefault();
+    localStorage.removeItem("token")
+    setAuth(false);
+    logout_sucessfully()
+  }
+
   // props로 받은 userName을 사용하기 때문에, localStorage에서 다시 가져올 필요 없음
   return (
     <Container>
       <Cell className="left">
         <Link to={"/"}>
-          <Img
-            src="https://modo-phinf.pstatic.net/20150520_153/1432118386155aFLGK_JPEG/mosaBygLif.jpeg?type=f320_320"
-            alt="로고"
-          />
+          <Img src="https://modo-phinf.pstatic.net/20150520_153/1432118386155aFLGK_JPEG/mosaBygLif.jpeg?type=f320_320" alt="Logo" />
         </Link>
       </Cell>
-      {userName ? <p>안녕하세요, {userName}님</p> : <p></p>}
+      
+       
+      <UserName>안녕하세요, {name}님</UserName>
+      <button onClick={e => logout(e)}>Logout</button>
+      
     </Container>
   );
 }
@@ -25,13 +61,13 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0 2.5rem;
+  margin: 0.1rem;
   padding: 0.5rem 0;
 `;
 
 const Cell = styled.div`
   display: flex;
-  align-items: center; /* 'cen' 오타를 'center'로 수정 */
+  align-items: center;
   gap: 2rem;
   &.right {
     font-size: 1.3rem;
@@ -40,16 +76,19 @@ const Cell = styled.div`
 `;
 
 const Img = styled.img`
-  width: 80px;
+  width: 150px;
   cursor: pointer;
   display: block;
+  transition: transform 0.3s; /* 호버 효과를 위한 트랜지션 추가 */
+  &:hover {
+    transform: scale(1.05); /* 호버할 때 조금씩 확대되는 효과 */
+  }
 `;
 
-// 사용자 이름을 보여주기 위한 스타일 컴포넌트 추가
 const UserName = styled.span`
-  margin-left: 1rem; /* MenuButton과의 간격을 주기 위해 */
+  margin-left: 1rem;
   font-size: 1rem;
   font-weight: bold;
-  color: #333; /* 적당한 색상 선택 */
-  align-self: center; /* 세로 중앙 정렬 */
+  color: #333;
+  align-self: center;
 `;

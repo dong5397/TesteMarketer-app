@@ -36,23 +36,29 @@ const Service = () => {
   }, []);
 
   const findRestaurant = () => {
+    // 사이트에 등록된 맛집이 하나도 없다면 null처리
     if (restaurants.length === 0) {
       return null;
     }
-
+    // 가장 가까운맛집과 그 맛집까지의차이를 나타내는 최소값을 저장할 변수
     let closestRestaurant = restaurants[0];
     let minDiff = Infinity;
 
+
+    // 각 맛집의 맛과 사용자가 선택한 맛 레벨간의 차이 계산하여 diff 변수에 누적
     for (let restaurant of restaurants) {
       let diff = 0;
       for (let tasteKey in taste) {
-        diff += Math.abs(taste[tasteKey] - restaurant.taste_level); // 수정된 부분
+        diff += Math.abs(taste[tasteKey] - restaurant.taste_level);
       }
+
+      // 맛집을 순회하면서 계산한 차이가 현재까지의 최소값보다 작을경우 최소값을 업데이트 가장 가까운 맛집을 찾음
       if (diff < minDiff) {
         minDiff = diff;
         closestRestaurant = restaurant;
       }
     }
+    // 해당 맛집반환
     return closestRestaurant;
   };
 
@@ -80,9 +86,9 @@ const Service = () => {
       <StyledRangeSlider onSave={(value) => handleSave("sour", value)} />
       <Circle className="bitter">쓴맛</Circle>
       <StyledRangeSlider onSave={(value) => handleSave("bitter", value)} />
-      <Btn className="search" onClick={handleSearch}>
+      <SearchBtn className="search" onClick={handleSearch}>
         검색
-      </Btn>
+      </SearchBtn>
       {isModalOpen && selectedRestaurant && (
         <Modal onClose={handleCloseModal}>
           <h1>{selectedRestaurant.restaurants_name}</h1>
@@ -134,7 +140,7 @@ const Container = styled.div`
   height: 100%;
   padding: 50px;
   margin-left: 30px;
-  background-color: #f2f2f2;
+  background-color: white;
   border-radius: 50px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
   display: flex;
@@ -151,16 +157,21 @@ const StyledRangeSlider = styled(RangeSlider)`
 `;
 
 // Button 스타일 만들어주기
-const Btn = styled.button`
+const SearchBtn = styled.button`
   padding: 20px;
-  &.save {
-    background-color: green;
-    color: white;
+  background-color: #f7df1e; /* 배경색 변경 */
+  color: black;
+  border: none; /* 테두리 없애기 */
+  border-radius: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ffd700; /* hover 시 배경색 변경 */
+    color: white; /* hover 시 텍스트 색상 변경 */
   }
 
-  &.search {
-    background-color: gray;
-    color: white;
+  &:active {
+    transform: translateY(2px); /* 클릭 시 버튼 아래로 약간 이동 */
   }
 `;
 // Service 컴포넌트를 내보냄

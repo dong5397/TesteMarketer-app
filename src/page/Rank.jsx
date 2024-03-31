@@ -39,7 +39,7 @@ export default Rank;
 
 const Box = styled.div`
   width: 400px;
-  border: 1px solid black;
+
   padding: 20px;
   margin-top: 20px;
   border-radius: 10px;

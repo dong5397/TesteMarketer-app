@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function Main({ setAuth }) {
   const [inputs, setInputs] = useState({
@@ -15,6 +18,11 @@ function Main({ setAuth }) {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
 
+ 
+  const login_sucessfully = () => toast("로그인 성공!");
+
+  const login_fail = () => toast("로그인 실패!");
+
   const onSubmitForm = async (e) => {
     e.preventDefault();
     try {
@@ -26,10 +34,15 @@ function Main({ setAuth }) {
       });
 
       const parseRes = await response.json();
-
+      if(parseRes.token){
       localStorage.setItem("token", parseRes.token);
-
+  
       setAuth(true);
+      login_sucessfully();
+      } else {
+        setAuth(false)
+        login_fail();
+      }
     } catch (err) {
       console.error(err.message);
     }
@@ -54,6 +67,7 @@ function Main({ setAuth }) {
             onChange={(e) => onChange(e)}
           />
           <button type="submit">로그인</button>
+          
           <div />
           <Link to={"/register"}>회원가입 하기</Link>
         </form>

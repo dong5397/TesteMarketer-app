@@ -30,7 +30,7 @@ const FoodBox = () => {
   };
 
   return (
-    <div>
+    <Container>
       {restaurants.map((restaurant, index) => (
         <Box
           key={index}
@@ -38,7 +38,7 @@ const FoodBox = () => {
         >
           <h2>식당 이름: {restaurant.restaurants_name}</h2>
           <p>주소: {restaurant.address}</p>
-          <img src={restaurant.image} alt={restaurant.restaurants_name} />
+          <Image src={restaurant.image} alt={restaurant.restaurants_name} />
         </Box>
       ))}
       {selectedRestaurant && (
@@ -46,33 +46,49 @@ const FoodBox = () => {
           <FoodDetail selectedRestaurant={selectedRestaurant} />
         </RestaurantDetails>
       )}
-    </div>
+    </Container>
   );
 };
+
 export default FoodBox;
 
-const BaseBox = styled.div`
-  width: 450px;
-  border: 1px solid black;
-  padding: 20px;
-  margin-top: 20px;
-  border-radius: 10px;
+const Container = styled.div`
+  display: inline-block;
+  justify-content: space-around;
+  gap: 20px;
+`;
 
+const BaseBox = styled.div`
+  width: 300px;
+  padding: 20px;
+  border-radius: 10px;
   background-color: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const Box = styled(BaseBox)`
-  margin-left: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
 
   p {
-    font-size: 20px;
-    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 15px;
   }
+`;
 
-  img {
-    max-width: 90%;
-    height: auto;
-  }
+const Image = styled.img`
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
 `;
 
 const RestaurantDetails = styled(BaseBox)`

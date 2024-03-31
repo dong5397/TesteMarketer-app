@@ -1,9 +1,10 @@
-// FoodDetail.jsx
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import FoodIndex from "./FoodIndex";
 import Modal from "react-modal";
+import FoodIndex from "./FoodIndex";
 import Review from "./Review";
+
+Modal.setAppElement("#root");
 
 function FoodDetail({ selectedRestaurant }) {
   const [isModalOpen, setDetailModalOpen] = useState(false);
@@ -15,7 +16,7 @@ function FoodDetail({ selectedRestaurant }) {
       if (selectedRestaurant?.restaurants_id) {
         try {
           const response = await fetch(
-            `http://localhost:3000/api/v1/restaurants/${selectedRestaurant.restaurants_id}/reviews`
+            `https://maktertest.fly.dev/api/v1/restaurants/${selectedRestaurant.restaurants_id}/reviews`
           );
           if (response.ok) {
             const data = await response.json();
@@ -23,52 +24,47 @@ function FoodDetail({ selectedRestaurant }) {
           } else {
             console.error("Failed to fetch reviews:", response.statusText);
             setReviews([]);
-            // 여기에 사용자에게 오류 메시지를 표시하는 로직을 추가할 수 있습니다.
           }
         } catch (error) {
           console.error("Error fetching reviews:", error.message);
           setReviews([]);
-          // 여기에 사용자에게 오류 메시지를 표시하는 로직을 추가할 수 있습니다.
         }
       } else {
         console.warn("No selected restaurant to fetch reviews");
         setReviews([]);
-        // 선택된 레스토랑이 없는 경우에 대한 사용자 알림을 추가할 수 있습니다.
       }
     };
 
     fetchReviews();
   }, [selectedRestaurant]);
 
-  // 모달: useState 의 상태를 false에서 true로 바꿈
   const handleDetailClick = () => {
     setDetailModalOpen(true);
   };
 
-  // 리뷰: useState 의 상태를 false에서 true로 바꿈
   const handleReviewClick = () => {
     setReviewModalOpen(true);
   };
 
-  // 리뷰 등록
-  // FoodDetail.jsx에 리뷰 등록 함수 수정
   const handleReviewSubmit = async (reviewText) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/v1/reviews`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          restaurants_id: selectedRestaurant.restaurants_id, // 수정된 부분
-          review_text: reviewText,
-          review_date: new Date().toISOString().slice(0, 10),
-          user_id: 1,
-        }),
-      });
+      const response = await fetch(
+        `https://maktertest.fly.dev/api/v1/reviews`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            restaurants_id: selectedRestaurant.restaurants_id,
+            review_text: reviewText,
+            review_date: new Date().toISOString().slice(0, 10),
+            user_id: 1,
+          }),
+        }
+      );
 
       if (!response.ok) {
-        // 여기서 response 상태에 따라 다른 처리를 할 수 있습니다.
         throw new Error(
           `Server responded with ${response.status}: ${response.statusText}`
         );
@@ -83,10 +79,9 @@ function FoodDetail({ selectedRestaurant }) {
     }
   };
 
-  // 리뷰 삭제
   const handleReviewDelete = async (reviewId) => {
     const response = await fetch(
-      `http://localhost:3000/api/v1/reviews/${reviewId}`,
+      `https://maktertest.fly.dev/api/v1/reviews/${reviewId}`,
       {
         method: "DELETE",
       }
@@ -105,15 +100,14 @@ function FoodDetail({ selectedRestaurant }) {
         <div key={selectedRestaurant.restaurants_id}>
           <p>
             세부 정보:{" "}
-            <button onClick={handleDetailClick}>세부 정보 보기</button>
+            <Button onClick={handleDetailClick}>세부 정보 보기</Button>
           </p>
           <p>
             리뷰 작성하기:{" "}
-            <button onClick={handleReviewClick}>리뷰 작성하기</button>
+            <Button onClick={handleReviewClick}>리뷰 작성하기</Button>
           </p>
         </div>
       )}
-      {/* 식당 정보를 보기위한 모달 */}
       <StyledModal
         isOpen={isModalOpen}
         onRequestClose={() => setDetailModalOpen(false)}
@@ -126,15 +120,14 @@ function FoodDetail({ selectedRestaurant }) {
           />
         )}
         {reviews.map((review) => (
-          <div key={review.restaurant_id}>
+          <ReviewContainer key={review.review_id}>
             <ReviewText>리뷰: {review.review_text}</ReviewText>
-            <button onClick={() => handleReviewDelete(review.restaurant_id)}>
+            <Button onClick={() => handleReviewDelete(review.review_id)}>
               삭제하기
-            </button>
-          </div>
+            </Button>
+          </ReviewContainer>
         ))}
       </StyledModal>
-      {/* 리뷰 작성을 하기위한 모달 */}
       <StyledModal
         isOpen={isReviewOpen}
         onRequestClose={() => setReviewModalOpen(false)}
@@ -152,25 +145,40 @@ function FoodDetail({ selectedRestaurant }) {
 
 export default FoodDetail;
 
-const ReviewText = styled.p`
-  font-size: 20px;
-  border: 1px solid black;
-  padding: 20px;
-  margin-top: 20px;
-  border-radius: 10px;
-`;
-
 const StyledModal = styled(Modal)`
   position: absolute;
-  top: 40%;
-  left: 10%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  width: 400px;
-  height: 700px;
+  width: 80%;
+  max-width: 600px;
   background: white;
-  border: 1px solid #ccc;
-  overflow: auto;
-
-  outline: none;
+  border-radius: 8px;
   padding: 20px;
+`;
+
+const ReviewContainer = styled.div`
+  margin-top: 20px;
+`;
+
+const ReviewText = styled.p`
+  font-size: 18px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+`;
+
+const Button = styled.button`
+  background-color: #f1c40f;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #e67e22;
+  }
 `;

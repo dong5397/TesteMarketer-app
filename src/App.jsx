@@ -1,26 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Main from "./page/Main";
-import Dashboard from "./page/dashboard";
+import Home from "./page/Home";
 import Header from "./components/Header";
 import NavigationBar from "./components/NavigationBar";
 import Search from "./page/Search";
 import Rank from "./page/Rank";
 import Service from "./page/Service";
 import KakaoMap from "./page/KakaoMap";
-import Joinmembership from "./page/Joinmembership";
-import Login from "./page/Login";
 import Register from "./page/Register";
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+
+
 function App() {
+  
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
 
   const setAuth = (boolean) => {
     setIsAuthenticated(boolean);
   };
 
+  async function isAuth() {
+    try{
+      const response = await fetch("http://localhost:3000/is-verify", {
+        method: "GET",
+        headers: {token : localStorage.token}
+      })
+
+      const parseRes = await response.json()
+      
+      parseRes === true ? setIsAuthenticated(true):
+      setIsAuthenticated(false)
+    } catch (err){
+      console.error(err.message);
+    }
+  }
+
+  useEffect(()=> {
+    isAuth()
+  })
   return (
     <BrowserRouter>
+    <ToastContainer />
       <Routes>
         {/* Main 페이지에는 Header와 NavigationBar를 제외한 컴포넌트를 렌더링 */}
         <Route
@@ -44,12 +70,17 @@ function App() {
           }
         />
         {/* 나머지 페이지에는 Header와 NavigationBar를 포함하여 렌더링 */}
-        <Route path="/dashboard" element={<DashboardHN setAuth={setAuth} />} />
+        <Route path="/home" element={
+        !isAuthenticated ? (
+          <Navigate to="/" />
+        ) : (
+        <HomeHN setAuth={setAuth} /> 
+        )
+      } 
+      />
         <Route path="/search" element={<SearchHN />} />
-        <Route path="/login" element={<LoginHN />} />
         <Route path="/rank" element={<RankHN />} />
         <Route path="/service" element={<ServiceHN />} />
-        <Route path="/Joinmembership" element={<JoinmembershipHN />} />
       </Routes>
     </BrowserRouter>
   );
@@ -63,58 +94,42 @@ const MainHN = ({ setAuth }) => (
 );
 
 // 나머지 페이지에서는 Header와 NavigationBar를 포함하여 컴포넌트를 렌더링
-const DashboardHN = (setAuth) => (
+const HomeHN = ({setAuth}) => (
   <div>
-    <Header />
+    <Header setAuth={setAuth}/>
     <NavigationBar />
-    <Dashboard setAuth={setAuth} />
+    <Home setAuth={setAuth} />
     <KakaoMap />
   </div>
 );
 
-const SearchHN = () => (
+const SearchHN = ({setAuth}) => (
   <div>
-    <Header />
+    <Header setAuth={setAuth}/>
     <NavigationBar />
     <Search />
     <KakaoMap />
   </div>
 );
 
-const LoginHN = () => (
-  <div>
-    <Header />
-    <NavigationBar />
-    <Login />
-    <KakaoMap />
-  </div>
-);
 
-const RankHN = () => (
+const RankHN = ({setAuth}) => (
   <div>
-    <Header />
+    <Header setAuth={setAuth}/>
     <NavigationBar />
     <Rank />
     <KakaoMap />
   </div>
 );
 
-const ServiceHN = () => (
+const ServiceHN = ({setAuth}) => (
   <div>
-    <Header />
+    <Header setAuth={setAuth}/>
     <NavigationBar />
     <Service />
     <KakaoMap />
   </div>
 );
 
-const JoinmembershipHN = () => (
-  <div>
-    <Header />
-    <NavigationBar />
-    <Joinmembership setAuth={setAuth} />
-    <KakaoMap />
-  </div>
-);
 
 export default App;

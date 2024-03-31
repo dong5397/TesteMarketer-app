@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import {toast } from "react-toastify";
+
 const Register = ({ setAuth }) => {
   const [inputs, setinputs] = useState({
     email: "",
@@ -14,6 +16,10 @@ const Register = ({ setAuth }) => {
     setinputs({ ...inputs, [e.target.name]: e.target.value });
   };
 
+  const register_sucessfully = () => toast("회원가입 성공!");
+
+  const register_fail = () => toast("이미 존재하는 회원입니다.");
+
   const onSubmitForm = async (e) => {
     e.preventDefault();
 
@@ -27,12 +33,21 @@ const Register = ({ setAuth }) => {
         },
         body: JSON.stringify(body),
       });
+      
       // 회원가입 성공시 토큰 발급
       const parseRes = await response.json();
 
+      if(parseRes.token) {
       localStorage.setItem("token", parseRes.token);
 
       setAuth(true);
+      register_sucessfully()
+    } else {
+      setAuth(false);
+      register_fail()
+    }
+
+     
     } catch (err) {
       console.error(err.message);
     }

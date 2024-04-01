@@ -69,7 +69,6 @@ const BaseBox = styled.div`
 const Box = styled(BaseBox)`
   cursor: pointer;
   transition: transform 0.2s ease;
-
   &:hover {
     transform: translateY(-5px);
   }

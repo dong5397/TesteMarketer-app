@@ -12,11 +12,12 @@ function FoodDetail({ selectedRestaurant }) {
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
+    console.log(selectedRestaurant);
     const fetchReviews = async () => {
-      if (selectedRestaurant?.restaurants_id) {
+      if (selectedRestaurant.restaurants_id) {
         try {
           const response = await fetch(
-            `https://maktertest.fly.dev/api/v1/restaurants/${selectedRestaurant.restaurants_id}/reviews`
+            `http://localhost:3000/api/v1/restaurants/${selectedRestaurant.restaurants_id}/reviews`
           );
           if (response.ok) {
             const data = await response.json();
@@ -48,21 +49,18 @@ function FoodDetail({ selectedRestaurant }) {
 
   const handleReviewSubmit = async (reviewText) => {
     try {
-      const response = await fetch(
-        `https://maktertest.fly.dev/api/v1/reviews`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            restaurants_id: selectedRestaurant.restaurants_id,
-            review_text: reviewText,
-            review_date: new Date().toISOString().slice(0, 10),
-            user_id: 1,
-          }),
-        }
-      );
+      const response = await fetch(`http://localhost:3000/api/v1/reviews`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          restaurants_id: selectedRestaurant.restaurants_id,
+          review_text: reviewText,
+          review_date: new Date().toISOString().slice(0, 10),
+          user_id: 1,
+        }),
+      });
 
       if (!response.ok) {
         throw new Error(
@@ -81,7 +79,7 @@ function FoodDetail({ selectedRestaurant }) {
 
   const handleReviewDelete = async (reviewId) => {
     const response = await fetch(
-      `https://maktertest.fly.dev/api/v1/reviews/${reviewId}`,
+      `http://localhost:3000/api/v1/reviews/${reviewId}`,
       {
         method: "DELETE",
       }

@@ -72,7 +72,8 @@ const KakaoMap = () => {
       {selectedRestaurant && (
         <StyledModal
           isOpen={true}
-          onRequ  estClose={() => setSelectedRestaurant(null)}
+          onRequ
+          estClose={() => setSelectedRestaurant(null)}
         >
           <FoodIndex restaurant={selectedRestaurant} />
         </StyledModal>
@@ -92,7 +93,7 @@ const Container = styled.div`
 
 const MapContainer = styled.div`
   position: absolute;
-  top: 60%;
+  top: 55%;
   left: 60%;
   transform: translate(-50%, -50%);
   width: 1300px;
@@ -105,15 +106,15 @@ const MapContainer = styled.div`
     #f0f0f0
   ); /* 그라데이션 효과 추가 */
 `;
+
 const StyledModal = styled(Modal)`
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 30%;
-  height: 50%;
+  width: 500px;
   background: white;
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 `;

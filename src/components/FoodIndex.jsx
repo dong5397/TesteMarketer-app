@@ -36,11 +36,11 @@ const Container = styled.div`
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
-  background: linear-gradient(to right, #f7df1e, #f1c40f); /* 그라데이션 배경 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
-  transition: transform 0.3s ease-in-out; /* 호버 효과 */
+  background: linear-gradient(to right, #f7df1e, #f1c40f);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out;
   &:hover {
-    transform: translateY(-5px); /* 호버 효과 */
+    transform: translateY(-5px);
   }
 `;
 
@@ -48,10 +48,10 @@ const Title = styled.h2`
   font-size: 24px;
   color: #333;
   margin-bottom: 12px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* 텍스트 그림자 효과 */
-  transition: color 0.3s ease-in-out; /* 호버 효과 */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  transition: color 0.3s ease-in-out;
   &:hover {
-    color: #f1c40f; /* 호버 효과 */
+    color: #f1c40f;
   }
 `;
 
@@ -71,9 +71,9 @@ const InfoLabel = styled.p`
 const InfoText = styled.p`
   font-size: 16px;
   color: #555;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* 텍스트 그림자 효과 */
-  transition: transform 0.3s ease-in-out; /* 호버 효과 */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
   &:hover {
-    transform: translateX(5px); /* 호버 효과 */
+    transform: translateX(5px);
   }
 `;

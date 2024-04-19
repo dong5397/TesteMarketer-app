@@ -7,7 +7,7 @@ import NavigationBar from "./components/NavigationBar";
 import Search from "./page/Search";
 import Rank from "./page/Rank";
 import Service from "./page/Service";
-import KakaoMap from "./page/KakaoMap";
+import KakaoMap from "./page/KaKaoMap";
 import Register from "./page/Register";
 
 import { ToastContainer, toast } from "react-toastify";

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import FoodBox from "./FoodBox";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 function Home({ setAuth }) {
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
-  
 
   const handleRestaurantClick = (restaurant) => {
     setSelectedRestaurant(restaurant);

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { toast } from "react-toastify";
-
+import logo from "../../Images/logo.png";
 function Header({ setAuth }) {
   const [name, setName] = useState("");
 
@@ -41,10 +41,7 @@ function Header({ setAuth }) {
     <Container>
       <Cell className="left">
         <Link to={"/"}>
-          <Img
-            src="https://modo-phinf.pstatic.net/20150520_153/1432118386155aFLGK_JPEG/mosaBygLif.jpeg?type=f320_320"
-            alt="Logo"
-          />
+          <Img src={logo} alt="Logo" />
         </Link>
       </Cell>
 

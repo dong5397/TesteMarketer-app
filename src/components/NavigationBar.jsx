@@ -6,13 +6,13 @@ function NavigationBar() {
   return (
     <StyledNavigationBar>
       <Container>
-      <NavLinkContainer>
+        <NavLinkContainer>
           <NavLink to="/home">홈</NavLink>
           <NavLink to="/search">검색</NavLink>
           <NavLink to="/service">맛 설정 모드</NavLink>
           <NavLink to="/rank">맛 집 랭킹</NavLink>
           <NavLink to="/cuminte">커뮤니티</NavLink>
-      </NavLinkContainer>
+        </NavLinkContainer>
       </Container>
     </StyledNavigationBar>
   );
@@ -37,7 +37,7 @@ const Container = styled.div`
 const NavLinkContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 20px; /* 링크 사이의 간격을 설정 */
+  gap: 10px; /* 링크 사이의 간격을 설정 */
 `;
 
 const NavLink = styled(Link)`

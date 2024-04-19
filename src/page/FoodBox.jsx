@@ -53,9 +53,11 @@ const FoodBox = () => {
 export default FoodBox;
 
 const Container = styled.div`
-  display: inline-block;
+  display: block;
+  flex-wrap: wrap;
   justify-content: space-around;
   gap: 20px;
+  margin-left: 20px;
 `;
 
 const BaseBox = styled.div`
@@ -69,6 +71,7 @@ const BaseBox = styled.div`
 const Box = styled(BaseBox)`
   cursor: pointer;
   transition: transform 0.2s ease;
+
   &:hover {
     transform: translateY(-5px);
   }

@@ -3,69 +3,86 @@ import styled from "styled-components";
 
 const Service = () => {
   const [tasteLevels, setTasteLevels] = useState({
-    sweetness: 50,
-    saltiness: 50,
-    sourness: 50,
-    bitterness: 50,
+    sweetness: 0,
+    saltiness: 0,
+    sourness: 0,
+    bitterness: 0,
   });
 
-  const handleChange = (e) => {
-    // ex) e.target == <input type="range" id="saltinessSlider" name="saltiness" min="0" max="100" value="64">
-    // 구조 분해할당 name이랑 value 객체에 넣기
-    const { name, value } = e.target;
-    setTasteLevels({ ...tasteLevels, [name]: parseInt(value) });
-  };
-
   return (
-    <div>
-      <label htmlFor="sweetnessSlider">단맛에 대한 선호도:</label>
-      <input
-        type="range"
-        id="sweetnessSlider"
-        name="sweetness"
-        min="0"
-        max="100"
-        value={tasteLevels.sweetness}
-        onChange={handleChange}
-      />
-      <p>선택한 단맛 선호도: {tasteLevels.sweetness}</p>
+    <>
+      <div>
+        <div>
+          <h1>좋아하는 맛 선호도 검사 테스트</h1>
+        </div>
+        <div>
+          <h2>대충 설명글</h2>
+        </div>
+        <button>검사하기</button>
+      </div>
 
-      <label htmlFor="saltinessSlider">짠맛에 대한 선호도:</label>
-      <input
-        type="range"
-        id="saltinessSlider"
-        name="saltiness"
-        min="0"
-        max="100"
-        value={tasteLevels.saltiness}
-        onChange={handleChange}
-      />
-      <p>선택한 짠맛 선호도: {tasteLevels.saltiness}</p>
-
-      <label htmlFor="sournessSlider">신맛에 대한 선호도:</label>
-      <input
-        type="range"
-        id="sournessSlider"
-        name="sourness"
-        min="0"
-        max="100"
-        value={tasteLevels.sourness}
-        onChange={handleChange}
-      />
-      <p>선택한 신맛 선호도: {tasteLevels.sourness}</p>
-
-      <label htmlFor="bitternessSlider">쓴맛에 대한 선호도:</label>
-      <input
-        type="range"
-        id="bitternessSlider"
-        name="bitterness"
-        min="0"
-        max="100"
-        value={tasteLevels.bitterness}
-        onChange={handleChange}
-      />
-      <p>선택한 쓴맛 선호도: {tasteLevels.bitterness}</p>
-    </div>
+      <div>
+        <div>
+          <h1>
+            사용자님께서 좋아하는 맛을 확인하기 위해 몇가지 설문조사를 하도록
+            하겠습니다.
+          </h1>
+        </div>
+        <div>
+          <form action="">
+            <Fildset>
+              <h1>
+                질문 1: 배가 고파 컵라면을 먹으려고합니다. 어떤 컵라면을
+                드시겠습니까?
+              </h1>
+              <input type="radio" id="survey1-1" />
+              <label for="survey1-1">1. 육개장 사발면</label>
+              <input type="radio" id="survey1-2" />
+              <label for="survey1-2">2. 비빔면</label>
+              <input type="radio" id="survey1-3" />
+              <label for="survey1-3">3. 짜왕</label>
+            </Fildset>
+            <Fildset>
+              <h1>
+                질문 2: 주말에 카페에서 시간을 보내려고 합니다. 어떤 음료를
+                주문하시겠습니까?
+              </h1>
+              <input type="radio" id="survey1-1" />
+              <label for="survey2-1">1. 아메리카노</label>
+              <input type="radio" id="survey1-2" />
+              <label for="survey2-2">2. 카페라떼</label>
+              <input type="radio" id="survey1-3" />
+              <label for="survey2-3">3. 아이스티</label>
+            </Fildset>
+            <Fildset>
+              <h1>질문 3: 영화를 보러갈 때 간식으로 무엇을 선호하시나요?</h1>
+              <input type="radio" id="survey1-1" />
+              <label for="survey3-1">1. 팝콘</label>
+              <input type="radio" id="survey1-2" />
+              <label for="survey3-2">2. 나쵸</label>
+              <input type="radio" id="survey1-3" />
+              <label for="survey3-3">3. 핫도그</label>
+            </Fildset>
+            <Fildset>
+              <h1>질문 4: 브런치 카페에 갔을 때 어떤 브런치를 선호하시나요?</h1>
+              <input type="radio" id="survey1-1" />
+              <label for="survey4-1">1. 프렌치 토스트</label>
+              <input type="radio" id="survey1-2" />
+              <label for="survey4-2">2. 베리 팬케이크</label>
+              <input type="radio" id="survey1-3" />
+              <label for="survey4-3">3. 와플</label>
+            </Fildset>
+          </form>
+        </div>
+      </div>
+    </>
   );
 };
 export default Service;
+
+const Fildset = styled.div`
+  max-width: 1000px;
+  max-height: 100vh;
+  border: 1px solid black;
+  margin-bottom: 18px;
+`;

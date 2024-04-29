@@ -21,7 +21,7 @@ function Rank() {
   return (
     <div>
       <h1>Top 10 Restaurants</h1>
-      <ul>
+      <List>
         {searchResults.map((restaurant) => (
           <Box key={restaurant.restaurants_id}>
             <li>
@@ -30,19 +30,24 @@ function Rank() {
             </li>
           </Box>
         ))}
-      </ul>
+      </List>
     </div>
   );
 }
 
 export default Rank;
 
+const List = styled.ul`
+  max-height: 700px;
+  overflow-y: auto;
+`;
+
 const Box = styled.div`
   width: 400px;
-
   padding: 20px;
   margin-top: 20px;
   border-radius: 10px;
+
   p,
   pre,
   h2 {

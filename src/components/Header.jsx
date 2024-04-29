@@ -1,42 +1,49 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import logo from "../../Images/logo.png";
+
 function Header({ setAuth }) {
   const [name, setName] = useState("");
 
-  async function getName() {
-    try {
-      const response = await fetch("http://localhost:3000/dashboard/", {
-        method: "GET",
-        headers: { token: localStorage.token },
-      });
-
-      const parseRes = await response.json();
-      console.log(parseRes);
-
-      setName(parseRes.user_name);
-    } catch (err) {
-      console.error(err.message);
-    }
-  }
-
   useEffect(() => {
+    const getName = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/dashboard", {
+          method: "GET",
+          headers: { token: localStorage.token },
+        });
+
+        const parseRes = await response.json();
+        console.log(parseRes);
+
+        setName(parseRes.username); // 여기서 setName으로 상태 업데이트
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+
     getName();
   }, []);
 
   const logout_sucessfully = () => toast("로그아웃 성공!");
 
-  function logout(e) {
+  const logout = async (e) => {
     e.preventDefault();
-    localStorage.removeItem("token");
-    setAuth(false);
-    logout_sucessfully();
-  }
+    try {
+      await fetch("http://localhost:3000/api/v1/logout", {
+        method: "GET",
+        headers: { token: localStorage.token },
+      });
+      localStorage.removeItem("token");
+      setAuth(false);
+      logout_sucessfully();
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
 
-  // props로 받은 userName을 사용하기 때문에, localStorage에서 다시 가져올 필요 없음
   return (
     <Container>
       <Cell className="left">
@@ -46,7 +53,7 @@ function Header({ setAuth }) {
       </Cell>
 
       <UserName>안녕하세요, {name}님</UserName>
-      <button onClick={(e) => logout(e)}>Logout</button>
+      <button onClick={logout}>Logout</button>
     </Container>
   );
 }

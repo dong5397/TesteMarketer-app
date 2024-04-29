@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import FoodBox from "./FoodBox";
+
 import { toast } from "react-toastify";
+import FoodForm from "./FoodForm";
 
 function Home({ setAuth }) {
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
@@ -12,7 +13,7 @@ function Home({ setAuth }) {
   return (
     <>
       <div>
-        <FoodBox onRestaurantClick={handleRestaurantClick} />
+        <FoodForm onRestaurantClick={handleRestaurantClick} />
       </div>
     </>
   );

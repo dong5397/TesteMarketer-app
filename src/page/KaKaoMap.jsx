@@ -72,10 +72,12 @@ const KakaoMap = () => {
       {selectedRestaurant && (
         <StyledModal
           isOpen={true}
-          onRequ
-          estClose={() => setSelectedRestaurant(null)}
+          onRequestClose={() => setSelectedRestaurant(null)} // 모달 닫기
         >
           <FoodIndex restaurant={selectedRestaurant} />
+          <CloseButton onClick={() => setSelectedRestaurant(null)}>
+            X
+          </CloseButton>
         </StyledModal>
       )}
     </Container>
@@ -117,4 +119,15 @@ const StyledModal = styled(Modal)`
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
 `;

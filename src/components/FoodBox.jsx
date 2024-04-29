@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import FoodDetail from "../components/FoodDetail";
+import FoodDetail from "./FoodDetail";
+import Draggable from "react-draggable";
 
 const FoodBox = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -29,6 +30,11 @@ const FoodBox = () => {
     setSelectedRestaurantId(Id);
   };
 
+  const handleCloseDetails = () => {
+    setSelectedRestaurant(null);
+    setSelectedRestaurantId(null);
+  };
+
   return (
     <Container>
       {restaurants.map((restaurant, index) => (
@@ -42,9 +48,12 @@ const FoodBox = () => {
         </Box>
       ))}
       {selectedRestaurant && (
-        <RestaurantDetails>
-          <FoodDetail selectedRestaurant={selectedRestaurant} />
-        </RestaurantDetails>
+        <Draggable>
+          <RestaurantDetails>
+            <CloseButton onClick={handleCloseDetails}>X</CloseButton>
+            <FoodDetail selectedRestaurant={selectedRestaurant} />
+          </RestaurantDetails>
+        </Draggable>
       )}
     </Container>
   );
@@ -95,4 +104,16 @@ const Image = styled.img`
 
 const RestaurantDetails = styled(BaseBox)`
   border-color: #ccc;
+  position: absolute;
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
 `;

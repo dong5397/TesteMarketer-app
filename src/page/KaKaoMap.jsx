@@ -88,25 +88,13 @@ export default KakaoMap;
 
 const Container = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 700px;
+  width: 100%;
+  height: calc(100vh - 60px); /* 해더의 높이를 제외한 나머지 영역 */
 `;
 
 const MapContainer = styled.div`
-  position: absolute;
-  top: 55%;
-  left: 60%;
-  transform: translate(-50%, -50%);
-  width: 1300px;
-  height: 600px;
-  border: 1px solid rgba(0, 0, 0, 0.1); /* 테두리 추가 */
-  border-radius: 10px; /* 테두리 둥글게 만듦 */
-  background-image: linear-gradient(
-    to bottom right,
-    #ffffff,
-    #f0f0f0
-  ); /* 그라데이션 효과 추가 */
+  flex: 1;
+  height: 100%;
 `;
 
 const StyledModal = styled(Modal)`

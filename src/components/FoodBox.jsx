@@ -105,6 +105,7 @@ const Image = styled.img`
 const RestaurantDetails = styled(BaseBox)`
   border-color: #ccc;
   position: absolute;
+  z-index: 999;
 `;
 
 const CloseButton = styled.button`

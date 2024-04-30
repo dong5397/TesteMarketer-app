@@ -7,8 +7,7 @@ function NavigationBar() {
     <StyledNavigationBar>
       <Container>
         <NavLinkContainer>
-          <NavLink to="/home">홈</NavLink>
-          <NavLink to="/search">검색</NavLink>
+          <NavLink to="/food">식당보기</NavLink>
           <NavLink to="/service">맛 설정 모드</NavLink>
           <NavLink to="/rank">맛 집 랭킹</NavLink>
           <NavLink to="/cuminte">커뮤니티</NavLink>
@@ -43,7 +42,7 @@ const NavLinkContainer = styled.div`
 const NavLink = styled(Link)`
   color: #333;
   text-decoration: none;
-  padding: 0 60px;
+  padding: 30 60px;
   line-height: 50px;
   font-family: "Roboto", sans-serif;
   font-weight: bold; /* 폰트 두껍게 설정 */

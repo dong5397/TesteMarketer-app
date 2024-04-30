@@ -70,7 +70,7 @@ const KakaoMap = () => {
     <Container>
       <MapContainer id="map" />
       {selectedRestaurant && (
-        <StyledModal
+        <Modal
           isOpen={true}
           onRequestClose={() => setSelectedRestaurant(null)} // 모달 닫기
         >
@@ -78,7 +78,7 @@ const KakaoMap = () => {
           <CloseButton onClick={() => setSelectedRestaurant(null)}>
             X
           </CloseButton>
-        </StyledModal>
+        </Modal>
       )}
     </Container>
   );
@@ -87,26 +87,14 @@ const KakaoMap = () => {
 export default KakaoMap;
 
 const Container = styled.div`
-  display: flex;
+  position: relative; /* 부모 요소를 relative로 설정하여 모달의 위치를 지도를 기준으로 설정 */
   width: 100%;
   height: calc(100vh - 60px); /* 해더의 높이를 제외한 나머지 영역 */
 `;
 
 const MapContainer = styled.div`
-  flex: 1;
+  width: 100%;
   height: 100%;
-`;
-
-const StyledModal = styled(Modal)`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 500px;
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 `;
 
 const CloseButton = styled.button`

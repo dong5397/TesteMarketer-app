@@ -66,11 +66,11 @@ const Container = styled.div`
   flex-wrap: wrap;
   justify-content: space-around;
   gap: 20px;
-  margin-left: 20px;
+  margin-left: calc(10% + 20px); /* 여백 추가 */
 `;
 
 const BaseBox = styled.div`
-  width: 300px;
+  width: 80%;
   padding: 20px;
   border-radius: 10px;
   background-color: #fff;

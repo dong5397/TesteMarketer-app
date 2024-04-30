@@ -32,8 +32,8 @@ const MainHN = () => (
 const FoodHN = () => (
   <div>
     <MainHeader />
-
     <Home />
+    <KakaoMap />
   </div>
 );
 

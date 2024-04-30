@@ -73,6 +73,16 @@ const KakaoMap = () => {
         <Modal
           isOpen={true}
           onRequestClose={() => setSelectedRestaurant(null)} // 모달 닫기
+          style={{
+            overlay: {
+              zIndex: 1000, // 모달이 가장 위에 표시되도록 zIndex 설정
+            },
+            content: {
+              top: "50%", // 모달이 화면의 중앙에 위치하도록 top, left 조정
+              left: "50%",
+              transform: "translate(-50%, -50%)", // 모달을 화면의 중앙으로 이동
+            },
+          }}
         >
           <FoodIndex restaurant={selectedRestaurant} />
           <CloseButton onClick={() => setSelectedRestaurant(null)}>

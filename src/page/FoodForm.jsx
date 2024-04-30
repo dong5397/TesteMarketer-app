@@ -15,6 +15,5 @@ export default FoodForm;
 
 const FormContainer = styled.div`
   width: 400px;
-  height: 700px;
-  overflow-y: auto;
+  height: 10%;
 `;

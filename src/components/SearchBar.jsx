@@ -5,20 +5,24 @@ import Modal from "react-modal";
 Modal.setAppElement("#root");
 
 const SearchBar = () => {
-  const [searchTerm, setSearchTerm] = useState("");
   const [restaurants, setRestaurants] = useState([]);
-  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:3000/api/v1/restaurants")
       .then((response) => response.json())
       .then((data) => {
-        setRestaurants(Array.isArray(data.data) ? data.data : [data.data]);
-        setFilteredRestaurants(
-          Array.isArray(data.data) ? data.data : [data.data]
-        );
+        if (data.resultCode === "F-1") {
+          setError(data.msg);
+        } else {
+          setRestaurants(Array.isArray(data.data) ? data.data : [data.data]);
+        }
+      })
+      .catch((error) => {
+        setError("에러 발생");
       });
   }, []);
 
@@ -26,43 +30,60 @@ const SearchBar = () => {
     setSearchTerm(e.target.value);
   };
 
-  const handleSearch = () => {
-    const filtered = restaurants.filter((restaurant) =>
-      restaurant.restaurants_name && restaurant.address
-        ? restaurant.restaurants_name.includes(searchTerm)
-        : false
-    );
-    setFilteredRestaurants(filtered);
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  };
-
   const handleRestaurantClick = (restaurant) => {
     setSelectedRestaurant(restaurant);
     setModalIsOpen(true);
   };
 
+  const filteredRestaurants = restaurants
+    ? restaurants.filter((restaurant) =>
+        restaurant.restaurants_name && restaurant.address
+          ? restaurant.restaurants_name.includes(searchTerm)
+          : false
+      )
+    : [];
+
   return (
-    <SearchContainer>
+    <Container>
       <SearchInput
         type="text"
         value={searchTerm}
         onChange={handleInputChange}
-        onKeyPress={handleKeyPress}
         placeholder="음식점 검색"
       />
-      <SearchButton onClick={handleSearch}>검색</SearchButton>
+      {error ? (
+        <ErrorMessage>{error}</ErrorMessage>
+      ) : (
+        <>
+          {filteredRestaurants.length === 0 ? (
+            <NoResultMessage>검색 결과가 없습니다.</NoResultMessage>
+          ) : (
+            <RestaurantContainer>
+              {filteredRestaurants.map((restaurant) => (
+                <RestaurantItem
+                  key={restaurant.restaurants_id}
+                  onClick={() => handleRestaurantClick(restaurant)}
+                >
+                  <RestaurantName>{restaurant.restaurants_name}</RestaurantName>
+                  <RestaurantDetail>
+                    주소: {restaurant.address}
+                  </RestaurantDetail>
+                  <RestaurantDetail>
+                    전화번호: {restaurant.phone}
+                  </RestaurantDetail>
+                </RestaurantItem>
+              ))}
+            </RestaurantContainer>
+          )}
+        </>
+      )}
 
       <StyledModal
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
         style={{
           overlay: {
-            zIndex: 9999,
+            zIndex: 9999, // 모달 창이 화면의 맨 앞에 표시되도록 설정
           },
         }}
       >
@@ -78,32 +99,30 @@ const SearchBar = () => {
               src={selectedRestaurant.image}
               alt={selectedRestaurant.restaurants_name}
             />
+            <CloseButton onClick={() => setModalIsOpen(false)}>X</CloseButton>
           </ModalContent>
         )}
       </StyledModal>
-    </SearchContainer>
+    </Container>
   );
 };
 
-const SearchContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  background-color: #ffffff;
-  padding: 10px;
-  border-bottom: 2px solid #ddd;
+export default SearchBar;
+const Container = styled.div`
+  display: block;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+  margin-left: 10px;
 `;
 
 const SearchInput = styled.input`
-  flex: 1;
+  width: 100%;
+
   padding: 12px;
   font-size: 18px;
   border: 2px solid #ddd;
-  border-radius: 8px 0 0 8px;
+  border-radius: 8px;
   box-sizing: border-box;
   outline: none;
   transition: border-color 0.3s ease;
@@ -113,19 +132,35 @@ const SearchInput = styled.input`
   }
 `;
 
-const SearchButton = styled.button`
-  padding: 12px 16px;
-  font-size: 18px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 0 8px 8px 0;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+const RestaurantContainer = styled.div``;
 
-  &:hover {
-    background-color: #45a049;
-  }
+const NoResultMessage = styled.p`
+  font-size: 18px;
+  color: #999;
+`;
+
+const RestaurantItem = styled.div`
+  width: 300px;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
+  cursor: pointer;
+
+  border: 1px solid #eee;
+
+  transition: box-shadow 0.3s ease;
+`;
+
+const RestaurantName = styled.h2`
+  margin-bottom: 8px;
+  font-size: 20px;
+`;
+
+const RestaurantDetail = styled.p`
+  margin-bottom: 4px;
+  font-size: 16px;
 `;
 
 const StyledModal = styled(Modal)`
@@ -163,4 +198,18 @@ const ModalImage = styled.img`
   margin-top: 20px;
 `;
 
-export default SearchBar;
+const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+`;
+
+const ErrorMessage = styled.p`
+  font-size: 18px;
+  color: red;
+`;

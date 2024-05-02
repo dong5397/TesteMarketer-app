@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import NavigationBar from "../components/NavigationBar";
-import logo from "../../Images/logo.png";
-import { Link } from "react-router-dom";
+import logo from "../../images/logo.png";
 
-import HeaderText from "../components/HeaderText";
+import { Link } from "react-router-dom";
 
 function MainHeader() {
   return (

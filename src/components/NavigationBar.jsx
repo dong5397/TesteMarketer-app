@@ -26,7 +26,7 @@ const StyledNavigationBar = styled.nav`
 const Container = styled.div`
   max-width: 960px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 50px;
   height: 50px;
   display: flex;
   align-items: center;
@@ -41,8 +41,8 @@ const NavLinkContainer = styled.div`
 const NavLink = styled(Link)`
   color: #333;
   text-decoration: none;
-  padding: 30 60px;
-  line-height: 50px;
+  padding: 50 100px;
+  line-height: 100px;
   font-family: "Roboto", sans-serif;
   font-weight: bold; /* 폰트 두껍게 설정 */
   transition: color 0.3s ease, transform 0.3s ease; /* 트랜지션 효과 추가 */

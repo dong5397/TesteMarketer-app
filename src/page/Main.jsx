@@ -77,41 +77,136 @@ const Panel = styled.div`
   max-width: 780px;
   margin: 0 auto;
   position: relative; /* 추가된 부분 */
+
   .table {
-    bottom: -70px;
-    left: 10px;
-    z-index: 1;
+    width: 200px;
+    height: 200px;
+    top: 100px;
+    left: 75px;
+    z-index: 2;
     margin-right: -300px;
     animation-name: table-move;
-    animation-delay: 0.2s;
+    animation-delay: 0.5s;
     animation-duration: 1s;
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: forwards;
   }
 
   .plate {
-    width: 200px;
-    height: 200px;
-    top: 60px;
-    left: 90px;
+    width: 100px;
+    height: 100px;
+    top: 90px;
+    left: 120px;
     z-index: 2;
     animation-name: plate-move;
-    animation-delay: 1s;
-    animation-duration: 1s;
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: forwards;
+    animation-delay: 0.2s;
+    animation-duration: 2s;
   }
   .meat {
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
     top: 90px;
     left: 130px;
     z-index: 3;
     animation-name: meat-move;
-    animation-delay: 1s;
+    animation-delay: 0.2s;
     animation-duration: 2s;
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: forwards;
+  }
+  .chair {
+    width: 200px;
+    height: 150px;
+    top: 140px;
+    left: 0px;
+    z-index: 1;
+    animation-name: teste2-move;
+    animation-delay: 0.2s;
+    animation-duration: 2s;
+  }
+  .steward {
+    width: 150px;
+    height: 280px;
+    top: 50px;
+    left: 200px;
+    z-index: 4;
+    animation-name: steward-move;
+    animation-delay: 0.2s;
+    animation-duration: 3s;
+  }
+
+  .review {
+    width: 200px;
+    height: 200px;
+    top: 70px;
+    left: 80px;
+    z-index: 1;
+    animation-name: review-move;
+    animation-delay: 0.2s;
+    animation-duration: 1s;
+  }
+  .review2 {
+    width: 150px;
+    height: 150px;
+    top: 100px;
+    left: 200px;
+    z-index: 3;
+    animation-name: review2-move;
+    animation-delay: 0.2s;
+    animation-duration: 2s;
+  }
+  .review3 {
+    width: 150px;
+    height: 150px;
+    top: 100px;
+    left: 200px;
+    z-index: 2;
+    animation-name: review2-move;
+    animation-delay: 0.2s;
+    animation-duration: 2s;
+  }
+
+  .computer {
+    width: 200px;
+    height: 150px;
+    top: 20px;
+    left: 80px;
+    z-index: 3;
+    animation-name: computer-move;
+    animation-delay: 0.2s;
+    animation-duration: 2s;
+  }
+  .computertable {
+    width: 200px;
+    height: 150px;
+    top: 120px;
+    left: 80px;
+    animation-name: computertable-move;
+    animation-delay: 0.2s;
+    animation-duration: 2s;
+  }
+  .teste1 {
+    width: 200px;
+    height: 150px;
+    top: 80px;
+    left: 120px;
+    animation-name: teste1-move;
+    animation-delay: 0.2s;
+    animation-duration: 2s;
+  }
+  .teste2 {
+    width: 200px;
+    height: 150px;
+    top: 40px;
+    left: 120px;
+    animation-name: teste2-move;
+    animation-delay: 0.2s;
+    animation-duration: 2s;
+  }
+  .teste3 {
+    width: 100px;
+    height: 100px;
+    top: 130px;
+    left: 30px;
+    animation-name: teste2-move;
+    animation-delay: 0.2s;
+    animation-duration: 2s;
   }
 `;
 
@@ -186,52 +281,156 @@ const Link = styled.span`
     border-left: 9px solid rgba(0, 0, 0, 0.25);
   }
 
-  @keyframes home-link-move {
-    0% {
-      opacity: 0;
-      transform: translateY(150px);
-    }
-    90% {
-      opacity: 1;
-      transform: translateY(-5px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0px);
-    }
-  }
   @keyframes table-move {
     0% {
       margin-right: -300px;
+      opacity: 1;
     }
     100% {
       margin-right: 0;
+      opacity: 1;
     }
   }
 
-  @keyframes plate-move {
+  @keyframes table-move {
     0% {
-      transform: translateY(-300px);
+      margin-right: -300px;
+      opacity: 1;
     }
     100% {
-      transform: translateY(0);
+      margin-right: 0;
+      opacity: 1;
     }
   }
+
   @keyframes meat-move {
     0% {
       transform: translateY(-300px);
+      opacity: 1;
     }
     100% {
       transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes chair-move {
+    0% {
+      transform: translateX(-300px);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes steward-move {
+    0% {
+      transform: translateX(-300px);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes review-move {
+    0% {
+      opacity: 1;
+      transform: translateX(-250px);
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes review2-move {
+    0% {
+      opacity: 1;
+      transform: translateY(-250px);
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes review3-move {
+    0% {
+      opacity: 1;
+      transform: translateX(-300px);
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes computer-move {
+    0% {
+      opacity: 1;
+      transform: translateY(-300px);
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes computertable-move {
+    0% {
+      opacity: 1;
+      transform: translateX(-300px);
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes teste1-move {
+    0% {
+      opacity: 1;
+      transform: translateX(-250px);
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes teste2-move {
+    0% {
+      opacity: 1;
+      transform: translateY(-250px);
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes teste3-move {
+    0% {
+      opacity: 1;
+      transform: translateX(-350px);
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
     }
   }
 `;
 
 const Img = styled.img`
   position: absolute;
-  opacity: 1;
-  width: 100%;
-  height: 100%;
+  opacity: 0;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
 `;
 
 const Main = () => {
@@ -254,37 +453,48 @@ const Main = () => {
             <A href="/food">
               <Inner>
                 <Img src="../../images/table.png" className="table" />
-                <Img src="../../images/plate.png" className="plate" />
+
                 <Img src="../../images/meat.png" className="meat" />
+                <Img src="../../images/chair.png" className="chair" />
+                <Img src="../../images/steward.png" className="steward" />
               </Inner>
               <Link className="link link-01" href="/food">
                 식당보기
               </Link>
             </A>
-            <A href="#">
+            <A href="/review">
               <Inner>
-                <Img src="../../images/3.jpg" className="home-chair" />
-                <Img src="../../images/4.jpg" className="home-shelves" />
-                <Img src="../../images/5.jpg" className="home-drawers" />
+                <Img src="../../images/review.png" className="review" />
+                <Img src="../../images/review2.png" className="review2" />
+                <Img src="../../images/review3.png" className="review3" />
               </Inner>
+              <Link className="link link-01" href="/review">
+                리뷰 작성
+              </Link>
             </A>
           </Panel>
           <Panel className="second">
-            <A href="#">
+            <A href="/cumunite">
               <Inner>
-                <Img src="../../images/1.jpg" className="home-bike" />
-                <Img src="../../images/1.jpg" className="home-car" />
+                <Img src="../../images/computer.png" className="computer" />
+                <Img
+                  src="../../images/computertable.png"
+                  className="computertable"
+                />
               </Inner>
+              <Link className="link link-01" href="/cumunite">
+                커뮤니티
+              </Link>
             </A>
             <A href="#">
               <Inner>
-                <Img src="../../images/3.jpg" className="home-piano" />
+                <Img src="../../images/teste1.png" className="teste1" />
+                <Img src="../../images/teste2.png" className="teste2" />
+                <Img src="../../images/teste3.png" className="teste3" />
               </Inner>
-            </A>
-            <A href="#">
-              <Inner>
-                <Img src="../../images/4.jpg" className="home-boxes" />
-              </Inner>
+              <Link className="link link-01" href="/cumunite">
+                맛 조절
+              </Link>
             </A>
           </Panel>
         </Panels>

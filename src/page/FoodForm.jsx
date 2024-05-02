@@ -14,6 +14,6 @@ function FoodForm() {
 export default FoodForm;
 
 const FormContainer = styled.div`
-  width: 400px;
+  width: 420px;
   height: 10%;
 `;

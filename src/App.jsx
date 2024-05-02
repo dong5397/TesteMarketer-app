@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./page/Home";
 import MainHeader from "./page/MainHeader";
 
-import Rank from "./page/Rank";
 import Service from "./page/Service";
 import KakaoMap from "./page/KaKaoMap";
 import Main from "./page/Main";
@@ -15,7 +14,6 @@ function App() {
         <Route path="/" element={<MainHN />} />
         <Route path="/food" element={<FoodHN />} />
 
-        <Route path="/rank" element={<RankHN />} />
         <Route path="/service" element={<ServiceHN />} />
       </Routes>
     </BrowserRouter>
@@ -34,19 +32,6 @@ const FoodHN = () => (
     <MainHeader />
     <Home />
     <KakaoMap />
-  </div>
-);
-
-const SearchHN = () => (
-  <div>
-    <MainHeader />
-  </div>
-);
-
-const RankHN = () => (
-  <div>
-    <MainHeader />
-    <Rank />
   </div>
 );
 

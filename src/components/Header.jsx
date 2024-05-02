@@ -46,14 +46,14 @@ function Header({ setAuth }) {
 
   return (
     <Container>
-      <Cell className="left">
-        <Link to={"/"}>
-          <Img src={logo} alt="Logo" />
-        </Link>
-      </Cell>
+      <Link to={"/"}>
+        <Img src={logo} alt="Logo" />
+      </Link>
 
-      <UserName>안녕하세요, {name}님</UserName>
-      <button onClick={logout}>Logout</button>
+      <Cell>
+        <UserName>안녕하세요, {name}님</UserName>
+        <LogoutButton onClick={logout}>Logout</LogoutButton>
+      </Cell>
     </Container>
   );
 }
@@ -65,17 +65,13 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 0.1rem;
-  padding: 0.5rem 0;
+  padding: 0.5rem 1rem; /* 좌우 여백 추가 */
 `;
 
 const Cell = styled.div`
   display: flex;
   align-items: center;
   gap: 2rem;
-  &.right {
-    font-size: 1.3rem;
-    cursor: pointer;
-  }
 `;
 
 const Img = styled.img`
@@ -89,9 +85,20 @@ const Img = styled.img`
 `;
 
 const UserName = styled.span`
-  margin-left: 1rem;
   font-size: 1rem;
   font-weight: bold;
   color: #333;
-  align-self: center;
+`;
+
+const LogoutButton = styled.button`
+  padding: 0.5rem 1rem;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: #555;
+  }
 `;

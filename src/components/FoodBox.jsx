@@ -12,7 +12,10 @@ const FoodBox = () => {
     fetch("http://localhost:3000/api/v1/restaurants")
       .then((response) => response.json())
       .then((data) => {
-        setRestaurants(Array.isArray(data.data) ? data.data : [data.data]);
+        const sortedRestaurants = Array.isArray(data.data)
+          ? data.data.sort((a, b) => b.rating - a.rating)
+          : [data.data];
+        setRestaurants(sortedRestaurants);
       });
   }, []);
 
@@ -44,6 +47,7 @@ const FoodBox = () => {
         >
           <h2>식당 이름: {restaurant.restaurants_name}</h2>
           <p>주소: {restaurant.address}</p>
+          <p>평점: {restaurant.rating}</p>
           <Image src={restaurant.image} alt={restaurant.restaurants_name} />
         </Box>
       ))}
@@ -67,6 +71,8 @@ const Container = styled.div`
   justify-content: space-around;
   gap: 20px;
   margin-left: calc(10% + 20px); /* 여백 추가 */
+  overflow-y: auto; /* 스크롤바 추가 */
+  max-height: calc(90vh - 40px); /* 최대 높이 지정 */
 `;
 
 const BaseBox = styled.div`

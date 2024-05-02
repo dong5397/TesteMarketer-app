@@ -42,7 +42,7 @@ const Container = styled.div`
   width: ${(props) => (props.isOpen ? "400px" : "50px")};
   height: 100%;
   position: fixed;
-  top: 10%;
+  top: 15%;
   left: 0;
   background-color: #f8f9fa;
   transition: width 0.5s, left 0.5s;

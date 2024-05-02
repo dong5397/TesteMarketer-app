@@ -41,7 +41,7 @@ const KakaoMap = () => {
       kakao.maps.load(() => {
         const mapContainer = document.getElementById("map"),
           mapOption = {
-            center: new kakao.maps.LatLng(36.3273034, 127.4253552),
+            center: new kakao.maps.LatLng(36.350411, 127.384548), // 대전 중심 좌표
             level: 8,
           };
 
@@ -61,6 +61,15 @@ const KakaoMap = () => {
           });
 
           marker.setMap(map);
+        });
+
+        // 지도 이동 이벤트 리스너 등록
+        kakao.maps.event.addListener(map, "dragend", function () {
+          const center = map.getCenter();
+          // 대전 중심 좌표보다 위도가 클 경우, 대전 중심 좌표로 되돌림
+          if (center.getLat() > 36.350411) {
+            map.setCenter(new kakao.maps.LatLng(36.350411, center.getLng()));
+          }
         });
       });
     }

@@ -5,10 +5,7 @@ const Section = styled.section`
   display: grid;
   place-items: center;
   padding-block: var(--space-fluid-md);
-  background-color: ${({ theme }) =>
-    theme === "dark" ? "var(--surface-1)" : "var(--surface-2)"};
-  color: ${({ theme }) =>
-    theme === "dark" ? "var(--text-1)" : "var(--text-2)"};
+  background: linear-gradient(#e0e09d, #e7e78b);
   inline-size: 100%;
 `;
 
@@ -34,6 +31,7 @@ const CardContainer = styled.div`
 `;
 
 const Visual = styled.div`
+  margin-top: 50px;
   block-size: 180px;
   background-color: var(--surface-3);
 `;

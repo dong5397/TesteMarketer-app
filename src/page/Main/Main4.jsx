@@ -1,17 +1,18 @@
 import React from "react";
 import styled from "styled-components";
+import KimDongWok from "../../../images/team/KimDongWok.jpg";
+import BackMinKi from "../../../images/team/BackMinKi.jpg";
+import NaJiMin from "../../../images/team/NaJiMin.jpg";
 
 const Section = styled.section`
+  background: linear-gradient(#f0f0c3, #e7e7c9);
   font-family: "Poppins", sans-serif;
   font-weight: 300;
   font-style: normal;
-  padding-block: min(20vh, 6rem);
   text-align: center;
-  width: calc(min(90rem, 90%));
-  margin-inline: auto;
   position: relative;
+  padding-top: 50px;
 
-  span,
   p,
   h2,
   h3 {
@@ -22,7 +23,7 @@ const Section = styled.section`
     line-height: 1.6;
     color: #a3a3a3;
     max-width: 50rem;
-    margin: 0 auto;
+    margin: auto;
     font-size: clamp(0.9rem, 0.825rem + 0.3vw, 1.2rem);
   }
 
@@ -38,23 +39,19 @@ const Section = styled.section`
     letter-spacing: 0.5rem;
   }
 
-  span {
-    text-transform: uppercase;
-    display: block;
-    font-size: 1.2rem;
-    color: #a3a3a3;
-  }
-
   h2 {
     font-size: clamp(3rem, 2.5rem + 1.6vw, 4rem);
-    margin-top: -0.625rem;
-    color: #fff;
+    margin-top: 50px;
+    color: black;
   }
 
   .cards {
     margin-top: 7rem;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(15rem, 1fr)
+    ); /* 변경된 부분 */
     gap: 2rem;
     justify-content: center;
 
@@ -68,6 +65,7 @@ const Section = styled.section`
       cursor: pointer;
       width: 100%;
       max-width: 20rem;
+      margin: auto;
 
       h3,
       p {
@@ -94,9 +92,9 @@ const Section = styled.section`
         height: 100%;
         z-index: 0;
         transition: 0.3s ease-in-out;
-        background: #f2709c;
-        background: -webkit-linear-gradient(to left, #ff9472, #f2709c);
-        background: linear-gradient(to left, #ff9472, #f2709c);
+        background: #000000;
+        background: -webkit-linear-gradient(to left, #000000, #000000);
+        background: linear-gradient(to left, #a59c66, #000000);
         top: -0.375rem;
         left: -0.375rem;
       }
@@ -202,9 +200,9 @@ const Card = styled.div`
     height: 100%;
     z-index: 0;
     transition: 0.3s ease-in-out;
-    background: #f2709c;
-    background: -webkit-linear-gradient(to left, #ff9472, #f2709c);
-    background: linear-gradient(to left, #ff9472, #f2709c);
+    background: #000000;
+    background: -webkit-linear-gradient(to left, #000000, #000000);
+    background: linear-gradient(to left, #000000, #000000);
     top: -0.375rem;
     left: -0.375rem;
   }
@@ -267,23 +265,23 @@ const Card = styled.div`
 const Main4 = () => {
   return (
     <Section>
-      <span>meet our</span>
       <h2>Team</h2>
+      <p>맛케터는 웹사이트입니다.</p>
       <p>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animi,
-        praesentium veritatis voluptatibus ut consequuntur quas consequatur
-        omnis id rem obcaecati.
+        언제 어디서나 다양한 디바이스를 통해 접근하고 맛집을 탐색할 수 있습니다.
       </p>
+      <p>
+        원하는 맛을 선택할 수 있는 기능이 제공되고 사용자에게 선택지가
+        주어집니다.
+      </p>
+      <p> 사용자간의 소통이 이루어지기 위한 커뮤니티가 제공됩니다.</p>
       <span className="bg-watermark">team</span>
       <CardsContainer className="cards">
         <Card className="card">
-          <img
-            src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Franklin Carlson"
-          />
+          <img src={KimDongWok} alt="Franklin Carlson" />
           <div className="card-content">
-            <h3>franklin carlson</h3>
-            <p>UX Designer</p>
+            <h3>KimDongWok</h3>
+            <p>1951004</p>
             <ul>
               <li>
                 <a href="#">
@@ -299,13 +297,10 @@ const Main4 = () => {
           </div>
         </Card>
         <Card className="card">
-          <img
-            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Antonia Moore"
-          />
+          <img src={BackMinKi} alt="Antonia Moore" />
           <div className="card-content">
-            <h3>antonia moore</h3>
-            <p>product designer</p>
+            <h3>BackMinKi</h3>
+            <p>19526</p>
             <ul>
               <li>
                 <a href="#">
@@ -321,13 +316,10 @@ const Main4 = () => {
           </div>
         </Card>
         <Card className="card">
-          <img
-            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Travis Lynch"
-          />
+          <img src={NaJiMin} alt="Travis Lynch" />
           <div className="card-content">
-            <h3>travis lynch</h3>
-            <p>web developer</p>
+            <h3>NaJiMin</h3>
+            <p>19519</p>
             <ul>
               <li>
                 <a href="#">

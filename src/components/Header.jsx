@@ -61,17 +61,14 @@ function Header({ setAuth }) {
 export default Header;
 
 const Container = styled.div`
-  display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 0.1rem;
-  padding: 0.5rem 1rem; /* 좌우 여백 추가 */
 `;
 
 const Cell = styled.div`
   display: flex;
   align-items: center;
-  gap: 2rem;
 `;
 
 const Img = styled.img`

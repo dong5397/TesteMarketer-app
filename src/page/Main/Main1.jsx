@@ -2,12 +2,12 @@ import React from "react";
 import styled from "styled-components";
 
 const Main1Container = styled.div`
-  background-color: #41a5dd;
+  background: linear-gradient(#e7e78b, #f0f0c3);
   color: white;
   padding: 20px;
 `;
 const PageContainer = styled.div`
-  background-color: #41a5dd; /* 부모 컴포넌트에 배경색 추가 */
+  background: linear-gradient(#e7e78b, #f0f0c3); /* 변경된 부분 */
 `;
 const HomeHeader = styled.div`
   display: flex;
@@ -130,14 +130,14 @@ const Panel = styled.div`
     animation-delay: 0.2s;
     animation-duration: 0.8s;
   }
-  .steward {
-    width: 200px;
-    height: 450px;
-    top: -40px;
+  .cook {
+    width: 150px;
+    height: 200px;
+    top: 100px;
     left: 170px;
     z-index: 4;
-    animation-name: steward-move;
-    animation-delay: 0.5s;
+    animation-name: cook-move;
+    animation-delay: 1s;
     animation-duration: 0.8s;
   }
 
@@ -233,7 +233,7 @@ const Panel = styled.div`
     left: 120px;
     z-index: 1;
     animation-name: teste1-move;
-    animation-delay: 2s;
+    animation-delay: 1.7s;
     animation-duration: 0.8s;
   }
   .teste2 {
@@ -243,7 +243,7 @@ const Panel = styled.div`
     left: 120px;
     z-index: 3;
     animation-name: teste2-move;
-    animation-delay: 2.3s;
+    animation-delay: 2s;
     animation-duration: 0.8s;
   }
   .teste3 {
@@ -291,8 +291,9 @@ const A = styled.a`
     left: 0;
     bottom: 20px;
     right: 0;
-    background: #f7cb46;
+    background: #fadb7d;
     border-radius: 6px;
+    border: 10px solid #000;
   }
   &:hover {
     transform: translateY(-5px) scale(1.02, 1.02);
@@ -387,13 +388,13 @@ const Link = styled.span`
     }
   }
 
-  @keyframes steward-move {
+  @keyframes cook-move {
     0% {
-      transform: translateX(-300px);
+      transform: translateY(300px);
       opacity: 1;
     }
     100% {
-      transform: translateX(0);
+      transform: translateY(0);
       opacity: 1;
     }
   }
@@ -412,7 +413,7 @@ const Link = styled.span`
   @keyframes review2-move {
     0% {
       opacity: 1;
-      transform: translateY(-250px);
+      transform: translateY(300px);
     }
     100% {
       transform: translateY(0);
@@ -423,10 +424,10 @@ const Link = styled.span`
   @keyframes review3-move {
     0% {
       opacity: 1;
-      transform: translateX(-300px);
+      transform: translateY(300px);
     }
     100% {
-      transform: translateX(0);
+      transform: translateY(0);
       opacity: 1;
     }
   }
@@ -535,11 +536,13 @@ const Img = styled.img`
   animation-fill-mode: forwards;
 `;
 
-const Main = () => {
+const Main1 = () => {
   return (
     <div>
       <Main1Container>
         <PageContainer>
+          {" "}
+          {/* 변경된 부분 */}
           <HomeHeader>
             <Intro>
               <Header>
@@ -560,7 +563,7 @@ const Main = () => {
 
                     <Img src="../../images/1/meat.png" className="meat" />
                     <Img src="../../images/1/chair.png" className="chair" />
-                    <Img src="../../images/1/steward.png" className="steward" />
+                    <Img src="../../images/1/cook.png" className="cook" />
                   </Inner>
                   <Link className="link link-01" href="/food">
                     식당보기
@@ -619,10 +622,11 @@ const Main = () => {
               </Panel>
             </Panels>
           </HomeHeader>
-        </PageContainer>
+        </PageContainer>{" "}
+        {/* 변경된 부분 */}
       </Main1Container>
     </div>
   );
 };
 
-export default Main;
+export default Main1;

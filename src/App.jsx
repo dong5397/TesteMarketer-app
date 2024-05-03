@@ -1,9 +1,9 @@
 import React from "react";
 
 import Main from "./page/Main";
-import KakaoMap from "./page/KaKaoMap";
+import KakaoMap from "../src/page/Map/KaKaoMap";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./page/Home";
+import Home from "../src/page/Map/Home";
 import Service from "./page/Service";
 import Header from "./page/Header";
 

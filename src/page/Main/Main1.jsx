@@ -446,7 +446,7 @@ const Link = styled.span`
   @keyframes community2-move {
     0% {
       opacity: 1;
-      transform: translateX(-300px);
+      transform: translateX(300px);
     }
     100% {
       transform: translateX(0);

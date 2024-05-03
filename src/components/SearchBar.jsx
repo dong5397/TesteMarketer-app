@@ -114,12 +114,13 @@ const Container = styled.div`
   justify-content: space-around;
   gap: 20px;
   margin-left: 10px;
+  top: 20px;
 `;
 
 const SearchInput = styled.input`
   width: 100%;
 
-  padding: 12px;
+  padding: 15px;
   font-size: 18px;
   border: 2px solid #ddd;
   border-radius: 8px;

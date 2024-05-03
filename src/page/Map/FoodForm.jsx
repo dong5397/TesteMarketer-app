@@ -1,6 +1,6 @@
 // FoodForm.js
 import React from "react";
-import FoodBox from "../components/FoodBox";
+import FoodBox from "../../components/FoodBox";
 import styled from "styled-components";
 
 function FoodForm() {

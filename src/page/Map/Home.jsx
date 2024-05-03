@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import FoodForm from "./FoodForm"; // FoodForm 컴포넌트를 import합니다.
-import SearchBar from "../components/SearchBar"; // SearchBar 컴포넌트를 import합니다.
-import SearchForm from "./SearchForm";
+
+import SearchForm from "../Map/SearchForm";
 
 const Home = ({ onRestaurantClick }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,6 +48,8 @@ const Container = styled.div`
   transition: width 0.5s, left 0.5s;
   overflow: hidden;
   z-index: 1000;
+  border: 3px solid black;
+  border-top-right-radius: 30px;
 `;
 
 const ToggleButton = styled.button`
@@ -60,6 +62,7 @@ const ToggleButton = styled.button`
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
+  border: 1px solid black;
 `;
 
 const SearchButton = styled.button`
@@ -72,8 +75,9 @@ const SearchButton = styled.button`
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
+  border: 1px solid black;
 `;
 
 const Content = styled.div`
-  padding: 20px;
+  padding: 10px;
 `;

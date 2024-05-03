@@ -1,36 +1,57 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import FoodDetail from "./FoodDetail";
-import Draggable from "react-draggable";
 
 const FoodBox = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [selectedRestaurantId, setSelectedRestaurantId] = useState(null);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [detailPosition, setDetailPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     fetch("http://localhost:3000/api/v1/restaurants")
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        return response.json();
+      })
       .then((data) => {
         const sortedRestaurants = Array.isArray(data.data)
           ? data.data.sort((a, b) => b.rating - a.rating)
           : [data.data];
         setRestaurants(sortedRestaurants);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error.message);
+        setLoading(false);
       });
   }, []);
 
   useEffect(() => {
     if (selectedRestaurantId) {
       fetch(`http://localhost:3000/api/v1/restaurants/${selectedRestaurantId}`)
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to fetch data");
+          }
+          return response.json();
+        })
         .then((data) => {
           setSelectedRestaurant(data.data);
+        })
+        .catch((error) => {
+          setError(error.message);
         });
     }
   }, [selectedRestaurantId]);
 
-  const handleRestaurantClick = (Id) => {
-    setSelectedRestaurantId(Id);
+  const handleRestaurantClick = (id, event) => {
+    setSelectedRestaurantId(id);
+    setDetailPosition({ x: event.clientX, y: event.clientY });
   };
 
   const handleCloseDetails = () => {
@@ -40,24 +61,30 @@ const FoodBox = () => {
 
   return (
     <Container>
-      {restaurants.map((restaurant, index) => (
-        <Box
-          key={index}
-          onClick={() => handleRestaurantClick(restaurant.restaurants_id)}
-        >
-          <h2>식당 이름: {restaurant.restaurants_name}</h2>
-          <p>주소: {restaurant.address}</p>
-          <p>평점: {restaurant.rating}</p>
-          <Image src={restaurant.image} alt={restaurant.restaurants_name} />
-        </Box>
-      ))}
+      {loading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
+      {!loading &&
+        !error &&
+        restaurants.map((restaurant, index) => (
+          <Box
+            key={index}
+            onClick={(event) =>
+              handleRestaurantClick(restaurant.restaurants_id, event)
+            }
+          >
+            <h2>식당 이름: {restaurant.restaurants_name}</h2>
+            <p>주소: {restaurant.address}</p>
+            <p>평점: {restaurant.rating}</p>
+            <Image src={restaurant.image} alt={restaurant.restaurants_name} />
+          </Box>
+        ))}
       {selectedRestaurant && (
-        <Draggable>
-          <RestaurantDetails>
-            <CloseButton onClick={handleCloseDetails}>X</CloseButton>
-            <FoodDetail selectedRestaurant={selectedRestaurant} />
-          </RestaurantDetails>
-        </Draggable>
+        <RestaurantDetails
+          style={{ top: detailPosition.y, left: detailPosition.x }}
+        >
+          <CloseButton onClick={handleCloseDetails}>X</CloseButton>
+          <FoodDetail selectedRestaurant={selectedRestaurant} />
+        </RestaurantDetails>
       )}
     </Container>
   );
@@ -81,14 +108,16 @@ const BaseBox = styled.div`
   border-radius: 10px;
   background-color: #fff;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid black;
 `;
 
 const Box = styled(BaseBox)`
   cursor: pointer;
+
   transition: transform 0.2s ease;
 
   &:hover {
-    transform: translateY(-5px);
+    transform: translateY(5px);
   }
 
   h2 {
@@ -111,7 +140,7 @@ const Image = styled.img`
 const RestaurantDetails = styled(BaseBox)`
   border-color: #ccc;
   position: absolute;
-  z-index: 999;
+  z-index: 9999999;
 `;
 
 const CloseButton = styled.button`

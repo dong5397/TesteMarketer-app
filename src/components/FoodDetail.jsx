@@ -7,12 +7,11 @@ import Review from "./Review";
 Modal.setAppElement("#root");
 
 function FoodDetail({ selectedRestaurant }) {
-  const [isModalOpen, setDetailModalOpen] = useState(false);
-  const [isReviewOpen, setReviewModalOpen] = useState(false);
+  const [isDetailModalOpen, setDetailModalOpen] = useState(false);
+  const [isReviewModalOpen, setReviewModalOpen] = useState(false);
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    console.log(selectedRestaurant);
     const fetchReviews = async () => {
       if (selectedRestaurant.restaurants_id) {
         try {
@@ -39,11 +38,11 @@ function FoodDetail({ selectedRestaurant }) {
     fetchReviews();
   }, [selectedRestaurant]);
 
-  const handleDetailClick = () => {
+  const handleDetailModalOpen = () => {
     setDetailModalOpen(true);
   };
 
-  const handleReviewClick = () => {
+  const handleReviewModalOpen = () => {
     setReviewModalOpen(true);
   };
 
@@ -87,7 +86,7 @@ function FoodDetail({ selectedRestaurant }) {
 
     if (response.ok) {
       setReviews((prevReviews) =>
-        prevReviews.filter((review) => review.id !== reviewId)
+        prevReviews.filter((review) => review.review_id !== reviewId)
       );
     }
   };
@@ -98,65 +97,76 @@ function FoodDetail({ selectedRestaurant }) {
         <div key={selectedRestaurant.restaurants_id}>
           <p>
             세부 정보:{" "}
-            <Button onClick={handleDetailClick}>세부 정보 보기</Button>
+            <Button onClick={handleDetailModalOpen}>세부 정보 보기</Button>
           </p>
           <p>
             리뷰 작성하기:{" "}
-            <Button onClick={handleReviewClick}>리뷰 작성하기</Button>
+            <Button onClick={handleReviewModalOpen}>리뷰 작성하기</Button>
           </p>
         </div>
       )}
-      <StyledModal
-        isOpen={isModalOpen}
+      <Modal
+        isOpen={isDetailModalOpen}
         onRequestClose={() => setDetailModalOpen(false)}
         contentLabel="Selected Restaurant"
+        style={{
+          overlay: {
+            zIndex: 1000,
+          },
+        }}
       >
-        {selectedRestaurant && (
-          <FoodIndex
-            key={selectedRestaurant.restaurants_id}
-            restaurant={selectedRestaurant}
-          />
-        )}
-        {reviews.map((review) => (
-          <ReviewContainer key={review.review_id}>
-            <ReviewText>리뷰: {review.review_text}</ReviewText>
-            <Button onClick={() => handleReviewDelete(review.review_id)}>
-              삭제하기
-            </Button>
-          </ReviewContainer>
-        ))}
-      </StyledModal>
-      <StyledModal
-        isOpen={isReviewOpen}
+        <ModalContent>
+          {selectedRestaurant && <FoodIndex restaurant={selectedRestaurant} />}
+          <ReviewList>
+            {reviews.map((review) => (
+              <ReviewContainer key={review.review_id}>
+                <ReviewText>리뷰: {review.review_text}</ReviewText>
+                <Button onClick={() => handleReviewDelete(review.review_id)}>
+                  삭제하기
+                </Button>
+              </ReviewContainer>
+            ))}
+          </ReviewList>
+          <CloseButton onClick={() => setDetailModalOpen(false)}>
+            닫기
+          </CloseButton>
+        </ModalContent>
+      </Modal>
+      <Modal
+        isOpen={isReviewModalOpen}
         onRequestClose={() => setReviewModalOpen(false)}
+        style={{
+          overlay: {
+            zIndex: 1000,
+          },
+        }}
       >
-        {selectedRestaurant && (
-          <Review
-            key={selectedRestaurant.restaurants_id}
-            onSubmit={handleReviewSubmit}
-          />
-        )}
-      </StyledModal>
+        <Review
+          onSubmit={handleReviewSubmit}
+          onCancel={() => setReviewModalOpen(false)}
+        />
+      </Modal>
     </div>
   );
 }
 
 export default FoodDetail;
 
-const StyledModal = styled(Modal)`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
+const ModalContent = styled.div`
+  width: 100%;
   max-width: 600px;
   background: white;
   border-radius: 8px;
   padding: 20px;
+  position: relative;
+`;
+
+const ReviewList = styled.div`
+  margin-top: 20px;
 `;
 
 const ReviewContainer = styled.div`
-  margin-top: 20px;
+  margin-bottom: 10px;
 `;
 
 const ReviewText = styled.p`
@@ -179,4 +189,10 @@ const Button = styled.button`
   &:hover {
     background-color: #e67e22;
   }
+`;
+
+const CloseButton = styled(Button)`
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
 `;

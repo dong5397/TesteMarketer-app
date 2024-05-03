@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Modal from "react-modal";
-import FoodIndex from "../components/FoodIndex";
+import FoodIndex from "../../components/FoodIndex";
 
 Modal.setAppElement("#root");
 
@@ -106,14 +106,20 @@ const KakaoMap = () => {
 export default KakaoMap;
 
 const Container = styled.div`
-  position: relative; /* 부모 요소를 relative로 설정하여 모달의 위치를 지도를 기준으로 설정 */
   width: 100%;
   height: calc(100vh - 60px); /* 해더의 높이를 제외한 나머지 영역 */
+  padding: 3%;
+  padding-left: 10%;
+  padding-right: 10%;
+  background: linear-gradient(#e7e78b, #f0f0c3);
 `;
 
 const MapContainer = styled.div`
   width: 100%;
   height: 100%;
+  margin-right: 10%;
+  border-radius: 30px;
+  border: 5px solid black;
 `;
 
 const CloseButton = styled.button`

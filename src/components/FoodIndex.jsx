@@ -35,8 +35,8 @@ export default FoodIndex;
 const Container = styled.div`
   padding: 20px;
   border-radius: 10px;
-  margin-bottom: 20px;
-  background: linear-gradient(to right, #f7df1e, #f1c40f);
+
+  background: linear-gradient(#e7e78b, #f0f0c3);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease-in-out;
   &:hover {

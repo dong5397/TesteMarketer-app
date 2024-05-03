@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Modal from "react-modal";
+import KakaoMap from "../page/Map/KaKaoMap";
 
 Modal.setAppElement("#root");
 
-const SearchBar = () => {
+const SearchBar = ({ onRestaurantClick }) => {
   const [restaurants, setRestaurants] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
@@ -83,7 +84,7 @@ const SearchBar = () => {
         onRequestClose={() => setModalIsOpen(false)}
         style={{
           overlay: {
-            zIndex: 9999, // 모달 창이 화면의 맨 앞에 표시되도록 설정
+            zIndex: 9999,
           },
         }}
       >
@@ -108,18 +109,16 @@ const SearchBar = () => {
 };
 
 export default SearchBar;
+
 const Container = styled.div`
-  display: block;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  gap: 20px;
-  margin-left: 10px;
-  top: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const SearchInput = styled.input`
   width: 100%;
-
   padding: 15px;
   font-size: 18px;
   border: 2px solid #ddd;
@@ -127,6 +126,7 @@ const SearchInput = styled.input`
   box-sizing: border-box;
   outline: none;
   transition: border-color 0.3s ease;
+  margin-left: 20px;
 
   &:focus {
     border-color: #f1c40f;
@@ -141,17 +141,19 @@ const NoResultMessage = styled.p`
 `;
 
 const RestaurantItem = styled.div`
+  margin-left: 15px;
   width: 300px;
   padding: 20px;
   border-radius: 5px;
   background-color: #fff;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-
   cursor: pointer;
-
   border: 1px solid #eee;
-
   transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  }
 `;
 
 const RestaurantName = styled.h2`
@@ -169,12 +171,14 @@ const StyledModal = styled(Modal)`
   top: 20%;
   left: 50%;
   transform: translateX(-50%);
-  width: 80%;
+  width: 300px;
   max-width: 600px;
   background: white;
   border-radius: 8px;
   padding: 20px;
   box-sizing: border-box;
+  border-radius: 30px;
+  border: 5px solid black;
 `;
 
 const ModalContent = styled.div`

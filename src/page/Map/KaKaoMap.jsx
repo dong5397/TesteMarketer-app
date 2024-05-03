@@ -85,11 +85,20 @@ const KakaoMap = () => {
           style={{
             overlay: {
               zIndex: 1000, // 모달이 가장 위에 표시되도록 zIndex 설정
+              backgroundColor: "rgba(0, 0, 0, 0.5)", // 배경색 및 투명도 설정
             },
             content: {
               top: "50%", // 모달이 화면의 중앙에 위치하도록 top, left 조정
-              left: "50%",
+              left: "20%",
               transform: "translate(-50%, -50%)", // 모달을 화면의 중앙으로 이동
+              width: "90%", // 모달의 너비 설정
+              maxWidth: "600px", // 모달의 최대 너비 설정
+              margin: "0 auto", // 가운데 정렬을 위해 margin 조정
+              background: "linear-gradient(#e7e78b, #f0f0c3)", // 모달 배경색 설정
+              borderRadius: "8px", // 모달 테두리 둥글게 설정
+              padding: "20px", // 내용의 패딩 설정
+              position: "relative", // 위치 설정
+              border: "5px solid black", // 테두리 설정
             },
           }}
         >

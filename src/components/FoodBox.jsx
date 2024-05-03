@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import FoodDetail from "./FoodDetail";
 
@@ -8,7 +8,10 @@ const FoodBox = () => {
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [detailPosition, setDetailPosition] = useState({ x: 0, y: 0 });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+
+  const modalRef = useRef();
 
   useEffect(() => {
     fetch("http://localhost:3000/api/v1/restaurants")
@@ -42,6 +45,7 @@ const FoodBox = () => {
         })
         .then((data) => {
           setSelectedRestaurant(data.data);
+          setIsModalOpen(true);
         })
         .catch((error) => {
           setError(error.message);
@@ -50,17 +54,25 @@ const FoodBox = () => {
   }, [selectedRestaurantId]);
 
   const handleRestaurantClick = (id, event) => {
+    const { clientX, clientY } = event;
     setSelectedRestaurantId(id);
-    setDetailPosition({ x: event.clientX, y: event.clientY });
+    setModalPosition({ x: clientX, y: clientY });
   };
 
   const handleCloseDetails = () => {
+    setIsModalOpen(false);
     setSelectedRestaurant(null);
     setSelectedRestaurantId(null);
   };
 
+  const handleContainerClick = (event) => {
+    if (!modalRef.current.contains(event.target)) {
+      handleCloseDetails();
+    }
+  };
+
   return (
-    <Container>
+    <Container onClick={handleContainerClick}>
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
       {!loading &&
@@ -78,9 +90,10 @@ const FoodBox = () => {
             <Image src={restaurant.image} alt={restaurant.restaurants_name} />
           </Box>
         ))}
-      {selectedRestaurant && (
+      {isModalOpen && (
         <RestaurantDetails
-          style={{ top: detailPosition.y, left: detailPosition.x }}
+          ref={modalRef}
+          style={{ top: modalPosition.y, left: modalPosition.x }}
         >
           <CloseButton onClick={handleCloseDetails}>X</CloseButton>
           <FoodDetail selectedRestaurant={selectedRestaurant} />
@@ -139,8 +152,9 @@ const Image = styled.img`
 
 const RestaurantDetails = styled(BaseBox)`
   border-color: #ccc;
-  position: absolute;
+  position: fixed;
   z-index: 9999999;
+  width: 300px;
 `;
 
 const CloseButton = styled.button`

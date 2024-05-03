@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import FoodForm from "./FoodForm"; // FoodForm 컴포넌트를 import합니다.
 
-import SearchForm from "../Map/SearchForm";
+import SearchBar from "../../components/SearchBar";
 
 const Home = ({ onRestaurantClick }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +31,11 @@ const Home = ({ onRestaurantClick }) => {
       <Content>
         <FoodForm />
       </Content>
-      {isSearchOpen && <SearchForm />}
+      {isSearchOpen && (
+        <SearchContainer>
+          <SearchBar />
+        </SearchContainer>
+      )}
     </Container>
   );
 };
@@ -48,7 +52,7 @@ const Container = styled.div`
   transition: width 0.5s, left 0.5s;
   overflow: hidden;
   z-index: 1000;
-  border: 3px solid black;
+  border: 4px solid black;
   border-top-right-radius: 30px;
 `;
 
@@ -56,7 +60,7 @@ const ToggleButton = styled.button`
   position: absolute;
   top: 50%;
   right: 1%;
-  background-color: #007bff;
+  background-color: #041c11;
   color: white;
   border: none;
   padding: 10px;
@@ -69,7 +73,7 @@ const SearchButton = styled.button`
   position: absolute;
   top: 50px;
   left: 10px;
-  background-color: #007bff;
+  background-color: #041c11;
   color: white;
   border: none;
   padding: 10px;
@@ -80,4 +84,9 @@ const SearchButton = styled.button`
 
 const Content = styled.div`
   padding: 10px;
+`;
+const SearchContainer = styled.div`
+  position: absolute;
+  top: 10px;
+  left: 50px; // 'right'를 'left'로 바꿉니다.
 `;

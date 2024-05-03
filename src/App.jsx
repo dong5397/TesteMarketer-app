@@ -1,10 +1,11 @@
 import React from "react";
-import MainHeader from "./page/MainHeader";
+
 import Main from "./page/Main";
 import KakaoMap from "./page/KaKaoMap";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./page/Home";
 import Service from "./page/Service";
+import Header from "./page/Header";
 
 function App() {
   return (
@@ -20,14 +21,14 @@ function App() {
 
 const MainHN = () => (
   <div>
-    <MainHeader />
+    <Header />
     <Main />
   </div>
 );
 
 const FoodHN = () => (
   <div>
-    <MainHeader />
+    <Header />
     <Home />
     <KakaoMap />
   </div>
@@ -35,7 +36,7 @@ const FoodHN = () => (
 
 const ServiceHN = () => (
   <div>
-    <MainHeader />
+    <Header />
     <Service />
     <KakaoMap />
   </div>

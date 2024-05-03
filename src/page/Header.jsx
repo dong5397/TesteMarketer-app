@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { toast } from "react-toastify";
 import logo from "../../Images/logo.png";
 
-function Header({ setAuth }) {
+const Header = ({ setAuth }) => {
   const [name, setName] = useState("");
 
   useEffect(() => {
@@ -45,46 +45,83 @@ function Header({ setAuth }) {
   };
 
   return (
-    <Container>
-      <Link to={"/"}>
-        <Img src={logo} alt="Logo" />
-      </Link>
-
-      <Cell>
-        <UserName>안녕하세요, {name}님</UserName>
+    <HeaderContainer>
+      <LogoContainer to={"/"}>
+        <Logo src={logo} alt="Logo" />
+      </LogoContainer>
+      <NavLinks>
+        <NavLink to="/food">식당보기</NavLink>
+        <NavLink to="/service">맛 설정 모드</NavLink>
+        <NavLink to="/cuminte">커뮤니티</NavLink>
+      </NavLinks>
+      <UserInfo>
+        <Greeting>안녕하세요, {name}님</Greeting>
         <LogoutButton onClick={logout}>Logout</LogoutButton>
-      </Cell>
-    </Container>
+      </UserInfo>
+    </HeaderContainer>
   );
-}
+};
 
 export default Header;
 
-const Container = styled.div`
+const HeaderContainer = styled.div`
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0.1rem;
+  padding: 20px;
+  background: linear-gradient(#b6b654, #e7e78b);
 `;
 
-const Cell = styled.div`
-  display: flex;
-  align-items: center;
+const LogoContainer = styled(Link)`
+  flex: 1;
 `;
 
-const Img = styled.img`
+const Logo = styled.img`
   width: 150px;
   cursor: pointer;
-  display: block;
-  transition: transform 0.3s; /* 호버 효과를 위한 트랜지션 추가 */
+  transition: transform 0.3s;
+
   &:hover {
-    transform: scale(1.05); /* 호버할 때 조금씩 확대되는 효과 */
+    transform: scale(1.05);
   }
 `;
 
-const UserName = styled.span`
+const NavLinks = styled.div`
+  text-decoration: none;
+  padding: 0 20px;
+
+  font-weight: bold;
+  transition: color 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
+const NavLink = styled(Link)`
+  text-decoration: none;
+  padding: 0 50px;
+  font-size: 25px;
+
+  font-weight: bold;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
+const UserInfo = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
+const Greeting = styled.span`
   font-size: 1rem;
   font-weight: bold;
-  color: #333;
+
+  margin-right: 10px;
 `;
 
 const LogoutButton = styled.button`
@@ -95,7 +132,7 @@ const LogoutButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
+
   &:hover {
-    background-color: #555;
   }
 `;

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { toast } from "react-toastify";
-import logo from "../../Images/logo.png";
+import Potodance from "../components/Potodance";
 
 const Header = ({ setAuth }) => {
   const [name, setName] = useState("");
@@ -45,7 +45,7 @@ const Header = ({ setAuth }) => {
   return (
     <HeaderContainer>
       <LogoContainer to={"/"}>
-        <Logo src={logo} alt="Logo" />
+        <Potodance />
       </LogoContainer>
       <NavLinks>
         <NavLink to="/food">식당보기</NavLink>
@@ -76,10 +76,6 @@ const LogoContainer = styled(Link)`
   display: flex;
   align-items: center;
   cursor: pointer;
-`;
-
-const Logo = styled.img`
-  width: 150px;
   transition: transform 0.3s;
 
   &:hover {
@@ -94,8 +90,8 @@ const NavLinks = styled.div`
 
 const NavLink = styled(Link)`
   text-decoration: none;
-  padding: 0 20px;
-  font-size: 25px;
+  padding: 0 25px;
+  font-size: 20px;
   font-weight: bold;
   transition: transform 0.3s ease;
 

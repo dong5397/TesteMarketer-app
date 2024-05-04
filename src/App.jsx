@@ -4,8 +4,10 @@ import Main from "./page/Main";
 import KakaoMap from "../src/page/Map/KaKaoMap";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "../src/page/Map/Home";
-import Service from "./page/Service";
+
 import Header from "./page/Header";
+import ServicePage from "./page/ServicePage";
+import Service from "./components/Service";
 
 function App() {
   return (
@@ -37,8 +39,7 @@ const FoodHN = () => (
 const ServiceHN = () => (
   <div>
     <Header />
-    <Service />
-    <KakaoMap />
+    <ServicePage />
   </div>
 );
 

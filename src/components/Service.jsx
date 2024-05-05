@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import RestaurantCard from "./RestaurantCard";
 
 const Form = styled.div`
   display: flex;
@@ -17,7 +18,7 @@ const Wrap = styled.div`
 const LikertHeader = styled.h1`
   padding-left: 4.25%;
   margin: 20px 0 0;
-  text-align: center; /* 헤더 가운데 정렬 */
+  text-align: center;
 `;
 
 const Statement = styled.label`
@@ -30,7 +31,7 @@ const Statement = styled.label`
 
 const LikertList = styled.ul`
   list-style: none;
-  margin: 0 auto; /* 가운데 정렬 */
+  margin: 0 auto;
   padding: 0 0 35px;
   display: block;
   border-bottom: 2px solid #efefef;
@@ -42,7 +43,7 @@ const LikertList = styled.ul`
 
 const LikertItem = styled.li`
   display: inline-block;
-  width: 20%; /* 수정된 부분 */
+  width: 20%;
   text-align: center;
   vertical-align: top;
 `;
@@ -62,27 +63,27 @@ const LikertLabel = styled.label`
 const Buttons = styled.div`
   margin: 30px 0;
   padding: 0 4.25%;
-  text-align: center; /* 버튼 가운데 정렬 */
+  text-align: center;
 `;
 
 const ClearButton = styled.button`
   padding: 10px 20px;
   background-color: #e9e9e9;
-  border: 2px solid #e9e9e9; /* 수정 */
+  border: 2px solid #e9e9e9;
   border-radius: 5px;
   font-size: 14px;
   cursor: pointer;
 
   &:hover {
     background-color: #ccc;
-    border-color: #ccc; /* 수정 */
+    border-color: #ccc;
   }
 `;
 
 const SubmitButton = styled.button`
   padding: 10px 20px;
   background-color: #67ab49;
-  border: 2px solid #67ab49; /* 수정 */
+  border: 2px solid #67ab49;
   border-radius: 5px;
   font-size: 14px;
   color: #fff;
@@ -90,7 +91,7 @@ const SubmitButton = styled.button`
 
   &:hover {
     background-color: #14892c;
-    border-color: #14892c; /* 수정 */
+    border-color: #14892c;
   }
 `;
 
@@ -110,41 +111,24 @@ const ProgressBar = styled.div`
 `;
 
 const Container = styled.div`
-  display: flex;
+  display: block;
   flex-wrap: wrap;
-  justify-content: center;
-`;
-
-const Card = styled.div`
-  width: 300px;
-  margin: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  overflow: hidden;
-`;
-
-const Image = styled.img`
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-`;
-
-const Content = styled.div`
-  padding: 20px;
-`;
-
-const Title = styled.h2`
-  margin: 0;
-`;
-
-const Info = styled.p`
-  margin: 10px 0;
+  justify-content: space-around;
+  gap: 20px;
+  margin-left: calc(10% + 20px); /* 여백 추가 */
+  overflow-y: auto; /* 스크롤바 추가 */
+  max-height: calc(90vh - 40px); /* 최대 높이 지정 */
 `;
 
 const Service = () => {
   const [progress, setProgress] = useState(0);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
+  const [foodType, setFoodType] = useState("");
+  const [spicy, setSpicy] = useState("");
+  const [sweet, setSweet] = useState("");
+  const [salty, setSalty] = useState("");
+  const [sour, setSour] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:3000/api/v1/restaurants")
@@ -161,16 +145,76 @@ const Service = () => {
   }, []);
 
   const handleChange = () => {
-    const checkedItems = document.querySelectorAll(
-      'input[type="radio"]:checked'
+    const foodTypeInput = document.querySelector(
+      'input[name="food_type"]:checked'
     );
-    const totalQuestions = 5; // 총 질문의 수
-    const newProgress = (checkedItems.length / totalQuestions) * 100;
-    setProgress(newProgress);
+    const spicyInput = document.querySelector('input[name="spicy"]:checked');
+    const sweetInput = document.querySelector('input[name="sweet"]:checked');
+    const saltyInput = document.querySelector('input[name="salty"]:checked');
+    const sourInput = document.querySelector('input[name="sour"]:checked');
+
+    if (foodTypeInput && spicyInput && sweetInput && saltyInput && sourInput) {
+      const totalQuestions = 5;
+      const checkedItems = document.querySelectorAll(
+        'input[type="radio"]:checked'
+      );
+      const newProgress = (checkedItems.length / totalQuestions) * 100;
+      setProgress(newProgress);
+
+      setFoodType(foodTypeInput.value);
+      setSpicy(spicyInput.value);
+      setSweet(sweetInput.value);
+      setSalty(saltyInput.value);
+      setSour(sourInput.value);
+    }
   };
 
-  const getLikertValue = (name) => {
-    const value = document.querySelector(`input[name="${name}"]:checked`).value;
+  const handleSubmit = () => {
+    const answers = {
+      food_type: getLikertValue(foodType),
+      spicy: getLikertValue(spicy),
+      sweet: getLikertValue(sweet),
+      salty: getLikertValue(salty),
+      sour: getLikertValue(sour),
+    };
+
+    const userPreference = {
+      맵기: answers.spicy,
+      단맛: answers.sweet,
+      신맛: answers.sour,
+      짠맛: answers.salty,
+      food_type: answers.food_type,
+    };
+
+    filterRestaurants(userPreference);
+  };
+
+  const filterRestaurants = (userPreference) => {
+    const filtered = restaurants.filter((restaurant) => {
+      const 맵기차이 = Math.abs(restaurant.맵기 - userPreference.맵기);
+      const 단맛차이 = Math.abs(restaurant.단맛 - userPreference.단맛);
+      const 신맛차이 = Math.abs(restaurant.신맛 - userPreference.신맛);
+      const 짠맛차이 = Math.abs(restaurant.짠맛 - userPreference.짠맛);
+      const foodTypeMatch =
+        restaurant.food_type === userPreference.food_type ||
+        userPreference.food_type === "기타"; // 기타 선택 시에만 해당
+
+      if (userPreference.food_type === "기타") {
+        return (
+          맵기차이 <= 1 &&
+          단맛차이 <= 1 &&
+          신맛차이 <= 1 &&
+          짠맛차이 <= 1 &&
+          foodTypeMatch
+        );
+      } else {
+        return 맵기차이 <= 1 && 단맛차이 <= 1 && 신맛차이 <= 1 && 짠맛차이 <= 1;
+      }
+    });
+    setFilteredRestaurants(filtered);
+  };
+
+  const getLikertValue = (value) => {
     switch (value) {
       case "아주 좋아합니다":
         return 5;
@@ -185,51 +229,6 @@ const Service = () => {
       default:
         return 0;
     }
-  };
-
-  const calculatePreference = () => {
-    const answers = {
-      food_type: getLikertValue("food_type"),
-      spicy: getLikertValue("spicy"),
-      sweet: getLikertValue("sweet"),
-      salty: getLikertValue("salty"),
-      sour: getLikertValue("sour"),
-    };
-
-    const preference = {
-      맵기: answers.spicy,
-      단맛: answers.sweet,
-      신맛: answers.sour,
-      짠맛: answers.salty,
-      food_type: answers.food_type,
-    };
-
-    return preference;
-  };
-
-  const handleSubmit = () => {
-    const userPreference = calculatePreference();
-    filterRestaurants(userPreference);
-  };
-
-  const filterRestaurants = (userPreference) => {
-    const filtered = restaurants.filter((restaurant) => {
-      const 맵기차이 = Math.abs(restaurant.맵기 - userPreference.맵기);
-      const 단맛차이 = Math.abs(restaurant.단맛 - userPreference.단맛);
-      const 신맛차이 = Math.abs(restaurant.신맛 - userPreference.신맛);
-      const 짠맛차이 = Math.abs(restaurant.짠맛 - userPreference.짠맛);
-      const foodTypeMatch =
-        restaurant.food_type === userPreference.food_type ||
-        userPreference.food_type === 0;
-      return (
-        맵기차이 <= 1 &&
-        단맛차이 <= 1 &&
-        신맛차이 <= 1 &&
-        짠맛차이 <= 1 &&
-        foodTypeMatch
-      );
-    });
-    setFilteredRestaurants(filtered);
   };
 
   return (
@@ -397,17 +396,7 @@ const Service = () => {
       </Wrap>
       <Container>
         {filteredRestaurants.map((restaurant, index) => (
-          <Card key={index}>
-            <Image src={restaurant.image} alt={restaurant.restaurant_name} />
-            <Content>
-              <Title>{restaurant.restaurant_name}</Title>
-              <Info>주소: {restaurant.address}</Info>
-              <Info>전화번호: {restaurant.phone}</Info>
-              <Info>영업 시간: {restaurant.opening_hours}</Info>
-              <Info>평점: {restaurant.rating}</Info>
-              <Info>맛의 단계: {restaurant.taste_level}</Info>
-            </Content>
-          </Card>
+          <RestaurantCard key={index} restaurant={restaurant} />
         ))}
       </Container>
     </Form>

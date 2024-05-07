@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Main1 from "../page/Main/Main1";
-
+import Main2 from "../page/Main/Main2";
 import Main4 from "../page/Main/Main4";
 
 const MainContainer = styled.div`
@@ -13,6 +13,7 @@ function Main() {
   return (
     <MainContainer>
       <Main1 />
+      <Main2 />
       <Main4 />
     </MainContainer>
   );

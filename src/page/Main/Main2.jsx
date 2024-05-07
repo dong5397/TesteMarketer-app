@@ -1,181 +1,168 @@
-import React, { useRef, useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
-const ImgSliderWrapp = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  flex-direction: column;
-`;
+import { Link } from "react-router-dom";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import img1 from "../../../images/5/1.jpg";
+import img2 from "../../../images/5/2.jpg";
+import img3 from "../../../images/5/3.jpg";
+import img4 from "../../../images/5/4.jpg";
+import img5 from "../../../images/5/5.jpg";
 
-const Container = styled.div`
-  position: relative;
-  width: 100vw;
-  height: 75vh;
-`;
+import img8 from "../../../images/5/8.jpg";
+import img9 from "../../../images/5/9.jpg";
+import img10 from "../../../images/5/10.jpg";
+import img11 from "../../../images/5/11.jpg";
 
-const ImgAfterWrap = styled.div`
-  position: absolute;
-  height: 75vh;
-  width: 100vw;
-  transition: all 0.15s;
-`;
-
-const ImgBeforeWrap = styled.div`
-  position: absolute;
-  height: 75vh;
-  width: 50vw;
-  overflow: hidden;
-`;
-
-const Image = styled.img`
-  width: 100vw;
-  height: 100%;
-  object-fit: cover;
-`;
-
-const SliderIndicator = styled.div`
-  position: absolute;
-  width: 5px;
-  height: 100%;
-  left: 50%;
-  transform: translate(-50%, 0%);
-  background-color: #1b2c34;
-  z-index: 30;
-  pointer-events: none;
-  transition: all 0.15s;
-`;
-
-const HeroContent = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  opacity: 0;
-  animation: fadeInUp 1.5s forwards 0.5s;
-  z-index: 5;
-  pointer-events: none;
-
-  @keyframes fadeInUp {
-    to {
-      opacity: 1;
-      transform: translate(-50%, -60%);
-    }
-  }
-`;
-
-const H1 = styled.h1`
-  font-size: 2.8em;
-  color: #fff;
-  margin-bottom: 20px;
-  font-weight: 700;
-  pointer-events: none;
-  z-index: 40;
-`;
-
-const HeroBtn = styled.button`
-  padding: 15px 30px;
-  background-color: rgba(255, 255, 255, 0.2);
-  border: 2px solid #fff;
-  color: #fff;
-  font-size: 1.2em;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  outline: none;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  position: absolute;
-  bottom: 30%;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 50;
-
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
-
-  @media screen and (max-width: 376px) {
-    font-size: 0.9em;
-    bottom: 10%;
-  }
-
-  @media screen and (max-width: 541px) {
-    font-size: 1.1em;
-    bottom: 15%;
-  }
-
-  @media screen and (max-width: 768px) {
-    font-size: 1.1em;
-    bottom: 18%;
-  }
-`;
-
-const Main2 = () => {
-  const sliderRef = useRef(null);
-  const beforeRef = useRef(null);
-  const containerRef = useRef(null);
-  const [initialized, setInitialized] = useState(false);
-
-  useEffect(() => {
-    const initializeSlider = () => {
-      if (!initialized) {
-        const containerWidth = containerRef.current.offsetWidth;
-        const width = containerWidth / 2;
-        beforeRef.current.style.width = `${width}px`;
-        sliderRef.current.style.left = `${width}px`;
-        setInitialized(true);
-      }
-    };
-
-    initializeSlider();
-    window.addEventListener("resize", initializeSlider);
-    return () => window.removeEventListener("resize", initializeSlider);
-  }, [initialized]);
-
-  const dragTheImg = (e) => {
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const containerRect = containerRef.current.getBoundingClientRect();
-    const sliderPosition = clientX - containerRect.left;
-    const width = Math.max(0, Math.min(sliderPosition, containerRect.width));
-
-    beforeRef.current.style.width = `${width}px`;
-    sliderRef.current.style.left = `${width}px`;
+function Main2() {
+  const settings = {
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
   };
 
   return (
-    <ImgSliderWrapp>
-      <Container
-        ref={containerRef}
-        onMouseMove={dragTheImg}
-        onTouchMove={dragTheImg}
-      >
-        <ImgAfterWrap>
-          <Image
-            src="https://images.unsplash.com/photo-1710362921917-2e33bb342a23?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTIzNjg0MTN8&ixlib=rb-4.0.3&q=85"
-            alt="After"
-          />
-        </ImgAfterWrap>
-        <ImgBeforeWrap ref={beforeRef}>
-          <Image
-            src="https://images.unsplash.com/photo-1706820642455-12b6d3ea4a66?crop=entropy&cs=srgb&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTIzNjgzMDB8&ixlib=rb-4.0.3&q=85"
-            alt="Before"
-          />
-        </ImgBeforeWrap>
-        <SliderIndicator ref={sliderRef}></SliderIndicator>
-      </Container>
-      <HeroContent>
-        <H1>Your Title Here</H1>
-        <HeroBtn>Learn More</HeroBtn>
-      </HeroContent>
-    </ImgSliderWrapp>
+    <>
+      <div>
+        <Div />
+        <ContentWrapper>
+          <StyledSlider>
+            <Slider {...settings}>
+              <Slide>
+                <Image src={img1} alt="Slide 1" />
+              </Slide>
+              <Slide>
+                <Image src={img2} alt="Slide 2" />
+              </Slide>
+              <Slide>
+                <Image src={img3} alt="Slide 3" />
+              </Slide>
+              <Slide>
+                <Image src={img4} alt="Slide 4" />
+              </Slide>
+              <Slide>
+                <Image src={img5} alt="Slide 5" />
+              </Slide>
+            </Slider>
+          </StyledSlider>
+          <Introduction>
+            <h2>당신의 입맛을 먼저 듣는 맛집</h2>
+            <h1>맛케터</h1>
+          </Introduction>
+        </ContentWrapper>
+        <Div />
+        <DashboardGrid>
+          <DashboardItem>
+            <DashboardImage src={img8} alt="이미지 8" />
+            <DashboardText>
+              <h3>음식 추천 시스템</h3>
+              맛케터는 사용자의 맛 프로파일과 구매 이력을 기반으로 맛있는 음식
+              및 음식 관련 상품을 추천합니다. 이를 통해 사용자들은 자신에게 맞는
+              맛있는 상품을 발견하고 구매할 수 있습니다.
+            </DashboardText>
+          </DashboardItem>
+          <DashboardItem>
+            <DashboardImage src={img9} alt="이미지 9" />
+            <DashboardText>
+              <h3>맛 프로파일링</h3>
+              맛케터는 사용자의 개인 맛 프로파일을 작성하여 선호하는 맛과 음식
+              스타일을 파악합니다. 이를 토대로 맞춤형 맛집 추천을 제공하고,
+              사용자들은 자신의 취향에 맞는 맛있는 음식을 더욱 쉽게 찾을 수
+              있습니다
+            </DashboardText>
+          </DashboardItem>
+          <DashboardItem>
+            <DashboardImage src={img10} alt="이미지 10" />
+            <DashboardText>
+              <h3>사용자 커뮤니티</h3>
+              "맛케터 커뮤니티에서는 맛있는 음식에 대한 이야기를 나누고, 다양한
+              리뷰와 팁을 공유할 수 있어요. 함께 맛집을 발견하고 소통해보세요!"
+            </DashboardText>
+          </DashboardItem>
+          <DashboardItem>
+            <DashboardImage src={img11} alt="이미지 11" />
+            <DashboardText>
+              <h3>리뷰 신뢰도 스코어링</h3>
+              맛케터는 사용자들이 작성한 리뷰를 자동으로 분석하여 신뢰도
+              스코어를 부여합니다. 이 스코어는 사용자의 이전 리뷰 작성 이력,
+              리뷰 내용의 일관성 및 정확성 등을 고려하여 산출됩니다. 이를 통해
+              다른 사용자들은 신뢰할 수 있는 리뷰를 쉽게 구별하고, 더 나은
+              음식점 선택을 할 수 있습니다.
+            </DashboardText>
+          </DashboardItem>
+        </DashboardGrid>
+        <Div />
+      </div>
+    </>
   );
-};
+}
 
 export default Main2;
+
+const Div = styled.div`
+  display: flex;
+  background: linear-gradient(#f0f0c3, #f0f0c3);
+  padding: 100px; /* 원하는 패딩 값으로 설정하세요 */
+`;
+const StyledSlider = styled.div`
+  width: 70%;
+  float: left;
+  height: auto;
+  overflow: hidden;
+  border-radius: 5px;
+  margin-top: 20px;
+  margin-left: 10px;
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  background: linear-gradient(#f0f0c3, #f0f0c3);
+  height: 500px;
+`;
+
+const Slide = styled.div`
+  width: 100%;
+`;
+
+const Image = styled.img`
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+`;
+
+const Introduction = styled.div`
+  width: 30%;
+  padding: 50px;
+`;
+
+/* 여기는 대시보드 */
+const DashboardGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, calc(50% - 40px));
+  grid-template-rows: repeat(2, 1fr);
+  gap: 40px; /* 간격을 조정합니다. */
+  padding: 20px; /* 패딩을 조정합니다. */
+  background-color: #f0f0f0;
+`;
+
+const DashboardItem = styled.div`
+  background: linear-gradient(#f0f0c3, #f0f0c3);
+  padding: 10px; /* 내부 패딩을 조정합니다. */
+  display: flex;
+  align-items: center;
+  flex-direction: column; /* 세로로 정렬합니다. */
+`;
+
+const DashboardImage = styled.img`
+  max-width: 35%; /* 이미지의 최대 너비를 조정합니다. */
+  height: auto;
+`;
+
+const DashboardText = styled.p`
+  margin-top: 40px; /* 이미지와 텍스트 사이의 간격을 조정합니다. */
+`;

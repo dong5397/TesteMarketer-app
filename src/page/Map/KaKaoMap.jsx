@@ -1,15 +1,16 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Modal from "react-modal";
-import FoodIndex from "../../components/FoodIndex";
+
+import FoodDetail from "../../components/FoodDetail";
 
 Modal.setAppElement("#root");
 
-const KakaoMap = ({ onMapMove }) => {
+const KakaoMap = () => {
   const [kakao, setKakao] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
-  const mapRef = useRef(null); // useRef 추가
+  const [map, setMap] = useState(null);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -40,12 +41,12 @@ const KakaoMap = ({ onMapMove }) => {
       kakao.maps.load(() => {
         const mapContainer = document.getElementById("map"),
           mapOption = {
-            center: new kakao.maps.LatLng(36.350411, 127.384548),
+            center: new kakao.maps.LatLng(36.350411, 127.384548), // 대전 중심 좌표
             level: 8,
           };
 
-        const map = new kakao.maps.Map(mapContainer, mapOption);
-        mapRef.current = map; // mapRef에 map 할당
+        const mapInstance = new kakao.maps.Map(mapContainer, mapOption);
+        setMap(mapInstance);
 
         restaurants.forEach((restaurant) => {
           const markerPosition = new kakao.maps.LatLng(
@@ -58,70 +59,26 @@ const KakaoMap = ({ onMapMove }) => {
 
           kakao.maps.event.addListener(marker, "click", function () {
             setSelectedRestaurant(restaurant);
+            handleMapMove(markerPosition);
           });
 
-          marker.setMap(map);
-        });
-
-        // 지도 이동 이벤트 리스너 등록
-        kakao.maps.event.addListener(map, "dragend", function () {
-          const center = map.getCenter();
-          onMapMove &&
-            onMapMove({
-              latitude: center.getLat(),
-              longitude: center.getLng(),
-            });
+          marker.setMap(mapInstance);
         });
       });
     }
-  }, [kakao, restaurants, onMapMove]);
+  }, [kakao, restaurants]);
 
-  function panTo() {
-    if (kakao && selectedRestaurant && mapRef.current) {
-      // mapRef.current 추가
-      mapRef.current.panTo(
-        new kakao.maps.LatLng(
-          selectedRestaurant.latitude,
-          selectedRestaurant.longitude
-        )
-      );
-    }
-  }
+  const handleMapMove = (position) => {
+    map.panTo(position);
+  };
 
   return (
     <Container>
       <MapContainer id="map" />
-      {selectedRestaurant && (
-        <Modal
-          isOpen={true}
-          onRequestClose={() => setSelectedRestaurant(null)}
-          style={{
-            overlay: {
-              zIndex: 1000,
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-            },
-            content: {
-              top: "50%",
-              left: "20%",
-              transform: "translate(-50%, -50%)",
-              width: "90%",
-              maxWidth: "600px",
-              margin: "0 auto",
-              background: "linear-gradient(#e7e78b, #f0f0c3)",
-              borderRadius: "8px",
-              padding: "20px",
-              position: "relative",
-              border: "5px solid black",
-            },
-          }}
-        >
-          <FoodIndex restaurant={selectedRestaurant} />
-          <CloseButton onClick={() => setSelectedRestaurant(null)}>
-            X
-          </CloseButton>
-        </Modal>
-      )}
-      <Button onClick={panTo}>지도 중심좌표 부드럽게 이동시키기</Button>
+      <FoodDetail
+        selectedRestaurant={selectedRestaurant}
+        onMapMove={handleMapMove}
+      />
     </Container>
   );
 };
@@ -130,7 +87,7 @@ export default KakaoMap;
 
 const Container = styled.div`
   width: 100%;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 60px); /* 해더의 높이를 제외한 나머지 영역 */
   padding: 3%;
   padding-left: 10%;
   padding-right: 10%;
@@ -143,34 +100,4 @@ const MapContainer = styled.div`
   margin-right: 10%;
   border-radius: 30px;
   border: 5px solid black;
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 5px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-`;
-
-const Button = styled.button`
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  background-color: #d1d195;
-  color: black;
-  border: none;
-  font-weight: bold;
-  padding: 8px 16px;
-  font-size: 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: #b6b654;
-  }
 `;

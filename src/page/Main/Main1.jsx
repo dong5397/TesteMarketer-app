@@ -608,14 +608,14 @@ const Main1 = () => {
                     커뮤니티
                   </Link>
                 </A>
-                <A href="#">
+                <A href="/service">
                   <Inner>
                     <Img src="../../images/4/teste1.png" className="teste1" />
                     <Img src="../../images/4/teste2.png" className="teste2" />
                     <Img src="../../images/4/teste3.png" className="teste3" />
                     <Img src="../../images/4/teste4.png" className="teste4" />
                   </Inner>
-                  <Link className="link link-01" href="/cumunite">
+                  <Link className="link link-01" href="/service">
                     맛 조절
                   </Link>
                 </A>

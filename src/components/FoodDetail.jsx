@@ -5,7 +5,7 @@ import FoodIndex from "./FoodIndex";
 
 Modal.setAppElement("#root");
 
-function FoodDetail({ selectedRestaurant }) {
+function FoodDetail({ selectedRestaurant, onMapMove, mapRef }) {
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
   const [isReviewModalOpen, setReviewModalOpen] = useState(false);
   const [reviews, setReviews] = useState([]);
@@ -45,6 +45,17 @@ function FoodDetail({ selectedRestaurant }) {
   const handleReviewModalOpen = () => {
     setReviewModalOpen(true);
   };
+
+  function panTo() {
+    if (mapRef.current && selectedRestaurant) {
+      mapRef.current.panTo(
+        new kakao.maps.LatLng(
+          selectedRestaurant.latitude,
+          selectedRestaurant.longitude
+        )
+      );
+    }
+  }
 
   const handleReviewSubmit = async () => {
     try {
@@ -101,6 +112,9 @@ function FoodDetail({ selectedRestaurant }) {
           </p>
           <p>
             <Button onClick={handleReviewModalOpen}>리뷰 작성하기</Button>
+          </p>
+          <p>
+            <button onClick={panTo}>지도 중심좌표 부드럽게 이동시키기</button>
           </p>
         </div>
       )}

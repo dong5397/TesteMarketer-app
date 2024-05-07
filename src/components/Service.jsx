@@ -111,13 +111,14 @@ const ProgressBar = styled.div`
 `;
 
 const Container = styled.div`
-  display: block;
+  display: flex;
+  justify-content: center;
   flex-wrap: wrap;
-  justify-content: space-around;
   gap: 20px;
-  margin-left: calc(10% + 20px); /* 여백 추가 */
-  overflow-y: auto; /* 스크롤바 추가 */
-  max-height: calc(90vh - 40px); /* 최대 높이 지정 */
+  margin: 20px auto;
+  max-width: 960px;
+  overflow-y: auto;
+  max-height: calc(90vh - 40px);
 `;
 
 const Service = () => {

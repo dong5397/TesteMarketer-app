@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import Modal from "react-modal";
 import FoodIndex from "../../components/FoodIndex";
 
 Modal.setAppElement("#root");
 
-const KakaoMap = () => {
+const KakaoMap = ({ onMapMove }) => {
   const [kakao, setKakao] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+  const mapRef = useRef(null); // useRef 추가
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -22,11 +23,9 @@ const KakaoMap = () => {
     fetch("http://localhost:3000/api/v1/restaurants")
       .then((response) => response.json())
       .then((data) => {
-        // data가 배열이 아닌 객체이고, 실제 식당 데이터가 data.restaurants에 담겨있다고 가정
         if (data && Array.isArray(data.data)) {
           setRestaurants(data.data);
         } else {
-          // data가 배열이 아니라면 배열로 바꿔준다.
           if (data && !Array.isArray(data)) {
             setRestaurants([data]);
           } else {
@@ -41,11 +40,12 @@ const KakaoMap = () => {
       kakao.maps.load(() => {
         const mapContainer = document.getElementById("map"),
           mapOption = {
-            center: new kakao.maps.LatLng(36.350411, 127.384548), // 대전 중심 좌표
+            center: new kakao.maps.LatLng(36.350411, 127.384548),
             level: 8,
           };
 
         const map = new kakao.maps.Map(mapContainer, mapOption);
+        mapRef.current = map; // mapRef에 map 할당
 
         restaurants.forEach((restaurant) => {
           const markerPosition = new kakao.maps.LatLng(
@@ -66,14 +66,27 @@ const KakaoMap = () => {
         // 지도 이동 이벤트 리스너 등록
         kakao.maps.event.addListener(map, "dragend", function () {
           const center = map.getCenter();
-          // 대전 중심 좌표보다 위도가 클 경우, 대전 중심 좌표로 되돌림
-          if (center.getLat() > 36.350411) {
-            map.setCenter(new kakao.maps.LatLng(36.350411, center.getLng()));
-          }
+          onMapMove &&
+            onMapMove({
+              latitude: center.getLat(),
+              longitude: center.getLng(),
+            });
         });
       });
     }
-  }, [kakao, restaurants]);
+  }, [kakao, restaurants, onMapMove]);
+
+  function panTo() {
+    if (kakao && selectedRestaurant && mapRef.current) {
+      // mapRef.current 추가
+      mapRef.current.panTo(
+        new kakao.maps.LatLng(
+          selectedRestaurant.latitude,
+          selectedRestaurant.longitude
+        )
+      );
+    }
+  }
 
   return (
     <Container>
@@ -81,24 +94,24 @@ const KakaoMap = () => {
       {selectedRestaurant && (
         <Modal
           isOpen={true}
-          onRequestClose={() => setSelectedRestaurant(null)} // 모달 닫기
+          onRequestClose={() => setSelectedRestaurant(null)}
           style={{
             overlay: {
-              zIndex: 1000, // 모달이 가장 위에 표시되도록 zIndex 설정
-              backgroundColor: "rgba(0, 0, 0, 0.5)", // 배경색 및 투명도 설정
+              zIndex: 1000,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
             },
             content: {
-              top: "50%", // 모달이 화면의 중앙에 위치하도록 top, left 조정
+              top: "50%",
               left: "20%",
-              transform: "translate(-50%, -50%)", // 모달을 화면의 중앙으로 이동
-              width: "90%", // 모달의 너비 설정
-              maxWidth: "600px", // 모달의 최대 너비 설정
-              margin: "0 auto", // 가운데 정렬을 위해 margin 조정
-              background: "linear-gradient(#e7e78b, #f0f0c3)", // 모달 배경색 설정
-              borderRadius: "8px", // 모달 테두리 둥글게 설정
-              padding: "20px", // 내용의 패딩 설정
-              position: "relative", // 위치 설정
-              border: "5px solid black", // 테두리 설정
+              transform: "translate(-50%, -50%)",
+              width: "90%",
+              maxWidth: "600px",
+              margin: "0 auto",
+              background: "linear-gradient(#e7e78b, #f0f0c3)",
+              borderRadius: "8px",
+              padding: "20px",
+              position: "relative",
+              border: "5px solid black",
             },
           }}
         >
@@ -108,6 +121,7 @@ const KakaoMap = () => {
           </CloseButton>
         </Modal>
       )}
+      <Button onClick={panTo}>지도 중심좌표 부드럽게 이동시키기</Button>
     </Container>
   );
 };
@@ -116,7 +130,7 @@ export default KakaoMap;
 
 const Container = styled.div`
   width: 100%;
-  height: calc(100vh - 60px); /* 해더의 높이를 제외한 나머지 영역 */
+  height: calc(100vh - 60px);
   padding: 3%;
   padding-left: 10%;
   padding-right: 10%;
@@ -140,4 +154,23 @@ const CloseButton = styled.button`
   border: none;
   font-size: 20px;
   cursor: pointer;
+`;
+
+const Button = styled.button`
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: #d1d195;
+  color: black;
+  border: none;
+  font-weight: bold;
+  padding: 8px 16px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #b6b654;
+  }
 `;

@@ -66,7 +66,7 @@ const FoodBox = () => {
   };
 
   const handleContainerClick = (event) => {
-    if (!modalRef.current.contains(event.target)) {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
       handleCloseDetails();
     }
   };

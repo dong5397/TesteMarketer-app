@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Modal from "react-modal";
-
 import FoodDetail from "../../components/FoodDetail";
-
-Modal.setAppElement("#root");
 
 const KakaoMap = () => {
   const [kakao, setKakao] = useState(null);
@@ -41,7 +37,7 @@ const KakaoMap = () => {
       kakao.maps.load(() => {
         const mapContainer = document.getElementById("map"),
           mapOption = {
-            center: new kakao.maps.LatLng(36.350411, 127.384548), // 대전 중심 좌표
+            center: new kakao.maps.LatLng(36.350411, 127.384548),
             level: 8,
           };
 
@@ -87,7 +83,7 @@ export default KakaoMap;
 
 const Container = styled.div`
   width: 100%;
-  height: calc(100vh - 60px); /* 해더의 높이를 제외한 나머지 영역 */
+  height: calc(100vh - 60px);
   padding: 3%;
   padding-left: 10%;
   padding-right: 10%;

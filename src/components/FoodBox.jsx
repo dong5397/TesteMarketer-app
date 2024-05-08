@@ -11,8 +11,10 @@ const FoodBox = () => {
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+  const [mapPosition, setMapPosition] = useState({});
 
   const modalRef = useRef();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("http://localhost:3000/api/v1/restaurants")
@@ -72,6 +74,10 @@ const FoodBox = () => {
     }
   };
 
+  const handleMapMove = (newPosition) => {
+    setMapPosition(newPosition);
+  };
+
   return (
     <Container onClick={handleContainerClick}>
       {loading && <p>Loading...</p>}
@@ -97,7 +103,10 @@ const FoodBox = () => {
           style={{ top: modalPosition.y, left: modalPosition.x }}
         >
           <CloseButton onClick={handleCloseDetails}>X</CloseButton>
-          <FoodDetail selectedRestaurant={selectedRestaurant} />
+          <FoodDetail
+            selectedRestaurant={selectedRestaurant}
+            onMapMove={handleMapMove}
+          />
         </RestaurantDetails>
       )}
     </Container>
@@ -111,9 +120,9 @@ const Container = styled.div`
   flex-wrap: wrap;
   justify-content: space-around;
   gap: 20px;
-  margin-left: calc(10% + 20px); /* 여백 추가 */
-  overflow-y: auto; /* 스크롤바 추가 */
-  max-height: calc(90vh - 40px); /* 최대 높이 지정 */
+  margin-left: calc(10% + 20px);
+  overflow-y: auto;
+  max-height: calc(90vh - 40px);
 `;
 
 const BaseBox = styled.div`

@@ -1,15 +1,14 @@
-// FoodForm.js
 import React from "react";
-import FoodBox from "../../components/FoodBox";
 import styled from "styled-components";
+import FoodBox from "../../components/FoodBox";
 
-function FoodForm() {
+const FoodForm = () => {
   return (
     <FormContainer>
       <FoodBox />
     </FormContainer>
   );
-}
+};
 
 export default FoodForm;
 

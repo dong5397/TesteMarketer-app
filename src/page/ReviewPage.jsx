@@ -53,7 +53,6 @@ function ReviewPage() {
   return (
     <ReveiwP>
       <HeaderContainer>
-        <Link to="/">뒤로가기</Link>
         <Title>식당 리뷰</Title>
       </HeaderContainer>
 

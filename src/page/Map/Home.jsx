@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import FoodForm from "./FoodForm"; // FoodForm 컴포넌트를 import합니다.
-
+import FoodDetail from "../../components/FoodDetail";
 import SearchBar from "../../components/SearchBar";
 
 const Home = ({ onRestaurantClick }) => {
@@ -18,6 +18,9 @@ const Home = ({ onRestaurantClick }) => {
     if (!isSearchOpen && !isOpen) {
       setIsOpen(true); // 검색 버튼을 누르면 패널이 함께 열리도록 설정합니다.
     }
+  };
+  const handleMapMove = (newPosition) => {
+    setMapPosition(newPosition);
   };
 
   return (
@@ -36,6 +39,7 @@ const Home = ({ onRestaurantClick }) => {
           <SearchBar />
         </SearchContainer>
       )}
+      <FoodDetail onMapMove={handleMapMove} />
     </Container>
   );
 };

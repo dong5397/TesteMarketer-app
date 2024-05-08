@@ -4,6 +4,10 @@ import KimDongWok from "../../../images/team/KimDongWok.jpg";
 import BackMinKi from "../../../images/team/BackMinKi.jpg";
 import NaJiMin from "../../../images/team/NaJiMin.jpg";
 
+const P = styled.div`
+  font-size: 20px;
+  font-weight: bold;
+`;
 const Section = styled.section`
   background: linear-gradient(#f0f0c3, #e7e7c9);
   font-family: "Poppins", sans-serif;
@@ -48,6 +52,7 @@ const Section = styled.section`
   .cards {
     margin-top: 7rem;
     display: grid;
+
     grid-template-columns: repeat(
       auto-fit,
       minmax(15rem, 1fr)
@@ -62,6 +67,7 @@ const Section = styled.section`
 
     .card {
       position: relative;
+
       cursor: pointer;
       width: 100%;
       max-width: 20rem;
@@ -160,6 +166,7 @@ const CardsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+
   gap: 2rem;
   margin-top: 2rem;
 
@@ -266,15 +273,15 @@ const Main4 = () => {
   return (
     <Section>
       <h2>Team</h2>
-      <p>맛케터는 웹사이트입니다.</p>
-      <p>
+      <P>맛케터는 음식추천 웹사이트입니다.</P>
+      <P>
         언제 어디서나 다양한 디바이스를 통해 접근하고 맛집을 탐색할 수 있습니다.
-      </p>
-      <p>
+      </P>
+      <P>
         원하는 맛을 선택할 수 있는 기능이 제공되고 사용자에게 선택지가
         주어집니다.
-      </p>
-      <p> 사용자간의 소통이 이루어지기 위한 커뮤니티가 제공됩니다.</p>
+      </P>
+      <P> 사용자간의 소통이 이루어지기 위한 커뮤니티가 제공됩니다.</P>
       <span className="bg-watermark">team</span>
       <CardsContainer className="cards">
         <Card className="card">

@@ -11,11 +11,6 @@ import img3 from "../../../images/5/3.jpg";
 import img4 from "../../../images/5/4.jpg";
 import img5 from "../../../images/5/5.jpg";
 
-import img8 from "../../../images/5/8.jpg";
-import img9 from "../../../images/5/9.jpg";
-import img10 from "../../../images/5/10.jpg";
-import img11 from "../../../images/5/11.jpg";
-
 function Main2() {
   const settings = {
     infinite: true,
@@ -51,48 +46,57 @@ function Main2() {
             </Slider>
           </StyledSlider>
           <Introduction>
-            <h2>당신의 입맛을 먼저 듣는 맛집</h2>
-            <h1>맛케터</h1>
+            <H3>당신의 입맛을 먼저 듣는 맛집</H3>
+            <P>맛케터</P>
           </Introduction>
         </ContentWrapper>
         <Div />
         <DashboardGrid>
           <DashboardItem>
-            <DashboardImage src={img8} alt="이미지 8" />
             <DashboardText>
-              <h3>음식 추천 시스템</h3>
-              맛케터는 사용자의 맛 프로파일과 구매 이력을 기반으로 맛있는 음식
-              및 음식 관련 상품을 추천합니다. 이를 통해 사용자들은 자신에게 맞는
-              맛있는 상품을 발견하고 구매할 수 있습니다.
+              <H3>음식 추천 시스템</H3>
+              <P>
+                맛케터는 사용자의 맛 프로파일과 구매 이력을 기반으로 <br />
+                맛있는 음식 및 음식 관련 상품을 추천합니다. <br />
+                이를 통해 사용자들은 자신에게 맞는 맛있는 상품을 발견하고 <br />
+                구매할 수 있습니다.
+              </P>
             </DashboardText>
           </DashboardItem>
           <DashboardItem>
-            <DashboardImage src={img9} alt="이미지 9" />
             <DashboardText>
-              <h3>맛 프로파일링</h3>
-              맛케터는 사용자의 개인 맛 프로파일을 작성하여 선호하는 맛과 음식
-              스타일을 파악합니다. 이를 토대로 맞춤형 맛집 추천을 제공하고,
-              사용자들은 자신의 취향에 맞는 맛있는 음식을 더욱 쉽게 찾을 수
-              있습니다
+              <H3>맛 프로파일링</H3>
+              <P>
+                맛케터는 사용자의 개인 맛 프로파일을 작성하여 <br />
+                선호하는 맛과 음식 스타일을 파악합니다. <br />
+                이를 토대로 맞춤형 맛집 추천을 제공하고, <br />
+                사용자들은 자신의 취향에 맞는 맛있는 음식을 <br />
+                더욱 쉽게 찾을 수 있습니다
+              </P>
             </DashboardText>
           </DashboardItem>
           <DashboardItem>
-            <DashboardImage src={img10} alt="이미지 10" />
             <DashboardText>
-              <h3>사용자 커뮤니티</h3>
-              "맛케터 커뮤니티에서는 맛있는 음식에 대한 이야기를 나누고, 다양한
-              리뷰와 팁을 공유할 수 있어요. 함께 맛집을 발견하고 소통해보세요!"
+              <H3>사용자 커뮤니티</H3>
+              <P>
+                "맛케터 커뮤니티에서는 맛있는 음식에 대한 이야기를 나누고,
+                <br />
+                다양한 리뷰와 팁을 공유할 수 있어요. <br />
+                함께 맛집을 발견하고 소통해보세요!"
+              </P>
             </DashboardText>
           </DashboardItem>
           <DashboardItem>
-            <DashboardImage src={img11} alt="이미지 11" />
             <DashboardText>
-              <h3>리뷰 신뢰도 스코어링</h3>
-              맛케터는 사용자들이 작성한 리뷰를 자동으로 분석하여 신뢰도
-              스코어를 부여합니다. 이 스코어는 사용자의 이전 리뷰 작성 이력,
-              리뷰 내용의 일관성 및 정확성 등을 고려하여 산출됩니다. 이를 통해
-              다른 사용자들은 신뢰할 수 있는 리뷰를 쉽게 구별하고, 더 나은
-              음식점 선택을 할 수 있습니다.
+              <H3>리뷰 신뢰도 스코어링</H3>
+              <P>
+                맛케터는 사용자들이 작성한 리뷰를 자동으로 분석하여
+                <br /> 신뢰도 스코어를 부여합니다. <br />이 스코어는 사용자의
+                이전 리뷰 작성 이력, <br />
+                리뷰 내용의 일관성 및 정확성 등을 고려하여 산출됩니다. <br />
+                이를 통해 다른 사용자들은 신뢰할 수 있는 리뷰를
+                <br /> 쉽게 구별하고, 더 나은 음식점 선택을 할 수 있습니다.
+              </P>
             </DashboardText>
           </DashboardItem>
         </DashboardGrid>
@@ -104,6 +108,20 @@ function Main2() {
 
 export default Main2;
 
+const H3 = styled.div`
+  font-size: 40px;
+  color: black;
+  font-weight: bold;
+  text-align: center;
+`;
+const P = styled.div`
+  font-size: 25px;
+  color: black;
+  margin: 50px;
+  font-weight: 500;
+  text-align: center;
+`;
+
 const Div = styled.div`
   display: flex;
   background: linear-gradient(#f0f0c3, #f0f0c3);
@@ -114,9 +132,10 @@ const StyledSlider = styled.div`
   float: left;
   height: auto;
   overflow: hidden;
-  border-radius: 5px;
+  border-radius: 10px;
   margin-top: 20px;
   margin-left: 10px;
+  border: 5px solid;
 `;
 
 const ContentWrapper = styled.div`
@@ -136,18 +155,26 @@ const Image = styled.img`
 `;
 
 const Introduction = styled.div`
-  width: 30%;
-  padding: 50px;
+  width: 35%;
+  border: 5px solid;
+  padding: 100px;
+  text-align: center;
+  border-radius: 30px;
+  margin: 20px;
+  background-color: #f0f0f0;
 `;
 
 /* 여기는 대시보드 */
 const DashboardGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, calc(50% - 40px));
+  grid-template-columns: repeat(2, calc(50% - 30px));
   grid-template-rows: repeat(2, 1fr);
-  gap: 40px; /* 간격을 조정합니다. */
+  gap: 60px; /* 간격을 조정합니다. */
   padding: 20px; /* 패딩을 조정합니다. */
   background-color: #f0f0f0;
+  border: 5px solid;
+  margin: auto; /* 부모 요소에 대해 가운데 정렬 */
+  text-align: center; /* 그리드 내의 요소들을 가운데 정렬 */
 `;
 
 const DashboardItem = styled.div`
@@ -156,11 +183,13 @@ const DashboardItem = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column; /* 세로로 정렬합니다. */
-`;
-
-const DashboardImage = styled.img`
-  max-width: 35%; /* 이미지의 최대 너비를 조정합니다. */
-  height: auto;
+  border: 5px solid;
+  border-radius: 30px;
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 const DashboardText = styled.p`

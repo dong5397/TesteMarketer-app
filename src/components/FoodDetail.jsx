@@ -2,48 +2,50 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Modal from "react-modal";
 import FoodIndex from "./FoodIndex";
+import { useNavigate } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
 function FoodDetail({ selectedRestaurant, onMapMove }) {
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
-  const [isReviewModalOpen, setReviewModalOpen] = useState(false);
+  const [restaurants, setRestaurants] = useState([]);
   const [reviews, setReviews] = useState([]);
-  const [reviewText, setReviewText] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchReviews = async () => {
-      if (selectedRestaurant.restaurants_id) {
-        try {
-          const response = await fetch(
-            `http://localhost:3000/api/v1/restaurants/${selectedRestaurant.restaurants_id}/reviews`
-          );
-          if (response.ok) {
-            const data = await response.json();
-            setReviews(data.data);
-          } else {
-            console.error("Failed to fetch reviews:", response.statusText);
-            setReviews([]);
-          }
-        } catch (error) {
-          console.error("Error fetching reviews:", error.message);
-          setReviews([]);
-        }
-      } else {
-        console.warn("No selected restaurant to fetch reviews");
-        setReviews([]);
-      }
-    };
-
-    fetchReviews();
-  }, [selectedRestaurant]);
+    fetch("http://localhost:3000/api/v1/restaurants")
+      .then((response) => response.json())
+      .then((data) => {
+        const sortedRestaurants = Array.isArray(data.data)
+          ? data.data.sort((a, b) => b.rating - a.rating)
+          : [data.data];
+        setRestaurants(sortedRestaurants);
+      });
+  }, []);
 
   const handleDetailModalOpen = () => {
     setDetailModalOpen(true);
   };
 
-  const handleReviewModalOpen = () => {
-    setReviewModalOpen(true);
+  const handleDetailPost = () => {
+    if (!selectedRestaurant || !selectedRestaurant.restaurants_id) {
+      console.error("No selected restaurant or restaurant ID");
+      return;
+    }
+
+    console.log("restaurant:", selectedRestaurant);
+    navigate(`/review/${selectedRestaurant.restaurants_id}`, {
+      state: {
+        id: `${selectedRestaurant.restaurants_id}`,
+        name: `${selectedRestaurant.restaurants_name}`,
+        address: `${selectedRestaurant.address}`,
+        phone: `${selectedRestaurant.phone}`,
+        opening_hours: `${selectedRestaurant.opening_hours}`,
+        rating: `${selectedRestaurant.rating}`,
+        image: `${selectedRestaurant.image}`,
+      },
+    });
   };
 
   const handleMapMove = () => {
@@ -59,52 +61,6 @@ function FoodDetail({ selectedRestaurant, onMapMove }) {
       }); // 위치 정보 전달
   };
 
-  const handleReviewSubmit = async () => {
-    try {
-      const response = await fetch(`http://localhost:3000/api/v1/reviews`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          restaurants_id: selectedRestaurant.restaurants_id,
-          review_text: reviewText,
-          review_date: new Date().toISOString().slice(0, 10),
-          user_id: 1,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(
-          `Server responded with ${response.status}: ${response.statusText}`
-        );
-      }
-
-      const newReview = await response.json();
-      setReviews((prevReviews) => [...prevReviews, newReview]);
-      setReviewModalOpen(false);
-      setReviewText("");
-    } catch (error) {
-      console.error("Error submitting review:", error.message);
-      alert("리뷰 제출에 실패했습니다. 다시 시도해주세요.");
-    }
-  };
-
-  const handleReviewDelete = async (reviewId) => {
-    const response = await fetch(
-      `http://localhost:3000/api/v1/reviews/${reviewId}`,
-      {
-        method: "DELETE",
-      }
-    );
-
-    if (response.ok) {
-      setReviews((prevReviews) =>
-        prevReviews.filter((review) => review.review_id !== reviewId)
-      );
-    }
-  };
-
   return (
     <div>
       {selectedRestaurant && (
@@ -113,7 +69,7 @@ function FoodDetail({ selectedRestaurant, onMapMove }) {
             <Button onClick={handleDetailModalOpen}>세부 정보 보기</Button>
           </p>
           <p>
-            <Button onClick={handleReviewModalOpen}>리뷰 작성하기</Button>
+            <Button onClick={handleDetailPost}>리뷰 작성하기</Button>
           </p>
           <p>
             <Button onClick={handleMapMove}>지도로 이동</Button>
@@ -153,43 +109,6 @@ function FoodDetail({ selectedRestaurant, onMapMove }) {
             닫기
           </CloseButton>
         </ModalContent>
-      </Modal>
-      <Modal
-        isOpen={isReviewModalOpen}
-        onRequestClose={() => setReviewModalOpen(false)}
-        style={{
-          overlay: {
-            zIndex: 1000,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-          },
-          content: {
-            width: "90%",
-            maxWidth: "600px",
-            margin: "0 auto",
-
-            position: "relative",
-          },
-        }}
-      >
-        <CustomModalContent>
-          <CustomCloseButton onClick={() => setReviewModalOpen(false)}>
-            &times;
-          </CustomCloseButton>
-          <CustomTitle>리뷰 작성하기</CustomTitle>
-          <CustomForm>
-            <CustomTextArea
-              value={reviewText}
-              onChange={(e) => setReviewText(e.target.value)}
-              placeholder="리뷰를 작성해주세요."
-            />
-            <CustomSubmitButton onClick={handleReviewSubmit}>
-              작성 완료
-            </CustomSubmitButton>
-            <CustomCancelButton onClick={() => setReviewModalOpen(false)}>
-              취소
-            </CustomCancelButton>
-          </CustomForm>
-        </CustomModalContent>
       </Modal>
     </div>
   );
@@ -236,56 +155,4 @@ const CloseButton = styled(Button)`
   position: absolute;
   bottom: 20px;
   right: 20px;
-`;
-
-const CustomModalContent = styled.div`
-  width: 100%;
-`;
-
-const CustomCloseButton = styled.button`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #aaa;
-`;
-
-const CustomTitle = styled.h2`
-  font-size: 24px;
-  margin-bottom: 20px;
-  text-align: center;
-`;
-
-const CustomForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const CustomTextArea = styled.textarea`
-  width: 100%;
-  height: 100px;
-  margin-bottom: 20px;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-`;
-
-const CustomSubmitButton = styled(Button)`
-  width: 100%;
-  max-width: 200px;
-  margin: 0 auto;
-`;
-
-const CustomCancelButton = styled(Button)`
-  width: 100%;
-  max-width: 200px;
-  margin: 0 auto;
-  background-color: #aaa;
-  &:hover {
-    background-color: #888;
-  }
 `;

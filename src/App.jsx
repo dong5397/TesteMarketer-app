@@ -7,8 +7,8 @@ import Home from "../src/page/Map/Home";
 
 import Header from "./page/Header";
 import ServicePage from "./page/ServicePage";
-import Service from "./components/Service";
 
+import Review from "./page/ReviewPage";
 function App() {
   return (
     <BrowserRouter>
@@ -16,6 +16,7 @@ function App() {
         <Route path="/" element={<MainHN />} />
         <Route path="/food" element={<FoodHN />} />
         <Route path="/service" element={<ServiceHN />} />
+        <Route path="/review/:id" element={<ReviewHN />} />
       </Routes>
     </BrowserRouter>
   );
@@ -27,7 +28,12 @@ const MainHN = () => (
     <Main />
   </div>
 );
-
+const ReviewHN = () => (
+  <div>
+    <Header />
+    <Review />
+  </div>
+);
 const FoodHN = () => (
   <div>
     <Header />

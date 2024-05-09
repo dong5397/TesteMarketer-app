@@ -5,8 +5,14 @@ import BackMinKi from "../../../images/team/BackMinKi.jpg";
 import NaJiMin from "../../../images/team/NaJiMin.jpg";
 
 const P = styled.div`
-  font-size: 20px;
+  font-size: 30px;
+  
+  font-family: "GowunDodum-Regular";
+`;
+const H2 = styled.div`
+  font-size: 80px;
   font-weight: bold;
+  font-family: "GowunDodum-Regular";
 `;
 const Section = styled.section`
   background: linear-gradient(#f0f0c3, #e7e7c9);
@@ -272,7 +278,7 @@ const Card = styled.div`
 const Main4 = () => {
   return (
     <Section>
-      <h2>Team</h2>
+      <H2>Team</H2>
       <P>맛케터는 음식추천 웹사이트입니다.</P>
       <P>
         언제 어디서나 다양한 디바이스를 통해 접근하고 맛집을 탐색할 수 있습니다.

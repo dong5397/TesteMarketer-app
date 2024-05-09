@@ -9,11 +9,15 @@ const MainContainer = styled.div`
   align-items: center; /* 세로 가운데 정렬을 위해 추가 */
 `;
 
+
+
 function Main() {
   return (
     <MainContainer>
       <Main1 />
-
+     
+      <Main2/>
+      
       <Main4 />
     </MainContainer>
   );

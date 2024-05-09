@@ -1,197 +1,291 @@
 import React from "react";
 import styled from "styled-components";
+import Swiper from "swiper";
+import "swiper/swiper-bundle.css";
+const Container= styled.div`
+background: linear-gradient(#f0f0c3, #f0f0c3)
 
-import { Link } from "react-router-dom";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import img1 from "../../../images/5/1.jpg";
-import img2 from "../../../images/5/2.jpg";
-import img3 from "../../../images/5/3.jpg";
-import img4 from "../../../images/5/4.jpg";
-import img5 from "../../../images/5/5.jpg";
 
-function Main2() {
-  const settings = {
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
-  };
 
-  return (
-    <>
-      <div>
-        <Div />
-        <ContentWrapper>
-          <StyledSlider>
-            <Slider {...settings}>
-              <Slide>
-                <Image src={img1} alt="Slide 1" />
-              </Slide>
-              <Slide>
-                <Image src={img2} alt="Slide 2" />
-              </Slide>
-              <Slide>
-                <Image src={img3} alt="Slide 3" />
-              </Slide>
-              <Slide>
-                <Image src={img4} alt="Slide 4" />
-              </Slide>
-              <Slide>
-                <Image src={img5} alt="Slide 5" />
-              </Slide>
-            </Slider>
-          </StyledSlider>
-          <Introduction>
-            <H3>당신의 입맛을 먼저 듣는 맛집</H3>
-            <P>맛케터</P>
-          </Introduction>
-        </ContentWrapper>
-        <Div />
-        <DashboardGrid>
-          <DashboardItem>
-            <DashboardText>
-              <H3>음식 추천 시스템</H3>
-              <P>
-                맛케터는 사용자의 맛 프로파일과 구매 이력을 기반으로 <br />
-                맛있는 음식 및 음식 관련 상품을 추천합니다. <br />
-                이를 통해 사용자들은 자신에게 맞는 맛있는 상품을 발견하고 <br />
-                구매할 수 있습니다.
-              </P>
-            </DashboardText>
-          </DashboardItem>
-          <DashboardItem>
-            <DashboardText>
-              <H3>맛 프로파일링</H3>
-              <P>
-                맛케터는 사용자의 개인 맛 프로파일을 작성하여 <br />
-                선호하는 맛과 음식 스타일을 파악합니다. <br />
-                이를 토대로 맞춤형 맛집 추천을 제공하고, <br />
-                사용자들은 자신의 취향에 맞는 맛있는 음식을 <br />
-                더욱 쉽게 찾을 수 있습니다
-              </P>
-            </DashboardText>
-          </DashboardItem>
-          <DashboardItem>
-            <DashboardText>
-              <H3>사용자 커뮤니티</H3>
-              <P>
-                "맛케터 커뮤니티에서는 맛있는 음식에 대한 이야기를 나누고,
-                <br />
-                다양한 리뷰와 팁을 공유할 수 있어요. <br />
-                함께 맛집을 발견하고 소통해보세요!"
-              </P>
-            </DashboardText>
-          </DashboardItem>
-          <DashboardItem>
-            <DashboardText>
-              <H3>리뷰 신뢰도 스코어링</H3>
-              <P>
-                맛케터는 사용자들이 작성한 리뷰를 자동으로 분석하여
-                <br /> 신뢰도 스코어를 부여합니다. <br />이 스코어는 사용자의
-                이전 리뷰 작성 이력, <br />
-                리뷰 내용의 일관성 및 정확성 등을 고려하여 산출됩니다. <br />
-                이를 통해 다른 사용자들은 신뢰할 수 있는 리뷰를
-                <br /> 쉽게 구별하고, 더 나은 음식점 선택을 할 수 있습니다.
-              </P>
-            </DashboardText>
-          </DashboardItem>
-        </DashboardGrid>
-        <Div />
-      </div>
-    </>
-  );
-}
+`
+const BlogSliderWrapper = styled.div`
+  border: 5px solid black;
+  
+  margin-left:25%;
+  width: 50%;
+  position: flex;
+  background: #fff;
+  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+  padding: 25px;
+  border-radius: 25px;
+  height: 400px;
+  transition: all 0.3s;
 
-export default Main2;
+  @media screen and (max-width: 992px) {
+    max-width: 680px;
+    height: 400px;
+  }
 
-const H3 = styled.div`
-  font-size: 40px;
-  color: black;
-  font-weight: bold;
-  text-align: center;
-`;
-const P = styled.div`
-  font-size: 25px;
-  color: black;
-  margin: 50px;
-  font-weight: 500;
-  text-align: center;
-`;
+  @media screen and (max-width: 768px) {
+    min-height: 500px;
+    height: auto;
+    margin: 180px auto;
+  }
 
-const Div = styled.div`
-  display: flex;
-  background: linear-gradient(#f0f0c3, #f0f0c3);
-  padding: 100px; /* 원하는 패딩 값으로 설정하세요 */
-`;
-const StyledSlider = styled.div`
-  width: 70%;
-  float: left;
-  height: auto;
-  overflow: hidden;
-  border-radius: 10px;
-  margin-top: 20px;
-  margin-left: 10px;
-  border: 5px solid;
-`;
-
-const ContentWrapper = styled.div`
-  display: flex;
-  background: linear-gradient(#f0f0c3, #f0f0c3);
-  height: 500px;
-`;
-
-const Slide = styled.div`
-  width: 100%;
-`;
-
-const Image = styled.img`
-  width: 100%;
-  height: 500px;
-  object-fit: cover;
-`;
-
-const Introduction = styled.div`
-  width: 35%;
-  border: 5px solid;
-  padding: 100px;
-  text-align: center;
-  border-radius: 30px;
-  margin: 20px;
-  background-color: #f0f0f0;
-`;
-
-/* 여기는 대시보드 */
-const DashboardGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, calc(50% - 30px));
-  grid-template-rows: repeat(2, 1fr);
-  gap: 60px; /* 간격을 조정합니다. */
-  padding: 20px; /* 패딩을 조정합니다. */
-  background-color: #f0f0f0;
-  border: 5px solid;
-  margin: auto; /* 부모 요소에 대해 가운데 정렬 */
-  text-align: center; /* 그리드 내의 요소들을 가운데 정렬 */
-`;
-
-const DashboardItem = styled.div`
-  background: linear-gradient(#f0f0c3, #f0f0c3);
-  padding: 10px; /* 내부 패딩을 조정합니다. */
-  display: flex;
-  align-items: center;
-  flex-direction: column; /* 세로로 정렬합니다. */
-  border: 5px solid;
-  border-radius: 30px;
-  transition: all 0.3s ease-in-out;
-  &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  @media screen and (max-height: 500px) and (min-width: 992px) {
+    height: 350px;
   }
 `;
 
-const DashboardText = styled.p`
-  margin-top: 40px; /* 이미지와 텍스트 사이의 간격을 조정합니다. */
+const BlogSliderItem = styled.div`
+
+  display: flex;
+  align-items: center;
+  
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
+
+  &.swiper-slide-active {
+    .blog-slider__img {
+      img {
+        opacity: 1;
+        transition-delay: 0.3s;
+      }
+    }
+    .blog-slider__content > * {
+      opacity: 1;
+      transform: none;
+
+      @for $i from 0 to 15 {
+        &:nth-child(#{$i + 1}) {
+          transition-delay: $i * 0.1 + 0.3s;
+        }
+      }
+    }
+  }
 `;
+
+const BlogSliderImg = styled.div`
+  border: 5px solid black;  
+  margin:100px;
+  width: 300px;
+  flex-shrink: 0;
+  height: 300px;
+  background-color:#8f8f7a;
+  box-shadow: 4px 13px 30px 1px rgba(252, 56, 56, 0.2);
+  border-radius: 20px;
+  transform: translateX(-80px);
+  overflow: hidden;
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+   
+   
+    background-image: linear-gradient(147deg, #fe8a39 0%, #fd3838 74%);
+    border-radius: 20px;
+    opacity: 0.8;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0;
+    border-radius: 20px;
+    transition: all 0.3s;
+  }
+
+  @media screen and (max-width: 992px) {
+    // width: 45%;
+  }
+  @media screen and (max-width: 768px) {
+    transform: translateY(-50%);
+    width: 90%;
+  }
+  @media screen and (max-width: 576px) {
+    width: 95%;
+  }
+  @media screen and (max-height: 500px) and (min-width: 992px) {
+    height: 270px;
+  }
+`;
+
+const BlogSliderContent = styled.div`
+  padding-right: 25px;
+
+  @media screen and (max-width: 992px) {
+    // width: 55%;
+  }
+  @media screen and (max-width: 768px) {
+    margin-top: -80px;
+    text-align: center;
+    padding: 0 30px;
+  }
+
+  @media screen and (max-width: 576px) {
+    padding: 0;
+  }
+  > * {
+    opacity: 0;
+    transform: translateY(25px);
+    transition: all 0.4s;
+  }
+`;
+
+const BlogSliderCode = styled.span`
+  color: #7b7992;
+  margin-bottom: 15px;
+  display: block;
+  font-weight: 500;
+`;
+
+const BlogSliderTitle = styled.div`
+  font-size: 24px;
+  font-weight: 700;
+  color: #0d0925;
+  margin-bottom: 20px;
+`;
+
+const BlogSliderText = styled.div`
+  color: #4e4a67;
+  margin-bottom: 30px;
+  line-height: 1.5em;
+`;
+
+const BlogSliderButton = styled.a`
+  display: inline-flex;
+  background-image: linear-gradient(147deg, #fe8a39 0%, #fd3838 74%);
+  padding: 15px 35px;
+  border-radius: 50px;
+  color: #fff;
+  box-shadow: 0px 14px 80px rgba(252, 56, 56, 0.4);
+  text-decoration: none;
+  font-weight: 500;
+  justify-content: center;
+  text-align: center;
+  letter-spacing: 1px;
+
+  @media screen and (max-width: 576px) {
+    width: 100%;
+  }
+`;
+
+const BlogSliderPagination = styled.div`
+  position: absolute;
+  z-index: 21;
+  right: 20px;
+  width: 11px !important;
+  text-align: center;
+  left: auto !important;
+  top: 50%;
+  bottom: auto !important;
+  transform: translateY(-50%);
+
+  @media screen and (max-width: 768px) {
+    transform: translateX(-50%);
+    left: 50% !important;
+    top: 205px;
+    width: 100% !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &.swiper-pagination-bullets .swiper-pagination-bullet {
+    margin: 8px 0;
+
+    @media screen and (max-width: 768px) {
+      margin: 0 5px;
+    }
+  }
+
+  .swiper-pagination-bullet {
+    width: 11px;
+    height: 11px;
+    display: block;
+    border-radius: 10px;
+    background: #062744;
+    opacity: 0.2;
+    transition: all 0.3s;
+
+    &-active {
+      opacity: 1;
+      background: #fd3838;
+      height: 30px;
+      box-shadow: 0px 0px 20px rgba(252, 56, 56, 0.3);
+
+      @media screen and (max-width: 768px) {
+        height: 11px;
+        width: 30px;
+      }
+    }
+  }
+`;
+
+class Main2 extends React.Component {
+  componentDidMount() {
+    this.swiper = new Swiper(".blog-slider", {
+      spaceBetween: 30,
+      effect: "fade",
+      loop: true,
+      mousewheel: {
+        invert: false,
+      },
+      pagination: {
+        el: ".blog-slider__pagination",
+        clickable: true,
+      },
+    });
+  }
+
+  render() {
+    return (
+      <Container>
+      <BlogSliderWrapper className="blog-slider">
+        <div className="blog-slider__wrp swiper-wrapper">
+          <BlogSliderItem className="blog-slider__item swiper-slide">
+            <BlogSliderImg className="blog-slider__img">
+              <img src="https://res.cloudinary.com/muhammederdem/image/upload/q_60/v1535759872/kuldar-kalvik-799168-unsplash.webp" alt="" />
+            </BlogSliderImg>
+            <BlogSliderContent className="blog-slider__content">
+              <BlogSliderCode className="blog-slider__code">26 December 2019</BlogSliderCode>
+              <BlogSliderTitle className="blog-slider__title">Lorem Ipsum Dolor</BlogSliderTitle>
+              <BlogSliderText className="blog-slider__text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Recusandae voluptate repellendus magni illo ea animi?</BlogSliderText>
+              <BlogSliderButton href="#" className="blog-slider__button">READ MORE</BlogSliderButton>
+            </BlogSliderContent>
+          </BlogSliderItem>
+          <BlogSliderItem className="blog-slider__item swiper-slide">
+            <BlogSliderImg className="blog-slider__img">
+              <img src="https://res.cloudinary.com/muhammederdem/image/upload/q_60/v1535759871/jason-leung-798979-unsplash.webp" alt="" />
+            </BlogSliderImg>
+            <BlogSliderContent className="blog-slider__content">
+              <BlogSliderCode className="blog-slider__code">26 December 2019</BlogSliderCode>
+              <BlogSliderTitle className="blog-slider__title">Lorem Ipsum Dolor2</BlogSliderTitle>
+              <BlogSliderText className="blog-slider__text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Recusandae voluptate repellendus magni illo ea animi?</BlogSliderText>
+              <BlogSliderButton href="#" className="blog-slider__button">READ MORE</BlogSliderButton>
+            </BlogSliderContent>
+          </BlogSliderItem>
+          <BlogSliderItem className="blog-slider__item swiper-slide">
+            <BlogSliderImg className="blog-slider__img">
+              <img src="https://res.cloudinary.com/muhammederdem/image/upload/q_60/v1535759871/alessandro-capuzzi-799180-unsplash.webp" alt="" />
+            </BlogSliderImg>
+            <BlogSliderContent className="blog-slider__content">
+              <BlogSliderCode className="blog-slider__code">26 December 2019</BlogSliderCode>
+              <BlogSliderTitle className="blog-slider__title">Lorem Ipsum Dolor</BlogSliderTitle>
+              <BlogSliderText className="blog-slider__text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Recusandae voluptate repellendus magni illo ea animi?</BlogSliderText>
+              <BlogSliderButton href="#" className="blog-slider__button">READ MORE</BlogSliderButton>
+            </BlogSliderContent>
+          </BlogSliderItem>
+        </div>
+        <BlogSliderPagination className="blog-slider__pagination"></BlogSliderPagination>
+      </BlogSliderWrapper>
+      </Container>
+    );
+  }
+}
+
+export default Main2;

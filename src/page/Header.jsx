@@ -91,9 +91,10 @@ const NavLinks = styled.div`
 const NavLink = styled(Link)`
   text-decoration: none;
   padding: 0 25px;
-  font-size: 20px;
+  font-size: 25px;
   font-weight: bold;
   transition: transform 0.3s ease;
+  font-family: "GowunDodum-Regular";
 
   &:hover {
     transform: scale(1.1);

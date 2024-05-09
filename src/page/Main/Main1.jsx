@@ -33,13 +33,17 @@ const Intro = styled.div`
 const Header = styled.div``;
 
 const H1 = styled.h1`
-  font-size: 3.4rem;
+  font-size: 80px;
   line-height: 1.2;
   margin-bottom: 0.3rem;
+  font-family: "GowunDodum-Regular";
 `;
 
 const H2 = styled.h2`
   font-weight: 300;
+  font-size: 30px;
+  font-family: "GowunDodum-Regular";
+  
 `;
 
 const Ul = styled.ul`
@@ -48,10 +52,12 @@ const Ul = styled.ul`
   border-radius: 6px;
   padding: 1.2rem;
   list-style-type: none;
+  
 `;
 
 const Li = styled.li`
   font-size: 1.2rem;
+  font-family: "GowunDodum-Regular";
   margin: 1.2rem 0;
   color: black;
   &:first-child {
@@ -69,6 +75,7 @@ const Trustpilot = styled.div`
   padding: 0.8rem;
   color: rgba(0, 0, 0, 0.7);
   font-weight: 400;
+  font-family: "GowunDodum-Regular";
 `;
 
 const Panels = styled.div`
@@ -319,7 +326,7 @@ const Link = styled.span`
   padding: 6px 0;
   border-radius: 6px;
   text-align: center;
-  font-size: 1.4rem;
+  font-size: 30px;
   bottom: 0;
   left: 70px;
   right: 70px;
@@ -329,6 +336,7 @@ const Link = styled.span`
   animation-name: home-link-move;
   transition: bottom 0.2s ease-out 100ms;
   z-index: 10;
+  font-family: "GowunDodum-Regular";
 
   &:before {
     content: "";

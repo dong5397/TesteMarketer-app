@@ -6,12 +6,13 @@ const Form = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 15px;
 `;
 const Wrap = styled.div`
-  font-family: Arial, san-serif;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border: 2px solid black;
+  border: 5px solid black;
+  border-radius: 20px;
   width: 1000px;
 `;
 
@@ -19,14 +20,16 @@ const LikertHeader = styled.h1`
   padding-left: 4.25%;
   margin: 20px 0 0;
   text-align: center;
+  font-family: "GowunDodum-Regular";
 `;
 
 const Statement = styled.label`
   display: block;
-  font-size: 16px;
+  font-size: 25px;
   font-weight: bold;
   padding: 30px 0 0 4.25%;
-  margin-bottom: 10px;
+  margin-bottom: 25px;
+  font-family: "GowunDodum-Regular";
 `;
 
 const LikertList = styled.ul`
@@ -34,7 +37,7 @@ const LikertList = styled.ul`
   margin: 0 auto;
   padding: 0 0 35px;
   display: block;
-  border-bottom: 2px solid #efefef;
+  border-bottom: 4px solid #000000;
 
   &:last-of-type {
     border-bottom: 0;
@@ -58,6 +61,8 @@ const LikertInput = styled.input`
 
 const LikertLabel = styled.label`
   width: 100%;
+  font-family: "GowunDodum-Regular";
+  font-size: 20px;
 `;
 
 const Buttons = styled.div`

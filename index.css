@@ -1,9 +1,17 @@
 @font-face {
-    font-family: "GowunDodum-Regular";
-    font-weight: normal;
-    src: url("./src/fonts/온글잎\ 밑미.ttf") format("truetype");
-  }
-  
-  body {
-    font-family: "GowunDodum-Regular";
-  }
+  font-family: "GowunDodum-Regular";
+  font-weight: normal;
+  src: url("./src/fonts/온글잎\ 밑미.ttf") format("truetype");
+}
+
+body {
+  font-family: "GowunDodum-Regular";
+}
+
+@font-face {
+  font-family: "ChosunCentennial";
+  src: url("https://gcore.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/ChosunCentennial.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}

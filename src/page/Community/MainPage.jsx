@@ -2,7 +2,7 @@ import { Container as MuiContainer } from "@mui/material";
 import { DeviceFrameset } from "react-device-frameset";
 import styled from "styled-components";
 import HeaderText from "./HeaderText";
-import List from "./List";
+import List from "./ListPage";
 
 function MainCumintePage() {
   return (

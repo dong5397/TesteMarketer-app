@@ -145,29 +145,27 @@ const Service = () => {
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-  const handleChange = () => {
-    const foodTypeInput = document.querySelector(
-      'input[name="food_type"]:checked'
-    );
-    const spicyInput = document.querySelector('input[name="spicy"]:checked');
-    const sweetInput = document.querySelector('input[name="sweet"]:checked');
-    const saltyInput = document.querySelector('input[name="salty"]:checked');
-    const sourInput = document.querySelector('input[name="sour"]:checked');
+  const handleChange = (e) => {
+    const { name, value } = e.target;
 
-    if (foodTypeInput && spicyInput && sweetInput && saltyInput && sourInput) {
-      const totalQuestions = 5;
-      const checkedItems = document.querySelectorAll(
-        'input[type="radio"]:checked'
-      );
-      const newProgress = (checkedItems.length / totalQuestions) * 100;
-      setProgress(newProgress);
-
-      setFoodType(foodTypeInput.value);
-      setSpicy(spicyInput.value);
-      setSweet(sweetInput.value);
-      setSalty(saltyInput.value);
-      setSour(sourInput.value);
+    if (name === "food_type") {
+      setFoodType(value);
+    } else if (name === "spicy") {
+      setSpicy(value);
+    } else if (name === "sweet") {
+      setSweet(value);
+    } else if (name === "salty") {
+      setSalty(value);
+    } else if (name === "sour") {
+      setSour(value);
     }
+
+    const totalQuestions = 5;
+    const checkedItems = document.querySelectorAll(
+      'input[type="radio"]:checked'
+    );
+    const newProgress = (checkedItems.length / totalQuestions) * 100;
+    setProgress(newProgress);
   };
 
   const handleSubmit = () => {
@@ -180,10 +178,10 @@ const Service = () => {
     };
 
     const userPreference = {
-      맵기: answers.spicy,
-      단맛: answers.sweet,
-      신맛: answers.sour,
-      짠맛: answers.salty,
+      Spicy: answers.spicy,
+      Sweet: answers.sweet,
+      Sour: answers.sour,
+      Salty: answers.salty,
       food_type: answers.food_type,
     };
 
@@ -192,24 +190,29 @@ const Service = () => {
 
   const filterRestaurants = (userPreference) => {
     const filtered = restaurants.filter((restaurant) => {
-      const 맵기차이 = Math.abs(restaurant.맵기 - userPreference.맵기);
-      const 단맛차이 = Math.abs(restaurant.단맛 - userPreference.단맛);
-      const 신맛차이 = Math.abs(restaurant.신맛 - userPreference.신맛);
-      const 짠맛차이 = Math.abs(restaurant.짠맛 - userPreference.짠맛);
+      const Spicydifference = Math.abs(restaurant.Spicy - userPreference.Spicy);
+      const Sweetdifference = Math.abs(restaurant.Sweet - userPreference.Sweet);
+      const Sourdifference = Math.abs(restaurant.Sour - userPreference.Sour);
+      const Saltydifference = Math.abs(restaurant.Salty - userPreference.Salty);
       const foodTypeMatch =
         restaurant.food_type === userPreference.food_type ||
-        userPreference.food_type === "기타"; // 기타 선택 시에만 해당
+        userPreference.food_type === "Random"; // 기타 선택 시에만 해당
 
-      if (userPreference.food_type === "기타") {
+      if (userPreference.food_type === "Random") {
         return (
-          맵기차이 <= 1 &&
-          단맛차이 <= 1 &&
-          신맛차이 <= 1 &&
-          짠맛차이 <= 1 &&
+          Spicydifference <= 1 &&
+          Sweetdifference <= 1 &&
+          Sourdifference <= 1 &&
+          Saltydifference <= 1 &&
           foodTypeMatch
         );
       } else {
-        return 맵기차이 <= 1 && 단맛차이 <= 1 && 신맛차이 <= 1 && 짠맛차이 <= 1;
+        return (
+          Spicydifference <= 1 &&
+          Sweetdifference <= 1 &&
+          Sourdifference <= 1 &&
+          Saltydifference <= 1
+        );
       }
     });
     setFilteredRestaurants(filtered);
@@ -217,15 +220,15 @@ const Service = () => {
 
   const getLikertValue = (value) => {
     switch (value) {
-      case "아주 좋아합니다":
+      case "Verygood":
         return 5;
-      case "좋아합니다":
+      case "Good":
         return 4;
-      case "보통입니다":
+      case "Normal":
         return 3;
-      case "별로 좋아하지 않습니다":
+      case "Bad":
         return 2;
-      case "전혀 좋아하지 않습니다":
+      case "Verybad":
         return 1;
       default:
         return 0;
@@ -243,147 +246,115 @@ const Service = () => {
           <Statement>어떤 종류의 음식을 가장 좋아하시나요?</Statement>
           <LikertList>
             <LikertItem>
-              <LikertInput type="radio" name="food_type" value="한식" />
+              <LikertInput type="radio" name="food_type" value="Korean" />
               <LikertLabel>한식</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput type="radio" name="food_type" value="양식" />
+              <LikertInput type="radio" name="food_type" value="Western" />
               <LikertLabel>양식</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput type="radio" name="food_type" value="중식" />
+              <LikertInput type="radio" name="food_type" value="Chinese" />
               <LikertLabel>중식</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput type="radio" name="food_type" value="일식" />
+              <LikertInput type="radio" name="food_type" value="Japanese" />
               <LikertLabel>일식</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput type="radio" name="food_type" value="기타" />
+              <LikertInput type="radio" name="food_type" value="Random" />
               <LikertLabel>기타</LikertLabel>
             </LikertItem>
           </LikertList>
           <Statement>매운 음식을 얼마나 좋아하시나요?</Statement>
           <LikertList>
             <LikertItem>
-              <LikertInput type="radio" name="spicy" value="아주 좋아합니다" />
+              <LikertInput type="radio" name="spicy" value="Verygood" />
               <LikertLabel>아주 좋아합니다</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput type="radio" name="spicy" value="좋아합니다" />
+              <LikertInput type="radio" name="spicy" value="Good" />
               <LikertLabel>좋아합니다</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput type="radio" name="spicy" value="보통입니다" />
+              <LikertInput type="radio" name="spicy" value="Normal" />
               <LikertLabel>보통입니다</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput
-                type="radio"
-                name="spicy"
-                value="별로 좋아하지 않습니다"
-              />
+              <LikertInput type="radio" name="spicy" value="Bad" />
               <LikertLabel>별로 좋아하지 않습니다</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput
-                type="radio"
-                name="spicy"
-                value="전혀 좋아하지 않습니다"
-              />
+              <LikertInput type="radio" name="spicy" value="Verybad" />
               <LikertLabel>전혀 좋아하지 않습니다</LikertLabel>
             </LikertItem>
           </LikertList>
           <Statement>달달한 음식을 얼마나 좋아하시나요?</Statement>
           <LikertList>
             <LikertItem>
-              <LikertInput type="radio" name="sweet" value="아주 좋아합니다" />
+              <LikertInput type="radio" name="sweet" value="Verygood" />
               <LikertLabel>아주 좋아합니다</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput type="radio" name="sweet" value="좋아합니다" />
+              <LikertInput type="radio" name="sweet" value="Good" />
               <LikertLabel>좋아합니다</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput type="radio" name="sweet" value="보통입니다" />
+              <LikertInput type="radio" name="sweet" value="Normal" />
               <LikertLabel>보통입니다</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput
-                type="radio"
-                name="sweet"
-                value="별로 좋아하지 않습니다"
-              />
+              <LikertInput type="radio" name="sweet" value="Bad" />
               <LikertLabel>별로 좋아하지 않습니다</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput
-                type="radio"
-                name="sweet"
-                value="전혀 좋아하지 않습니다"
-              />
+              <LikertInput type="radio" name="sweet" value="Verybad" />
               <LikertLabel>전혀 좋아하지 않습니다</LikertLabel>
             </LikertItem>
           </LikertList>
           <Statement>짠 음식을 얼마나 좋아하시나요?</Statement>
           <LikertList>
             <LikertItem>
-              <LikertInput type="radio" name="salty" value="아주 좋아합니다" />
+              <LikertInput type="radio" name="salty" value="Verygood" />
               <LikertLabel>아주 좋아합니다</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput type="radio" name="salty" value="좋아합니다" />
+              <LikertInput type="radio" name="salty" value="Good" />
               <LikertLabel>좋아합니다</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput type="radio" name="salty" value="보통입니다" />
+              <LikertInput type="radio" name="salty" value="Normal" />
               <LikertLabel>보통입니다</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput
-                type="radio"
-                name="salty"
-                value="별로 좋아하지 않습니다"
-              />
+              <LikertInput type="radio" name="salty" value="Bad" />
               <LikertLabel>별로 좋아하지 않습니다</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput
-                type="radio"
-                name="salty"
-                value="전혀 좋아하지 않습니다"
-              />
+              <LikertInput type="radio" name="salty" value="Verybad" />
               <LikertLabel>전혀 좋아하지 않습니다</LikertLabel>
             </LikertItem>
           </LikertList>
           <Statement>신 음식을 얼마나 좋아하시나요?</Statement>
           <LikertList>
             <LikertItem>
-              <LikertInput type="radio" name="sour" value="아주 좋아합니다" />
+              <LikertInput type="radio" name="sour" value="Verygood" />
               <LikertLabel>아주 좋아합니다</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput type="radio" name="sour" value="좋아합니다" />
+              <LikertInput type="radio" name="sour" value="Good" />
               <LikertLabel>좋아합니다</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput type="radio" name="sour" value="보통입니다" />
+              <LikertInput type="radio" name="sour" value="Normal" />
               <LikertLabel>보통입니다</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput
-                type="radio"
-                name="sour"
-                value="별로 좋아하지 않습니다"
-              />
+              <LikertInput type="radio" name="sour" value="Bad" />
               <LikertLabel>별로 좋아하지 않습니다</LikertLabel>
             </LikertItem>
             <LikertItem>
-              <LikertInput
-                type="radio"
-                name="sour"
-                value="전혀 좋아하지 않습니다"
-              />
+              <LikertInput type="radio" name="sour" value="Verybad" />
               <LikertLabel>전혀 좋아하지 않습니다</LikertLabel>
             </LikertItem>
           </LikertList>

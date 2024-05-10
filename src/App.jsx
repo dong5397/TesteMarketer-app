@@ -1,14 +1,12 @@
 import React from "react";
-
 import Main from "./page/Main";
 import KakaoMap from "../src/page/Map/KaKaoMap";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "../src/page/Map/Home";
-
 import Header from "./page/Header";
 import ServicePage from "./page/ServicePage";
 
-import Review from "./page/ReviewPage";
+import ReviewRight from "./page/Review/ReviewRightPage";
 function App() {
   return (
     <BrowserRouter>
@@ -31,7 +29,7 @@ const MainHN = () => (
 const ReviewHN = () => (
   <div>
     <Header />
-    <Review />
+    <ReviewRight />
   </div>
 );
 const FoodHN = () => (

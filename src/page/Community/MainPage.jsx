@@ -2,21 +2,16 @@ import { Container as MuiContainer } from "@mui/material";
 import { DeviceFrameset } from "react-device-frameset";
 import styled from "styled-components";
 import HeaderText from "./HeaderText";
-import CommunityBox from "../Community/CommunityBox";
+import List from "./List";
 
 function MainCumintePage() {
   return (
     <MainContainer>
-      <DeviceFrameset
-        device="iPad Mini"
-        color="black"
-        width="100%"
-        height="80%"
-      >
+      <DeviceFrameset device="iPad Mini" color="black" width="95%" height="80%">
         <StyledContainer>
           <HeaderText />
           <DivContainer>
-            <CommunityBox />
+            <List />
           </DivContainer>
         </StyledContainer>
       </DeviceFrameset>

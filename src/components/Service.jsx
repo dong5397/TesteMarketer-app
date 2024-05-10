@@ -106,6 +106,7 @@ const Progress = styled.div`
   height: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
+  border: 2px solid black;
 `;
 
 const ProgressBar = styled.div`
@@ -113,6 +114,7 @@ const ProgressBar = styled.div`
   background-color: #67ab49;
   height: 100%;
   border-radius: 10px;
+  border-right: 2px solid black;
 `;
 
 const Container = styled.div`

@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "../src/page/Map/Home";
 import Header from "./page/Header";
 import ServicePage from "./page/ServicePage";
-import CommunityPage from "./page/Community/MainCommunityPage";
+import CommunityPage from "./page/Community/MainPage";
 import ReviewRight from "./page/Review/ReviewRightPage";
 function App() {
   return (

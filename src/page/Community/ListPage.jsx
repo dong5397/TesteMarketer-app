@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-function CommunityView() {
+function CommunityList() {
   const [posts, setPosts] = useState([]);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:3000/api/v1/posts")
@@ -11,19 +10,18 @@ function CommunityView() {
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
-        return response.json();
+        const result = response.json();
+        const sortedPosts = result.data.sort((a, b) => a.post_id - b.post_id);
+        setPosts(sortedPosts);
       })
-      .then((data) => {
-        setPosts(data);
-      })
+
       .catch((error) => {
-        setError(error.message);
+        console.error(error.message);
       });
   }, []);
 
   return (
-    <>
-      {error && <p>Error: {error}</p>}
+    <div>
       {posts.map((post, index) => (
         <PostContainer key={index}>
           <h2>식당 이름: {post.title}</h2>
@@ -33,11 +31,11 @@ function CommunityView() {
           <p>날짜: {post.post_date}</p>
         </PostContainer>
       ))}
-    </>
+    </div>
   );
 }
 
-export default CommunityView;
+export default CommunityList;
 
 const PostContainer = styled.div`
   cursor: pointer;

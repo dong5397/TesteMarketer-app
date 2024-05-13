@@ -43,7 +43,6 @@ const H2 = styled.h2`
   font-weight: 300;
   font-size: 30px;
   font-family: "GowunDodum-Regular";
-  
 `;
 
 const Ul = styled.ul`
@@ -52,7 +51,6 @@ const Ul = styled.ul`
   border-radius: 6px;
   padding: 1.2rem;
   list-style-type: none;
-  
 `;
 
 const Li = styled.li`
@@ -577,19 +575,19 @@ const Main1 = () => {
                     식당보기
                   </Link>
                 </A>
-                <A href="/review/:id">
+                <A href="/reviewrightpage">
                   <Inner>
                     <Img src="../../images/2/review.png" className="review" />
                     <Img src="../../images/2/review2.png" className="review2" />
                     <Img src="../../images/2/review3.png" className="review3" />
                   </Inner>
                   <Link className="link link-01" href="/review">
-                    리뷰 작성
+                    리뷰 보기
                   </Link>
                 </A>
               </Panel>
               <Panel className="second">
-                <A href="/cumunite">
+                <A href="/community">
                   <Inner>
                     <Img
                       src="../../images/3/community1.png"

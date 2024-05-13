@@ -1,73 +1,103 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+
+const Container = styled.div`
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Form = styled.form`
+  width: 100%;
+`;
+
+const Input = styled.input`
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+`;
+
+const TextArea = styled.textarea`
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+`;
 
 const Button = styled.button`
   background-color: #3498db;
   color: white;
-  padding: 8px 16px;
+  padding: 10px 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 16px;
 
   &:hover {
     background-color: #2980b9;
   }
 `;
 
-function CommunityWrite() {
+const SuccessMessage = styled.p`
+  color: green;
+  font-weight: bold;
+`;
+
+function WritePage() {
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
-  const [userId, setUserId] = useState(null); // 사용자 ID 상태 추가
-
-  useEffect(() => {
-    // 사용자 ID를 가져오는 함수
-    const fetchUserId = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/api/v1/user`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (!response.ok) {
-          throw new Error("사용자 정보를 가져오는 데 실패했습니다.");
-        }
-        const data = await response.json();
-        setUserId(data.user_id);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchUserId();
-  }, []);
+  const [message, setMessage] = useState("");
 
   const onInsert = async () => {
     if (!title || !contents) {
-      return alert("제목과 리뷰를 모두 입력해주세요.");
+      return alert("제목과 내용을 모두 입력해주세요.");
     }
-    const now = new Date().toISOString();
+
+    const now = new Date().toISOString(); // 현재 날짜와 시간 포맷
+    const dataToSend = {
+      post_title: title,
+      post_content: contents,
+      post_date: now,
+    };
+    console.log("Data to Send:", dataToSend); // 전송 데이터 확인을 위한 로그
+
     try {
       const response = await fetch(`http://localhost:3000/api/v1/post`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          post_title: title,
-          post_content: contents,
-          post_date: now,
-          user_id: userId,
-        }),
+        body: JSON.stringify(dataToSend),
       });
+
       if (!response.ok) {
-        throw new Error("리뷰 작성 요청이 실패했습니다.");
+        throw new Error("글 작성 요청이 실패했습니다.");
       }
+
       const data = await response.json();
-      console.log(data); // 서버에서 반환한 데이터 확인
+      if (data.resultCode === "S-1") {
+        setMessage("글이 성공적으로 작성되었습니다.");
+      } else {
+        setMessage("글 작성 중 오류가 발생했습니다.");
+      }
+      console.log("Server Response:", data); // 서버 응답 확인을 위한 로그
     } catch (error) {
       console.error(error);
+      setMessage("글 작성 중 오류가 발생했습니다.");
     }
+
     setTitle("");
     setContents("");
   };
@@ -86,26 +116,26 @@ function CommunityWrite() {
   };
 
   return (
-    <div>
-      <form onSubmit={onSubmit} className="mb-4">
-        <input
+    <Container>
+      <h2>새 글 작성</h2>
+      <Form onSubmit={onSubmit}>
+        <Input
           placeholder="제목을 입력해주세요."
           type="text"
           value={title}
           onChange={onTitleChange}
-          className="mb-2 p-1 border"
         />
-        <input
-          placeholder="리뷰를 작성해주세요."
-          type="text"
+        <TextArea
+          placeholder="내용을 작성해주세요."
           value={contents}
           onChange={onContentsChange}
-          className="mb-2 p-1 border"
+          rows={6}
         />
         <Button type="submit">저장</Button>
-      </form>
-    </div>
+        {message && <SuccessMessage>{message}</SuccessMessage>}
+      </Form>
+    </Container>
   );
 }
 
-export default CommunityWrite;
+export default WritePage;

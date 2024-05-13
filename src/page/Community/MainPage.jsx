@@ -2,7 +2,8 @@ import { Container as MuiContainer } from "@mui/material";
 import { DeviceFrameset } from "react-device-frameset";
 import styled from "styled-components";
 import HeaderText from "./HeaderText";
-import List from "./ListPage";
+import ListPage from "./ListPage";
+import WritePage from "./WritePage";
 
 function MainCumintePage() {
   return (
@@ -11,7 +12,10 @@ function MainCumintePage() {
         <StyledContainer>
           <HeaderText />
           <DivContainer>
-            <List />
+            <DeviceContent>
+              <WritePage />
+              <ListPage />
+            </DeviceContent>
           </DivContainer>
         </StyledContainer>
       </DeviceFrameset>
@@ -30,9 +34,14 @@ const StyledContainer = styled.div`
 
 const DivContainer = styled.div`
   flex: 1;
+  display: flex;
 `;
 
 const MainContainer = styled.div`
   height: 1200px;
   background: linear-gradient(#e7e78b, #f0f0c3);
+`;
+
+const DeviceContent = styled.div`
+  flex: 1;
 `;

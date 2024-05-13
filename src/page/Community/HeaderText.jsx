@@ -43,7 +43,7 @@ const GlitchText = styled.h1`
 const CenteredWrapper = styled.div`
   display: flex;
   justify-content: center;
-  height: 100vh;
+  height: 200px;
 `;
 
 export default function App() {

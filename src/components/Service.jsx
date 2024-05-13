@@ -161,9 +161,9 @@ const Service = () => {
       setSpicy(value);
     } else if (name === "sweet") {
       setSweet(value);
-    } else if (name === "salty") {
-      setSalty(value);
     } else if (name === "sour") {
+      setSalty(value);
+    } else if (name === "salty") {
       setSour(value);
     }
 
@@ -180,8 +180,8 @@ const Service = () => {
       food_type: getLikertValue(foodType),
       spicy: getLikertValue(spicy),
       sweet: getLikertValue(sweet),
-      salty: getLikertValue(salty),
       sour: getLikertValue(sour),
+      salty: getLikertValue(salty),
     };
 
     const userPreference = {

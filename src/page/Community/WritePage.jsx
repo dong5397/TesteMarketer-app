@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 1000px; /* 수정 */
+  max-height: 400px;
+  margin-left: 40px;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -117,7 +118,6 @@ function WritePage() {
 
   return (
     <Container>
-      <h2>새 글 작성</h2>
       <Form onSubmit={onSubmit}>
         <Input
           placeholder="제목을 입력해주세요."

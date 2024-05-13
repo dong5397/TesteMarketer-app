@@ -13,8 +13,12 @@ function MainCumintePage() {
           <HeaderText />
           <DivContainer>
             <DeviceContent>
-              <WritePage />
-              <ListPage />
+              <LWContainer>
+                <WritePage />
+              </LWContainer>
+              <ListPageContainer>
+                <ListPage />
+              </ListPageContainer>
             </DeviceContent>
           </DivContainer>
         </StyledContainer>
@@ -44,4 +48,15 @@ const MainContainer = styled.div`
 
 const DeviceContent = styled.div`
   flex: 1;
+  display: flex;
+`;
+
+const LWContainer = styled.div`
+  flex: 1;
+  padding: 20px;
+`;
+
+const ListPageContainer = styled.div`
+  flex: 1;
+  padding: 20px;
 `;

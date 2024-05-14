@@ -575,7 +575,7 @@ const Main1 = () => {
                     식당보기
                   </Link>
                 </A>
-                <A href="/reviewrightpage">
+                <A href="/review">
                   <Inner>
                     <Img src="../../images/2/review.png" className="review" />
                     <Img src="../../images/2/review2.png" className="review2" />

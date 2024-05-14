@@ -2,20 +2,17 @@ import React from "react";
 import styled from "styled-components";
 
 function ReviewItem({ review }) {
-  const { id, username, content, date, hashtags } = review;
+  const { review_id, username, review_contents, review_date, hashtag, rating } =
+    review;
 
   return (
     <ReviewItemContainer>
       <Username>{username}</Username>
-      <Content>{content}</Content>
-      <Date>{date}</Date>
-      {hashtags && (
-        <HashTagsContainer>
-          {hashtags.map((tag, index) => (
-            <HashTag key={index}>#{tag}</HashTag>
-          ))}
-        </HashTagsContainer>
-      )}
+      <Content>{review_contents}</Content>
+      <Date>{review_date}</Date>
+      <HashTagsContainer>
+        <HashTag>#{hashtag}</HashTag>
+      </HashTagsContainer>
     </ReviewItemContainer>
   );
 }

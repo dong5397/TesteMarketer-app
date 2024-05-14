@@ -12,6 +12,7 @@ function WriteReview({ onSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     onSubmit(username, content, date, hashtags, rating);
     setUsername("");
     setContent("");

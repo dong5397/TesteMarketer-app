@@ -49,7 +49,7 @@ const Header = ({ setAuth }) => {
       </LogoContainer>
       <NavLinks>
         <NavLink to="/food">식당보기</NavLink>
-        <NavLink to="/reviewrightpage">리뷰작성</NavLink>
+        <NavLink to="/review">리뷰작성</NavLink>
         <NavLink to="/community">커뮤니티</NavLink>
         <NavLink to="/service">맛 설정 모드</NavLink>
       </NavLinks>

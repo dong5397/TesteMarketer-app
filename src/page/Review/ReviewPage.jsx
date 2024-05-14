@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import RatingStars from "../../components/Review/RatingStars";
 import { useState, useRef } from "react";
 import ReviewList from "../../components/Review/ReviewList";
@@ -20,10 +20,31 @@ import { useLocation } from "react-router-dom";
 function ReviewPage() {
   const location = useLocation();
   const restranutInfo = { ...location.state };
+  const { id } = useParams();
 
   const [showReviewList, setShowReviewList] = useState(true);
   const [showWriteReview, setShowWriteReview] = useState(false);
   const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    const fetchReviews = async (restaurantId) => {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/v1/reviews/${restaurantId}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch reviews");
+        }
+
+        const data = await response.json();
+        console.log(data.reviews);
+        setReviews(data.reviews);
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    };
+    fetchReviews(restranutInfo.id); // restranutInfo.id를 사용하여 요청 보내기
+  }, [restranutInfo.id]); // restranutInfo.id가 변경될 때마다 실행
 
   const handleReviewListClick = () => {
     setShowReviewList(true);
@@ -37,13 +58,13 @@ function ReviewPage() {
 
   const lastId = useRef(4);
 
-  const onSubmit = (username, content, date, hashtags) => {
+  const onSubmit = (username, content, hashtags, rating) => {
     const updateReviews = reviews.concat({
       id: lastId.current,
       username,
       content,
-      date,
       hashtags,
+      rating,
     });
 
     setReviews(updateReviews);

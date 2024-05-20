@@ -6,6 +6,16 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUtensils } from "@fortawesome/free-solid-svg-icons";
+import { faUtensilSpoon } from "@fortawesome/free-solid-svg-icons";
+import { faFish } from "@fortawesome/free-solid-svg-icons";
+import { faCookie } from "@fortawesome/free-solid-svg-icons";
+import { faPizzaSlice } from "@fortawesome/free-solid-svg-icons";
+import { faDrumstickBite } from "@fortawesome/free-solid-svg-icons";
+import { faIceCream } from "@fortawesome/free-solid-svg-icons";
+import { faCoffee } from "@fortawesome/free-solid-svg-icons";
+import { faHamburger } from "@fortawesome/free-solid-svg-icons";
 
 const NextArrow = (props) => {
   const { className, style, onClick } = props;
@@ -82,6 +92,7 @@ function ReviewListPage() {
               opening_hours: el.opening_hours,
               rating: el.rating,
               category: el.category,
+              address: el.address,
               image: el.image,
               menus: el.food_menu.menus.map((menu) => menu.name),
             })),
@@ -101,37 +112,31 @@ function ReviewListPage() {
     setSearchTerm(event.target.value);
   };
 
-  // 필터링된 태그 데이터 가져오기
-  const filteredTags = selectedCategory
-    ? tagsData[selectedCategory].filter((tag) =>
-        tag.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    : [];
-
-  // 음식 카테고리 캐러셀 설정
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-  };
-
-  // 음식 태그 캐러셀 설정
-  const sliderSettings2 = {
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
+  const getCategoryIcon = (category) => {
+    switch (category) {
+      case "한식":
+        return faUtensilSpoon;
+      case "일식":
+        return faFish;
+      case "중식":
+        return faCookie;
+      case "양식":
+        return faPizzaSlice;
+      case "치킨":
+        return faDrumstickBite;
+      case "디저트":
+        return faIceCream;
+      case "음료":
+        return faCoffee;
+      case "버거":
+        return faHamburger;
+      default:
+        return null;
+    }
   };
 
   return (
-    <ReveiwP>
-      <HeaderContainer>
-        <Title>식당 리뷰</Title>
-      </HeaderContainer>
+    <ReviewPage>
       <ReviewPageWrapper>
         <DeviceFrameset
           device="iPad Mini"
@@ -139,20 +144,10 @@ function ReviewListPage() {
           width="100%"
           height="75%"
         >
-          <Slider {...sliderSettings}>
-            {Object.keys(tagsData).map((category, index) => (
-              <CategoryContainer key={index}>
-                <CategoryButton
-                  onClick={() => handleCategorySelect(category)}
-                  active={selectedCategory === category}
-                >
-                  {category}
-                </CategoryButton>
-              </CategoryContainer>
-            ))}
-          </Slider>
+          <GreenContainer>
+            <FontAwesomeIcon icon={faUtensils} size="2x" />
+          </GreenContainer>
           <SearchBarContainer>
-            <SearchIcon>🔍</SearchIcon>
             <SearchBar
               type="text"
               placeholder="검색어를 입력하세요..."
@@ -160,26 +155,36 @@ function ReviewListPage() {
               onChange={handleSearch}
             />
           </SearchBarContainer>
-          <TagsCarousel
-            {...sliderSettings2}
-            nextArrow={<NextArrow />}
-            prevArrow={<PrevArrow />}
-          >
-            {filteredTags.map((tag, index) => (
-              <TagButton key={index}>{tag}</TagButton>
-            ))}
-          </TagsCarousel>
+          <CategoriesGridContainer>
+            <CategoriesGrid>
+              {Object.keys(tagsData).map((category, index) => (
+                <CategoryContainer key={index}>
+                  <CategoryButton
+                    onClick={() => handleCategorySelect(category)}
+                    active={selectedCategory === category}
+                  >
+                    <FontAwesomeIcon
+                      icon={getCategoryIcon(category)}
+                      size="2x"
+                    />
+                    <CategoryLabel>{category}</CategoryLabel>
+                  </CategoryButton>
+                </CategoryContainer>
+              ))}
+            </CategoriesGrid>
+          </CategoriesGridContainer>
         </DeviceFrameset>
       </ReviewPageWrapper>
-    </ReveiwP>
+    </ReviewPage>
   );
 }
 
 export default ReviewListPage;
 
-const ReveiwP = styled.div`
+const ReviewPage = styled.div`
   background: linear-gradient(#f0f0c3, #e7e7c9);
 `;
+
 const ReviewPageWrapper = styled.div`
   max-width: 800px;
   height: 800px;
@@ -190,7 +195,7 @@ const ReviewPageWrapper = styled.div`
 
 const HeaderContainer = styled.header`
   padding: 20px;
-  background: linear-gradient(#e7e78b, #f0f0c3);
+  background: linear-gradient(#f0f0c3, #e7e7c9);
 `;
 
 const Title = styled.h1`
@@ -199,32 +204,13 @@ const Title = styled.h1`
   margin: 0;
 `;
 
-const CategoryContainer = styled.div`
+const GreenContainer = styled.div`
   display: flex;
+  align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
-  padding: 20px;
-  background-color: white;
-  border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-`;
-
-const CategoryButton = styled.button`
-  padding: 10px 20px;
-  margin: 0 10px;
-  font-size: 18px;
-  font-weight: bold;
-  border: none;
-  border-radius: 20px;
-  background-color: ${({ active }) => (active ? "#dd5746" : "#f0f0f0")};
-  color: ${({ active }) => (active ? "#fff" : "#000")};
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-
-  &:hover {
-    background-color: ${({ active }) => (active ? "#c33a1d" : "#e0e0e0")};
-    color: ${({ active }) => (active ? "#fff" : "#000")};
-  }
+  height: 80px;
+  background-color: #ffcc66;
+  border-radius: 0 0 30px 30px;
 `;
 
 const SearchBarContainer = styled.div`
@@ -237,7 +223,7 @@ const SearchBarContainer = styled.div`
 `;
 
 const SearchBar = styled.input`
-  flex: 1;
+  width: 100%;
   padding: 10px;
   font-size: 16px;
   border: none;
@@ -246,38 +232,51 @@ const SearchBar = styled.input`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
-const SearchIcon = styled.span`
-  padding: 10px;
-  font-size: 20px;
+const CategoriesGridContainer = styled.div`
+  background-color: #e1f5fe;
+  padding: 20px;
+  border-radius: 20px;
+  margin: 15px; 0;
 `;
 
-const TagsCarousel = styled.div`
-  margin-top: 20px;
-
-  .slick-slide {
-    margin: 0 10px; // 각 슬라이드의 좌우 간격 조절
-  }
-
-  .slick-list {
-    margin-left: -10px; // 슬라이드 리스트의 왼쪽 마진 조절
-    margin-right: -10px; // 슬라이드 리스트의 오른쪽 마진 조절
-  }
+const CategoriesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
 `;
 
-const TagButton = styled.button`
-  padding: 10px 20px;
-  margin: 10px;
-  font-size: 16px;
-  font-weight: bold;
+const CategoryContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const CategoryButton = styled.button`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
   border: none;
   border-radius: 20px;
-  background-color: #f0f0f0;
-  color: #000;
+  background-color: ${({ active }) => (active ? "#ff7043" : "#f0f0f0")};
+  color: ${({ active }) => (active ? "#fff" : "#000")};
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
+  width: 150px;
+  height: 150px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
   &:hover {
-    background-color: #e0e0e0;
-    color: #000;
+    background-color: ${({ active }) => (active ? "#ff5722" : "#e0e0e0")};
+    color: ${({ active }) => (active ? "#fff" : "#000")};
+    transform: translateY(-5px);
   }
+`;
+
+const CategoryLabel = styled.span`
+  margin-top: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
 `;

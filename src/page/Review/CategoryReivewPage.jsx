@@ -1,18 +1,17 @@
 import { useState, useEffect } from "react";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { DeviceFrameset } from "react-device-frameset";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ReviewCard from "../../components/Review/ReviewCard";
-import { DeviceFrameset } from "react-device-frameset";
 
 function CategoryReviewPage() {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const { restaurants } = location.state || { restaurants: [] };
+  console.log(restaurants);
 
-  console.log(restaurants[0]);
   const [isLoading, setIsLoading] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
 
@@ -57,49 +56,59 @@ function CategoryReviewPage() {
   }, [location.state]);
 
   return (
-    <ReviewPageWrapper>
-      <DeviceFrameset device="iPad Mini" color="black" width="93%" height="75%">
-        <Header>
-          <Link to="/review/">
-            <PressableIcon
-              icon={faArrowLeft}
-              size="3x"
-              onClick={handleIconClick}
-              pressed={isPressed}
-            />
-          </Link>
-          <Title>리뷰 목록</Title>
-        </Header>
-        <Input />
-        <TagsContainer>
-          {restaurants.map((restaurant, index) => (
-            <div key={index}>
-              {restaurant.menus &&
-                restaurant.menus.length > 0 &&
-                restaurant.menus.map((menu, menuIndex) => (
-                  <TagButton key={menuIndex}>{menu}</TagButton>
-                ))}
-            </div>
-          ))}
-        </TagsContainer>
-        <ReviewCardContainer>
-          <div>
-            {restaurants.map((restaurant, index) => (
-              <ReviewCard
-                key={index} // 고유한 식별자를 key로 사용
-                restaurant={restaurant}
+    <ReviewPage>
+      <ReviewPageWrapper>
+        <DeviceFrameset
+          device="iPad Mini"
+          color="black"
+          width="93%"
+          height="75%"
+        >
+          <Header>
+            <Link to="/review/">
+              <PressableIcon
+                icon={faArrowLeft}
+                size="3x"
+                onClick={handleIconClick}
+                pressed={isPressed}
               />
+            </Link>
+            <Title>리뷰 목록</Title>
+          </Header>
+          <Input />
+          <TagsContainer>
+            {restaurants.map((restaurant, index) => (
+              <div key={index}>
+                {restaurant.menus &&
+                  restaurant.menus.length > 0 &&
+                  restaurant.menus.map((menu, menuIndex) => (
+                    <TagButton key={menuIndex}>{menu}</TagButton>
+                  ))}
+              </div>
             ))}
-          </div>
-          {isLoading && <div>Loading...</div>}
-        </ReviewCardContainer>
-      </DeviceFrameset>
-    </ReviewPageWrapper>
+          </TagsContainer>
+          <ReviewCardContainer>
+            <div>
+              {restaurants.map((restaurant, index) => (
+                <ReviewCard
+                  key={index} // 고유한 식별자를 key로 사용
+                  restaurant={restaurant}
+                />
+              ))}
+            </div>
+            {isLoading && <div>Loading...</div>}
+          </ReviewCardContainer>
+        </DeviceFrameset>
+      </ReviewPageWrapper>
+    </ReviewPage>
   );
 }
 
 export default CategoryReviewPage;
 
+const ReviewPage = styled.div`
+  background: linear-gradient(#f0f0c3, #e7e7c9);
+`;
 const ReviewPageWrapper = styled.div`
   max-width: 800px;
   height: 800px;

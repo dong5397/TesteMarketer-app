@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "../src/page/Map/Home";
 import Header from "./page/Header";
 import ServicePage from "./page/ServicePage";
-import CommunityPage from "./page/Community/MainPage";
+import CommunityPage from "./page/Community/MainRPage";
 import CategoryReviewPage from "./page/Review/CategoryReivewPage";
 import ReviewPage from "./page/Review/ReviewPage";
 import MainReviewPages from "./page/Review/MainReviewPages";
@@ -20,6 +20,7 @@ function App() {
         <Route path="/review/:id" element={<ReviewHN />} />
         <Route path="/community" element={<CommunityHN />} />
         <Route path="/category/:category" element={<CategoryReviewHN />} />
+        <Route path="/communitywrite" element={<CommunityWriteHN />} />
       </Routes>
     </BrowserRouter>
   );
@@ -70,4 +71,11 @@ const CategoryReviewHN = () => (
     <CategoryReviewPage />
   </div>
 );
+const CommunityWriteHN = () => (
+  <div>
+    <Header />
+    <CommunityPage />
+  </div>
+);
+CommunityWriteHN;
 export default App;

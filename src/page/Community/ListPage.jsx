@@ -41,15 +41,9 @@ function CommunityList() {
 export default CommunityList;
 
 const Container = styled.div`
-  max-width: 800px;
-
   overflow-y: auto;
-  height: 80vh;
-`;
-
-const Title = styled.h1`
-  text-align: center;
-  margin-bottom: 30px;
+  height: auto;
+  align-items: center;
 `;
 
 const PostList = styled.div`
@@ -57,32 +51,31 @@ const PostList = styled.div`
 `;
 
 const PostContainer = styled.div`
-  cursor: pointer;
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-  }
+  width: 100%;
 `;
 
 const RestaurantName = styled.h2`
   font-size: 24px;
-  margin-bottom: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const ContentBox = styled.div`
-  padding: 15px;
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const Content = styled.p`
-  font-size: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const Date = styled.p`

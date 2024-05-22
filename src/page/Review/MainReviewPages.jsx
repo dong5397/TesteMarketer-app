@@ -148,7 +148,7 @@ function ReviewListPage() {
 export default ReviewListPage;
 
 const ReviewPage = styled.div`
-  background: linear-gradient(#f0f0c3, #e7e7c9);
+  background: linear-gradient(#e7e78b, #f0f0c3);
   height: 100%;
 `;
 

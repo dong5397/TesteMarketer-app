@@ -144,35 +144,37 @@ function ReviewListPage() {
           width="100%"
           height="75%"
         >
-          <GreenContainer>
-            <FontAwesomeIcon icon={faUtensils} size="2x" />
-          </GreenContainer>
-          <SearchBarContainer>
-            <SearchBar
-              type="text"
-              placeholder="검색어를 입력하세요..."
-              value={searchTerm}
-              onChange={handleSearch}
-            />
-          </SearchBarContainer>
-          <CategoriesGridContainer>
-            <CategoriesGrid>
-              {Object.keys(tagsData).map((category, index) => (
-                <CategoryContainer key={index}>
-                  <CategoryButton
-                    onClick={() => handleCategorySelect(category)}
-                    active={selectedCategory === category}
-                  >
-                    <FontAwesomeIcon
-                      icon={getCategoryIcon(category)}
-                      size="2x"
-                    />
-                    <CategoryLabel>{category}</CategoryLabel>
-                  </CategoryButton>
-                </CategoryContainer>
-              ))}
-            </CategoriesGrid>
-          </CategoriesGridContainer>
+          <StyledContainer>
+            <GreenContainer>
+              <FontAwesomeIcon icon={faUtensils} size="2x" />
+            </GreenContainer>
+            <SearchBarContainer>
+              <SearchBar
+                type="text"
+                placeholder="검색어를 입력하세요..."
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+            </SearchBarContainer>
+            <CategoriesGridContainer>
+              <CategoriesGrid>
+                {Object.keys(tagsData).map((category, index) => (
+                  <CategoryContainer key={index}>
+                    <CategoryButton
+                      onClick={() => handleCategorySelect(category)}
+                      active={selectedCategory === category}
+                    >
+                      <FontAwesomeIcon
+                        icon={getCategoryIcon(category)}
+                        size="2x"
+                      />
+                      <CategoryLabel>{category}</CategoryLabel>
+                    </CategoryButton>
+                  </CategoryContainer>
+                ))}
+              </CategoriesGrid>
+            </CategoriesGridContainer>
+          </StyledContainer>
         </DeviceFrameset>
       </ReviewPageWrapper>
     </ReviewPage>
@@ -182,26 +184,15 @@ function ReviewListPage() {
 export default ReviewListPage;
 
 const ReviewPage = styled.div`
-  background: linear-gradient(#f0f0c3, #e7e7c9);
+  background: linear-gradient(#e7e78b, #f0f0c3);
 `;
 
 const ReviewPageWrapper = styled.div`
-  max-width: 800px;
-  height: 800px;
+  max-width: 1000px;
+  height: 1000px;
   margin: 0 auto;
   padding: 20px;
   gap: 100px;
-`;
-
-const HeaderContainer = styled.header`
-  padding: 20px;
-  background: linear-gradient(#f0f0c3, #e7e7c9);
-`;
-
-const Title = styled.h1`
-  font-size: 42px;
-  font-weight: bold;
-  margin: 0;
 `;
 
 const GreenContainer = styled.div`
@@ -221,6 +212,12 @@ const SearchBarContainer = styled.div`
   margin-left: 20%;
   margin-top: 30px;
 `;
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #9ad6e2;
+`;
 
 const SearchBar = styled.input`
   width: 100%;
@@ -233,10 +230,10 @@ const SearchBar = styled.input`
 `;
 
 const CategoriesGridContainer = styled.div`
-  background-color: #e1f5fe;
+  background-color: #5e90a7;
   padding: 20px;
   border-radius: 20px;
-  margin: 15px; 0;
+  margin: 15px 0;
 `;
 
 const CategoriesGrid = styled.div`

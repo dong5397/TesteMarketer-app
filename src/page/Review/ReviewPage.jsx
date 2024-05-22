@@ -80,10 +80,10 @@ function ReviewPage() {
       <Container>
         <ContentsContainer>
           <DeviceFrameset
-            device="iPhone X"
+            device="iPad Mini"
             color="black"
             width="100%"
-            height="100%"
+            height="75%"
           >
             <ImgSection backgroundImage={restranutInfo.image}>
               <CardSection>

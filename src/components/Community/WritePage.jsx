@@ -1,61 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const Container = styled.div`
-  max-width: 1000px; /* 수정 */
-  max-height: 400px;
-  margin-left: 40px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const Form = styled.form`
-  width: 100%;
-`;
-
-const Input = styled.input`
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-`;
-
-const TextArea = styled.textarea`
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-`;
-
-const Button = styled.button`
-  background-color: #3498db;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  font-size: 16px;
-
-  &:hover {
-    background-color: #2980b9;
-  }
-`;
-
-const SuccessMessage = styled.p`
-  color: green;
-  font-weight: bold;
-`;
-
 function WritePage() {
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
@@ -129,13 +74,74 @@ function WritePage() {
           placeholder="내용을 작성해주세요."
           value={contents}
           onChange={onContentsChange}
-          rows={6}
+          rows={8}
         />
         <Button type="submit">저장</Button>
-        {message && <SuccessMessage>{message}</SuccessMessage>}
+        {message && <Message>{message}</Message>}
       </Form>
     </Container>
   );
 }
 
 export default WritePage;
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: #94bac2;
+`;
+
+const Form = styled.form`
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+`;
+
+const TextArea = styled.textarea`
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  resize: vertical;
+`;
+
+const Button = styled.button`
+  display: block;
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  background-color: #410707;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+
+  &:hover {
+    background-color: #357ab7;
+    transform: translateY(-2px);
+  }
+`;
+
+const Message = styled.p`
+  margin-top: 15px;
+  color: green;
+  font-weight: bold;
+  text-align: center;
+`;

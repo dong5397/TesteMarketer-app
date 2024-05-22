@@ -11,7 +11,7 @@ const CardWrapper = styled.div`
   border-radius: 20px;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
   flex: 1;
-  margin: 0 10px; /* 좌우 여백 추가 */
+  margin: 0 10px 20px; /* 좌우 여백 추가 및 아래 여백 추가 */
   display: flex;
   align-items: flex-start;
   flex-direction: column-reverse;
@@ -21,6 +21,7 @@ const CardWrapper = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  background-color: #ece1cc;
 
   &:hover {
     background: linear-gradient(#f0f0c3, #e7e7c9);

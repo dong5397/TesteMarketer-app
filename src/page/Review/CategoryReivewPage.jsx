@@ -5,7 +5,7 @@ import { DeviceFrameset } from "react-device-frameset";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ReviewCard from "../../components/Review/ReviewCard";
-
+import { faUtensils } from "@fortawesome/free-solid-svg-icons";
 function CategoryReviewPage() {
   const location = useLocation();
 
@@ -61,43 +61,48 @@ function CategoryReviewPage() {
         <DeviceFrameset
           device="iPad Mini"
           color="black"
-          width="93%"
+          width="100%"
           height="75%"
         >
-          <Header>
-            <Link to="/review/">
-              <PressableIcon
-                icon={faArrowLeft}
-                size="3x"
-                onClick={handleIconClick}
-                pressed={isPressed}
-              />
-            </Link>
-            <Title>리뷰 목록</Title>
-          </Header>
-          <Input />
-          <TagsContainer>
-            {restaurants.map((restaurant, index) => (
-              <div key={index}>
-                {restaurant.menus &&
-                  restaurant.menus.length > 0 &&
-                  restaurant.menus.map((menu, menuIndex) => (
-                    <TagButton key={menuIndex}>{menu}</TagButton>
-                  ))}
-              </div>
-            ))}
-          </TagsContainer>
-          <ReviewCardContainer>
-            <div>
-              {restaurants.map((restaurant, index) => (
-                <ReviewCard
-                  key={index} // 고유한 식별자를 key로 사용
-                  restaurant={restaurant}
+          <StyledContainer>
+            <GreenContainer>
+              <FontAwesomeIcon icon={faUtensils} size="2x" />
+            </GreenContainer>
+            <Header>
+              <Link to="/review/">
+                <PressableIcon
+                  icon={faArrowLeft}
+                  size="3x"
+                  onClick={handleIconClick}
+                  pressed={isPressed}
                 />
+              </Link>
+              <Title>리뷰 목록</Title>
+            </Header>
+
+            <TagsContainer>
+              {restaurants.map((restaurant, index) => (
+                <div key={index}>
+                  {restaurant.menus &&
+                    restaurant.menus.length > 0 &&
+                    restaurant.menus.map((menu, menuIndex) => (
+                      <TagButton key={menuIndex}>{menu}</TagButton>
+                    ))}
+                </div>
               ))}
-            </div>
-            {isLoading && <div>Loading...</div>}
-          </ReviewCardContainer>
+            </TagsContainer>
+            <ReviewCardContainer>
+              <div>
+                {restaurants.map((restaurant, index) => (
+                  <ReviewCard
+                    key={index} // 고유한 식별자를 key로 사용
+                    restaurant={restaurant}
+                  />
+                ))}
+              </div>
+              {isLoading && <div>Loading...</div>}
+            </ReviewCardContainer>
+          </StyledContainer>
         </DeviceFrameset>
       </ReviewPageWrapper>
     </ReviewPage>
@@ -107,15 +112,21 @@ function CategoryReviewPage() {
 export default CategoryReviewPage;
 
 const ReviewPage = styled.div`
-  background: linear-gradient(#f0f0c3, #e7e7c9);
+  background: linear-gradient(#e7e78b, #f0f0c3);
 `;
 const ReviewPageWrapper = styled.div`
-  max-width: 800px;
-  height: 800px;
-  padding: 20px;
+  max-width: 1000px;
+  height: 1000px;
   margin: 0 auto;
+  padding: 20px;
+  gap: 100px;
 `;
-
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #9ad6e2;
+`;
 const Header = styled.div`
   max-width: 90%;
   margin: 0 auto;
@@ -126,24 +137,15 @@ const Header = styled.div`
   border-bottom: 3px solid black;
 `;
 
-const Input = styled.input`
-  width: 90%;
-  height: 10%;
-  margin: 5%;
-  background-color: #a6e3e9;
-  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
-  border: none;
-  border-radius: 10px;
-`;
-
 const TagsContainer = styled.div`
   max-width: 100%;
+  padding: 15px;
   height: auto;
   margin: 0 auto;
   white-space: nowrap;
   display: flex;
   overflow-x: auto;
-
+  background-color: #5e90a7;
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.1);
   &::-webkit-scrollbar {
@@ -157,14 +159,22 @@ const TagsContainer = styled.div`
     background-color: rgba(0, 0, 0, 0.1);
   }
 `;
-
+const GreenContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  background-color: #ffcc66;
+  border-radius: 0 0 30px 30px;
+`;
 const TagButton = styled.button`
-  padding: 5px;
-  font-size: 32px;
+  margin-bottom: 20%;
+  padding: 15px;
+  font-size: 20px;
   font-weight: bold;
-  border: 3px solid #a6e3e9;
+  border: 2px solid #000000;
   background-color: white;
-  border-radius: 20px;
+  border-radius: 10px;
   margin-right: 10px;
   color: #000;
   cursor: pointer;
@@ -178,7 +188,7 @@ const TagButton = styled.button`
 `;
 
 const Title = styled.h2`
-  font-size: 32px;
+  font-size: 25px;
   font-family: "Uiyeun", sans-serif;
 `;
 

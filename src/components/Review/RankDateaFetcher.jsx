@@ -5,7 +5,7 @@ function RankDataFetcher({ children }) {
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/v1/restaurants")
+    fetch("https://makterbackend2.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
       .then((data) => {
         if (data && Array.isArray(data.data)) {

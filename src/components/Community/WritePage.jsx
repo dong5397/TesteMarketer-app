@@ -90,7 +90,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   padding: 20px;
-  background-color: #94bac2;
+  background-color: #e1f5fe;
 `;
 
 const Form = styled.form`

@@ -17,56 +17,22 @@ import { faIceCream } from "@fortawesome/free-solid-svg-icons";
 import { faCoffee } from "@fortawesome/free-solid-svg-icons";
 import { faHamburger } from "@fortawesome/free-solid-svg-icons";
 
-const NextArrow = (props) => {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={className}
-      style={{ ...style, display: "block", background: "red" }}
-      onClick={onClick}
-    />
-  );
-};
-
-NextArrow.propTypes = {
-  className: PropTypes.string, // className이 문자열 타입인지 확인
-  style: PropTypes.object, // style이 객체 타입인지 확인
-  onClick: PropTypes.func, // onClick이 함수 타입인지 확인
-};
-
-const PrevArrow = (props) => {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={className}
-      style={{ ...style, display: "block", background: "green" }}
-      onClick={onClick}
-    />
-  );
-};
-
-PrevArrow.propTypes = {
-  className: PropTypes.string, // className이 문자열 타입인지 확인
-  style: PropTypes.object, // style이 객체 타입인지 확인
-  onClick: PropTypes.func, // onClick이 함수 타입인지 확인
-};
-
-const tagsData = {
-  한식: ["#김치찌개", "#비빔밥", "#불고기", "#된장찌개", "#덮밥", "#도시락"],
-  일식: ["#초밥", "#라멘", "#돈부리", "#우동", "#돈까스", "#회"],
-  중식: ["#짜장면", "#탕수육", "#마파두부", "#양장피", "#마라탕", "볶음밥"],
-  양식: ["#스테이크", "#파스타", "#피자", "#버거"],
-  치킨: ["#후라이드 치킨", "#양념 치킨", "#순살 치킨", "#통닭"],
-  디저트: ["#아이스크림", "#케이크", "#호두 파이", "#크레페"],
-  음료: ["#커피", "#차", "#스무디", "#쥬스"],
-};
-
 function ReviewListPage() {
   const navigate = useNavigate();
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [restaurants, setRestaurants] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
+  const [categories, setCategories] = useState([
+    "한식",
+    "일식",
+    "중식",
+    "양식",
+    "치킨",
+    "디저트",
+    "음료",
+    "버거",
+  ]);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -144,37 +110,35 @@ function ReviewListPage() {
           width="100%"
           height="75%"
         >
-          <StyledContainer>
-            <GreenContainer>
-              <FontAwesomeIcon icon={faUtensils} size="2x" />
-            </GreenContainer>
-            <SearchBarContainer>
-              <SearchBar
-                type="text"
-                placeholder="검색어를 입력하세요..."
-                value={searchTerm}
-                onChange={handleSearch}
-              />
-            </SearchBarContainer>
-            <CategoriesGridContainer>
-              <CategoriesGrid>
-                {Object.keys(tagsData).map((category, index) => (
-                  <CategoryContainer key={index}>
-                    <CategoryButton
-                      onClick={() => handleCategorySelect(category)}
-                      active={selectedCategory === category}
-                    >
-                      <FontAwesomeIcon
-                        icon={getCategoryIcon(category)}
-                        size="2x"
-                      />
-                      <CategoryLabel>{category}</CategoryLabel>
-                    </CategoryButton>
-                  </CategoryContainer>
-                ))}
-              </CategoriesGrid>
-            </CategoriesGridContainer>
-          </StyledContainer>
+          <GreenContainer>
+            <FontAwesomeIcon icon={faUtensils} size="2x" />
+          </GreenContainer>
+          <SearchBarContainer>
+            <SearchBar
+              type="text"
+              placeholder="검색어를 입력하세요..."
+              value={searchTerm}
+              onChange={handleSearch}
+            />
+          </SearchBarContainer>
+          <CategoriesGridContainer>
+            <CategoriesGrid>
+              {categories.map((category, index) => (
+                <CategoryContainer key={index}>
+                  <CategoryButton
+                    onClick={() => handleCategorySelect(category)}
+                    active={selectedCategory === category}
+                  >
+                    <FontAwesomeIcon
+                      icon={getCategoryIcon(category)}
+                      size="2x"
+                    />
+                    <CategoryLabel>{category}</CategoryLabel>
+                  </CategoryButton>
+                </CategoryContainer>
+              ))}
+            </CategoriesGrid>
+          </CategoriesGridContainer>
         </DeviceFrameset>
       </ReviewPageWrapper>
     </ReviewPage>
@@ -184,15 +148,27 @@ function ReviewListPage() {
 export default ReviewListPage;
 
 const ReviewPage = styled.div`
-  background: linear-gradient(#e7e78b, #f0f0c3);
+  background: linear-gradient(#f0f0c3, #e7e7c9);
+  height: 100%;
 `;
 
 const ReviewPageWrapper = styled.div`
-  max-width: 1000px;
-  height: 1000px;
+  max-width: 800px;
+  height: 800px;
   margin: 0 auto;
   padding: 20px;
   gap: 100px;
+`;
+
+const HeaderContainer = styled.header`
+  padding: 20px;
+  background: linear-gradient(#f0f0c3, #e7e7c9);
+`;
+
+const Title = styled.h1`
+  font-size: 42px;
+  font-weight: bold;
+  margin: 0;
 `;
 
 const GreenContainer = styled.div`
@@ -212,12 +188,6 @@ const SearchBarContainer = styled.div`
   margin-left: 20%;
   margin-top: 30px;
 `;
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background-color: #9ad6e2;
-`;
 
 const SearchBar = styled.input`
   width: 100%;
@@ -230,10 +200,10 @@ const SearchBar = styled.input`
 `;
 
 const CategoriesGridContainer = styled.div`
-  background-color: #5e90a7;
+  background-color: #e1f5fe;
   padding: 20px;
   border-radius: 20px;
-  margin: 15px 0;
+  margin: 15px; 0;
 `;
 
 const CategoriesGrid = styled.div`

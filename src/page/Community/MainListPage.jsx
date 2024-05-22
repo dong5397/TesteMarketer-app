@@ -50,7 +50,7 @@ const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #9ad6e2;
+  background-color: #e1f5fe;
 `;
 
 const DivContainer = styled.div`

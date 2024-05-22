@@ -57,7 +57,7 @@ const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #94bac2; /* 연한 하늘색으로 설정 */
+  background-color: #e1f5fe; /* 연한 하늘색으로 설정 */
 `;
 
 const DivContainer = styled.div`

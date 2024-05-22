@@ -6,25 +6,17 @@ import RatingStars from "./RatingStars";
 function WriteReview({ onSubmit }) {
   const [username, setUsername] = useState("");
   const [content, setContent] = useState("");
-  const [date, setDate] = useState("");
   const [hashtags, setHashtags] = useState([]);
   const [rating, setRating] = useState(0);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    onSubmit(username, content, date, hashtags, rating);
+    onSubmit(username, content, hashtags, rating);
     setUsername("");
     setContent("");
-    setDate("");
     setHashtags([]);
     setRating(0);
-  };
-
-  const handleInputKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-    }
   };
 
   return (
@@ -49,15 +41,6 @@ function WriteReview({ onSubmit }) {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           required
-        />
-        <InputLabel>날짜</InputLabel>
-        <Input
-          type="date"
-          placeholder="날짜 입력"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-          onKeyDown={handleInputKeyDown}
         />
         <InputLabel>해시태그</InputLabel>
         <HashTag hashtags={hashtags} setHashtags={setHashtags} />

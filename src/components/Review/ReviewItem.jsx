@@ -1,9 +1,21 @@
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import styled from "styled-components";
 
 function ReviewItem({ review }) {
   const { review_id, username, review_contents, review_date, hashtag, rating } =
     review;
+
+  const [isClicked, setIsClicked] = useState(false);
+
+  const reviewDeleteHandler = () => {
+    setIsClicked(true);
+    setTimeout(() => {
+      setIsClicked(false);
+      // 삭제 로직을 여기에 추가하세요
+    }, 500);
+  };
 
   return (
     <ReviewItemContainer>
@@ -13,6 +25,13 @@ function ReviewItem({ review }) {
       <HashTagsContainer>
         <HashTag>#{hashtag}</HashTag>
       </HashTagsContainer>
+      <DeleteButton isClicked={isClicked} onClick={reviewDeleteHandler}>
+        <FontAwesomeIcon
+          icon={faTrash}
+          size="2xl"
+          style={{ color: "#ff0000" }}
+        />{" "}
+      </DeleteButton>
     </ReviewItemContainer>
   );
 }
@@ -52,4 +71,17 @@ const HashTag = styled.p`
   padding: 5px 10px;
   cursor: pointer;
   margin: 5px;
+`;
+
+const DeleteButton = styled.button`
+  border-radius: 100px;
+  padding: 10px;
+  background-color: white;
+  transition: transform 0.3s ease;
+
+  ${({ isClicked }) =>
+    isClicked &&
+    `
+    animation: ${enlarge} 0.3s forwards;
+  `}
 `;

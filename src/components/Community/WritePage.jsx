@@ -20,13 +20,16 @@ function WritePage() {
     console.log("Data to Send:", dataToSend); // 전송 데이터 확인을 위한 로그
 
     try {
-      const response = await fetch(`http://localhost:3000/api/v1/post`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataToSend),
-      });
+      const response = await fetch(
+        `https://maketerbackendtest4.fly.dev/api/v1/post`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataToSend),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("글 작성 요청이 실패했습니다.");

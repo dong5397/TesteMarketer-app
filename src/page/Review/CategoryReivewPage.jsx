@@ -125,7 +125,7 @@ const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #9ad6e2;
+  background-color: #e1f5fe;
 `;
 const Header = styled.div`
   max-width: 90%;
@@ -145,7 +145,7 @@ const TagsContainer = styled.div`
   white-space: nowrap;
   display: flex;
   overflow-x: auto;
-  background-color: #5e90a7;
+  background-color: #e1f5fe;
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.1);
   &::-webkit-scrollbar {
@@ -163,7 +163,7 @@ const GreenContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100px;
+  height: 120px;
   background-color: #ffcc66;
   border-radius: 0 0 30px 30px;
 `;

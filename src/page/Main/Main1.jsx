@@ -587,7 +587,7 @@ const Main1 = () => {
                 </A>
               </Panel>
               <Panel className="second">
-                <A href="/community">
+                <A href="/MainListPage">
                   <Inner>
                     <Img
                       src="../../images/3/community1.png"

@@ -37,7 +37,9 @@ function ReviewListPage() {
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
     // 서버에 해당 카테고리의 데이터를 요청
-    fetch(`http://localhost:3000/api/v1/restaurants/category/${category}`)
+    fetch(
+      `https://maketerbackendtest4.fly.dev/api/v1/restaurants/category/${category}`
+    )
       .then((response) => {
         if (response.ok) {
           return response.json(); // 응답이 성공적이면 JSON 형태로 변환
@@ -153,22 +155,12 @@ const ReviewPage = styled.div`
 `;
 
 const ReviewPageWrapper = styled.div`
-  max-width: 800px;
-  height: 800px;
+  max-width: 1000px;
+  height: 1200px;
+
   margin: 0 auto;
   padding: 20px;
   gap: 100px;
-`;
-
-const HeaderContainer = styled.header`
-  padding: 20px;
-  background: linear-gradient(#f0f0c3, #e7e7c9);
-`;
-
-const Title = styled.h1`
-  font-size: 42px;
-  font-weight: bold;
-  margin: 0;
 `;
 
 const GreenContainer = styled.div`
@@ -203,7 +195,7 @@ const CategoriesGridContainer = styled.div`
   background-color: #e1f5fe;
   padding: 20px;
   border-radius: 20px;
-  margin: 15px; 0;
+  margin: 15px 0;
 `;
 
 const CategoriesGrid = styled.div`

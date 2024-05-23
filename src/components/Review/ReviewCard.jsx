@@ -21,7 +21,7 @@ const CardWrapper = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-color: #ece1cc;
+  background-color: #98b2e2;
 
   &:hover {
     background: linear-gradient(#f0f0c3, #e7e7c9);

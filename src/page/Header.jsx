@@ -10,10 +10,13 @@ const Header = ({ setAuth }) => {
   useEffect(() => {
     const getName = async () => {
       try {
-        const response = await fetch("http://localhost:3000/dashboard", {
-          method: "GET",
-          headers: { token: localStorage.token },
-        });
+        const response = await fetch(
+          "https://maketerbackendtest4.fly.dev/dashboard",
+          {
+            method: "GET",
+            headers: { token: localStorage.token },
+          }
+        );
 
         const parseRes = await response.json();
         setName(parseRes.username);
@@ -30,7 +33,7 @@ const Header = ({ setAuth }) => {
   const logout = async (e) => {
     e.preventDefault();
     try {
-      await fetch("http://localhost:3000/api/v1/logout", {
+      await fetch("https://maketerbackendtest4.fly.dev/api/v1/logout", {
         method: "GET",
         headers: { token: localStorage.token },
       });
@@ -54,7 +57,6 @@ const Header = ({ setAuth }) => {
         <NavLink to="/service">맛 설정 모드</NavLink>
       </NavLinks>
       <UserInfo>
-        <Greeting>안녕하세요, {name}님</Greeting>
         <LogoutButton onClick={logout}>Logout</LogoutButton>
       </UserInfo>
     </HeaderContainer>

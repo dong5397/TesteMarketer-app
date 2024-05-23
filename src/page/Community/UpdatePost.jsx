@@ -50,7 +50,7 @@ const UpdatePost = ({ postId }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/v1/post/${postId}`,
+        `https://maketerbackendtest4.fly.dev/api/v1/post/${postId}`,
         {
           method: "POST",
           headers: {

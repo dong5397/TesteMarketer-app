@@ -17,7 +17,7 @@ const KakaoMap = () => {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/v1/restaurants")
+    fetch("https://maketerbackendtest4.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
       .then((data) => {
         if (data && Array.isArray(data.data)) {

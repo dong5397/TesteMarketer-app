@@ -14,7 +14,7 @@ function FoodDetail({ selectedRestaurant, onMapMove }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://maketerbackendtest4.fly.dev/api/v1/restaurants")
+    fetch("https://makterbackendtest.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
       .then((data) => {
         const sortedRestaurants = Array.isArray(data.data)

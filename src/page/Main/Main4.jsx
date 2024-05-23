@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import KimDongWok from "../../../images/team/KimDongWok.jpg";
-import BackMinKi from "../../../images/team/BackMinKi.jpg";
-import NaJiMin from "../../../images/team/NaJiMin.jpg";
+import KimDongWok from "../../../public/images/team/KimDongWok.jpg";
+import BackMinKi from "../../../public/images/team/BackMinKi.jpg";
+import NaJiMin from "../../../public/images/team/NaJiMin.jpg";
 
 const P = styled.div`
   font-size: 30px;
-  
+
   font-family: "GowunDodum-Regular";
 `;
 const H2 = styled.div`

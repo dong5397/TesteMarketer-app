@@ -38,7 +38,7 @@ function ReviewListPage() {
     setSelectedCategory(category);
     // 서버에 해당 카테고리의 데이터를 요청
     fetch(
-      `https://maketerbackendtest4.fly.dev/api/v1/restaurants/category/${category}`
+      `https://makterbackendtest.fly.dev/api/v1/restaurants/category/${category}`
     )
       .then((response) => {
         if (response.ok) {

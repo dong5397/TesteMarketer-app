@@ -565,11 +565,23 @@ const Main1 = () => {
               <Panel>
                 <A href="/food">
                   <Inner>
-                    <Img src="../../images/1/table.png" className="table" />
+                    <Img
+                      src="../../../public/images/1/table.png"
+                      className="table"
+                    />
 
-                    <Img src="../../images/1/meat.png" className="meat" />
-                    <Img src="../../images/1/chair.png" className="chair" />
-                    <Img src="../../images/1/cook.png" className="cook" />
+                    <Img
+                      src="../../../public/images/1/meat.png"
+                      className="meat"
+                    />
+                    <Img
+                      src="../../../public/images/1/chair.png"
+                      className="chair"
+                    />
+                    <Img
+                      src="../../../public/images/1/cook.png"
+                      className="cook"
+                    />
                   </Inner>
                   <Link className="link link-01" href="/food">
                     식당보기
@@ -577,9 +589,18 @@ const Main1 = () => {
                 </A>
                 <A href="/review">
                   <Inner>
-                    <Img src="../../images/2/review.png" className="review" />
-                    <Img src="../../images/2/review2.png" className="review2" />
-                    <Img src="../../images/2/review3.png" className="review3" />
+                    <Img
+                      src="../../../public/images/2/review.png"
+                      className="review"
+                    />
+                    <Img
+                      src="../../../public/images/2/review2.png"
+                      className="review2"
+                    />
+                    <Img
+                      src="../../../public/images/2/review3.png"
+                      className="review3"
+                    />
                   </Inner>
                   <Link className="link link-01" href="/review">
                     리뷰 보기
@@ -590,19 +611,19 @@ const Main1 = () => {
                 <A href="/MainListPage">
                   <Inner>
                     <Img
-                      src="../../images/3/community1.png"
+                      src="../../../public/images/3/community1.png"
                       className="community1"
                     />
                     <Img
-                      src="../../images/3/community2.png"
+                      src="../../../public/images/3/community2.png"
                       className="community2"
                     />
                     <Img
-                      src="../../images/3/community3.png"
+                      src="../../../public/images/3/community3.png"
                       className="community3"
                     />
                     <Img
-                      src="../../images/3/community4.png"
+                      src="../../../public/images/3/community4.png"
                       className="community4"
                     />
                     <Img
@@ -616,10 +637,22 @@ const Main1 = () => {
                 </A>
                 <A href="/service">
                   <Inner>
-                    <Img src="../../images/4/teste1.png" className="teste1" />
-                    <Img src="../../images/4/teste2.png" className="teste2" />
-                    <Img src="../../images/4/teste3.png" className="teste3" />
-                    <Img src="../../images/4/teste4.png" className="teste4" />
+                    <Img
+                      src="../../../public/images/4/teste1.png"
+                      className="teste1"
+                    />
+                    <Img
+                      src="../../../public/images/4/teste2.png"
+                      className="teste2"
+                    />
+                    <Img
+                      src="../../../public/images/4/teste3.png"
+                      className="teste3"
+                    />
+                    <Img
+                      src="../../../public/images/4/teste4.png"
+                      className="teste4"
+                    />
                   </Inner>
                   <Link className="link link-01" href="/service">
                     맛 조절

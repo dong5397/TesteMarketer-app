@@ -33,7 +33,7 @@ function CommunityReview({ post, onDelete }) {
   const handleDelete = async () => {
     try {
       const response = await fetch(
-        `https://maketerbackendtest4.fly.dev/api/v1/post/${post.id}`,
+        `https://makterbackendtest.fly.dev/api/v1/post/${post.id}`,
         {
           method: "DELETE",
         }

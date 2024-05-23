@@ -50,7 +50,7 @@ const UpdatePost = ({ postId }) => {
 
     try {
       const response = await fetch(
-        `https://maketerbackendtest4.fly.dev/api/v1/post/${postId}`,
+        `https://makterbackendtest.fly.dev/api/v1/post/${postId}`,
         {
           method: "POST",
           headers: {

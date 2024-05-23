@@ -13,7 +13,7 @@ const SearchBar = ({ onRestaurantClick }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("https://maketerbackendtest4.fly.dev/api/v1/restaurants")
+    fetch("https://makterbackendtest.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
       .then((data) => {
         if (data.resultCode === "F-1") {

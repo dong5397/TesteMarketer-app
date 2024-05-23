@@ -11,7 +11,7 @@ const Header = ({ setAuth }) => {
     const getName = async () => {
       try {
         const response = await fetch(
-          "https://maketerbackendtest4.fly.dev/dashboard",
+          "https://makterbackendtest.fly.dev/dashboard",
           {
             method: "GET",
             headers: { token: localStorage.token },
@@ -33,7 +33,7 @@ const Header = ({ setAuth }) => {
   const logout = async (e) => {
     e.preventDefault();
     try {
-      await fetch("https://maketerbackendtest4.fly.dev/api/v1/logout", {
+      await fetch("https://makterbackendtest.fly.dev/api/v1/logout", {
         method: "GET",
         headers: { token: localStorage.token },
       });

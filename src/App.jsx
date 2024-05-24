@@ -10,7 +10,8 @@ import MainListPage from "./page/Community/MainListPage";
 import CategoryReviewPage from "./page/Review/CategoryReivewPage";
 import ReviewPage from "./page/Review/ReviewPage";
 import MainReviewPages from "./page/Review/MainReviewPages";
-
+import EditPage from "./components/Community/EditPage";
+import DetailPost from "./components/Community/DetailPost";
 function App() {
   return (
     <BrowserRouter>
@@ -23,6 +24,8 @@ function App() {
         <Route path="/MainListPage" element={<CommunityListHN />} />
         <Route path="/MainWritePage" element={<CommunityWriteHN />} />
         <Route path="/category/:category" element={<CategoryReviewHN />} />
+        <Route path="/EditPage/:postId" element={<EditPageHN />} />
+        <Route path="/Post/:postId" element={<DetailPostPageHN />} />
       </Routes>
     </BrowserRouter>
   );
@@ -79,5 +82,17 @@ const CategoryReviewHN = () => (
     <CategoryReviewPage />
   </div>
 );
+const EditPageHN = () => (
+  <div>
+    <Header />
+    <EditPage />
+  </div>
+);
 
+const DetailPostPageHN = () => (
+  <div>
+    <Header />
+    <DetailPost />
+  </div>
+);
 export default App;

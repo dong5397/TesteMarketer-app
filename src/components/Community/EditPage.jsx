@@ -1,51 +1,81 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+// EditPage.jsx
 
-function WritePage() {
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { useParams } from "react-router-dom";
+
+function EditPage() {
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
   const [message, setMessage] = useState("");
+  const { postId } = useParams();
 
-  const onInsert = async () => {
+  useEffect(() => {
+    if (postId) {
+      fetch(`http://localhost:3000/api/v1/post/${postId}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("게시물 데이터를 불러오는데 실패했습니다.");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setTitle(data.title);
+          setContents(data.content);
+        })
+        .catch((error) => {
+          console.error(error);
+          setMessage("게시물을 불러오는데 실패했습니다.");
+        });
+    } else {
+      setTitle("");
+      setContents("");
+    }
+  }, [postId]);
+
+  const onUpdate = async () => {
     if (!title || !contents) {
       return alert("제목과 내용을 모두 입력해주세요.");
     }
 
-    const now = new Date().toISOString(); // 현재 날짜와 시간 포맷
     const dataToSend = {
+      postId: postId, // postId를 데이터에 포함시켜서 서버로 보냅니다.
       post_title: title,
       post_content: contents,
-      post_date: now,
     };
-    console.log("Data to Send:", dataToSend); // 전송 데이터 확인을 위한 로그
 
     try {
-      const response = await fetch(`http://localhost:3000/api/v1/post`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataToSend),
-      });
+      console.log("게시물 수정 요청 중...");
+
+      const response = await fetch(
+        `http://localhost:3000/api/v1/post/${postId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataToSend),
+        }
+      );
+
+      console.log("서버 응답:", response);
 
       if (!response.ok) {
-        throw new Error("글 작성 요청이 실패했습니다.");
+        throw new Error("글 수정 요청이 실패했습니다.");
       }
 
       const data = await response.json();
+      console.log("수정된 게시물 데이터:", data);
+
       if (data.resultCode === "S-1") {
-        setMessage("글이 성공적으로 작성되었습니다.");
+        setMessage("글이 성공적으로 수정되었습니다.");
       } else {
-        setMessage("글 작성 중 오류가 발생했습니다.");
+        setMessage("글 수정 중 오류가 발생했습니다.");
       }
-      console.log("Server Response:", data); // 서버 응답 확인을 위한 로그
     } catch (error) {
       console.error(error);
-      setMessage("글 작성 중 오류가 발생했습니다.");
+      setMessage("글 수정 중 오류가 발생했습니다.");
     }
-
-    setTitle("");
-    setContents("");
   };
 
   const onTitleChange = (e) => {
@@ -58,7 +88,7 @@ function WritePage() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    onInsert();
+    onUpdate();
   };
 
   return (
@@ -76,14 +106,14 @@ function WritePage() {
           onChange={onContentsChange}
           rows={8}
         />
-        <Button type="submit">저장</Button>
+        <Button type="submit">수정</Button>
         {message && <Message>{message}</Message>}
       </Form>
     </Container>
   );
 }
 
-export default WritePage;
+export default EditPage;
 
 const Container = styled.div`
   display: flex;

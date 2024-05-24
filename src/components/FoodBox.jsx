@@ -17,7 +17,7 @@ const FoodBox = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://makterbackendtest.fly.dev/api/v1/restaurants")
+    fetch("http://localhost:3000/api/v1/restaurants")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -39,9 +39,7 @@ const FoodBox = () => {
 
   useEffect(() => {
     if (selectedRestaurantId) {
-      fetch(
-        `https://makterbackendtest.fly.dev/api/v1/restaurants/${selectedRestaurantId}`
-      )
+      fetch(`http://localhost:3000/api/v1/restaurants/${selectedRestaurantId}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Failed to fetch data");

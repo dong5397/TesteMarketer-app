@@ -30,7 +30,7 @@ function ReviewPage() {
     const fetchReviews = async (restaurantId) => {
       try {
         const response = await fetch(
-          `https://makterbackendtest.fly.dev/api/v1/reviews/${restaurantId}`
+          `http://localhost:3000/api/v1/reviews/${restaurantId}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch reviews");

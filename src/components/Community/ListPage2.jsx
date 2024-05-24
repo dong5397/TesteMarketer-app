@@ -5,7 +5,7 @@ function CommunityList() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetch("https://makterbackendtest.fly.dev/api/v1/posts")
+    fetch("http://localhost:3000/api/v1/posts")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -22,7 +22,7 @@ function CommunityList() {
   }, []);
 
   const handleDelete = (postId) => {
-    fetch(`https://makterbackendtest.fly.dev/api/v1/post/${postId}`, {
+    fetch(`http://localhost:3000/api/v1/post/${postId}`, {
       method: "DELETE",
     })
       .then((response) => {

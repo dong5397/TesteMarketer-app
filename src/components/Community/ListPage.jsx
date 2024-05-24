@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 function CommunityList() {
   const [posts, setPosts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://makterbackendtest.fly.dev/api/v1/posts")
+    fetch("http://localhost:3000/api/v1/posts")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -22,7 +24,7 @@ function CommunityList() {
   }, []);
 
   const handleDelete = (postId) => {
-    fetch(`https://makterbackendtest.fly.dev/api/v1/post/${postId}`, {
+    fetch(`http://localhost:3000/api/v1/post/${postId}`, {
       method: "DELETE",
     })
       .then((response) => {
@@ -38,18 +40,35 @@ function CommunityList() {
       });
   };
 
+  const handleUpdate = (postId) => {
+    // Navigate to MainEditPage
+    navigate(`/EditPage/${postId}`);
+  };
+
+  const handlePostClick = (postId) => {
+    navigate(`/Post/${postId}`); // Post/:postId로 이동
+  };
+
   return (
     <Container>
       <PostList>
         {posts.map((post) => (
-          <PostContainer key={post.post_id}>
+          <PostContainer
+            key={post.post_id}
+            onClick={() => handlePostClick(post.post_id)}
+          >
             <PostContent>
               <RestaurantName>{post.title}</RestaurantName>
               <Date>날짜: {post.post_date}</Date>
             </PostContent>
-            <DeleteButton onClick={() => handleDelete(post.post_id)}>
-              삭제
-            </DeleteButton>
+            <ButtonContainer>
+              <DeleteButton onClick={() => handleDelete(post.post_id)}>
+                삭제
+              </DeleteButton>
+              <UpdateButton onClick={() => handleUpdate(post.post_id)}>
+                수정
+              </UpdateButton>
+            </ButtonContainer>
           </PostContainer>
         ))}
       </PostList>
@@ -71,8 +90,8 @@ const PostList = styled.div`
   flex-direction: column;
   width: 100%;
   max-width: 600px;
-  max-height: 500px; /* 고정된 높이 설정 */
-  overflow-y: auto; /* 수직 스크롤바 추가 */
+  max-height: 500px;
+  overflow-y: auto;
   gap: 15px;
 `;
 
@@ -88,6 +107,7 @@ const PostContainer = styled.div`
 
   &:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    cursor: pointer; // 포인터 모양으로 변경
   }
 `;
 
@@ -123,4 +143,23 @@ const DeleteButton = styled.button`
   &:hover {
     background-color: #ff3b3b;
   }
+`;
+
+const UpdateButton = styled.button`
+  padding: 8px 12px;
+  background-color: #6b66ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #3b36ff;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 8px;
 `;

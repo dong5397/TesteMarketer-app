@@ -23,7 +23,8 @@ function CommunityList() {
       });
   }, []);
 
-  const handleDelete = (postId) => {
+  const handleDelete = (postId, event) => {
+    event.stopPropagation(); // 이벤트 전파 중단
     fetch(`http://localhost:3000/api/v1/post/${postId}`, {
       method: "DELETE",
     })
@@ -40,13 +41,13 @@ function CommunityList() {
       });
   };
 
-  const handleUpdate = (postId) => {
-    // Navigate to MainEditPage
+  const handleUpdate = (postId, event) => {
+    event.stopPropagation(); // 이벤트 전파 중단
     navigate(`/EditPage/${postId}`);
   };
 
   const handlePostClick = (postId) => {
-    navigate(`/Post/${postId}`); // Post/:postId로 이동
+    navigate(`/Post/${postId}`);
   };
 
   return (
@@ -62,10 +63,14 @@ function CommunityList() {
               <Date>날짜: {post.post_date}</Date>
             </PostContent>
             <ButtonContainer>
-              <DeleteButton onClick={() => handleDelete(post.post_id)}>
+              <DeleteButton
+                onClick={(event) => handleDelete(post.post_id, event)}
+              >
                 삭제
               </DeleteButton>
-              <UpdateButton onClick={() => handleUpdate(post.post_id)}>
+              <UpdateButton
+                onClick={(event) => handleUpdate(post.post_id, event)}
+              >
                 수정
               </UpdateButton>
             </ButtonContainer>
@@ -107,7 +112,7 @@ const PostContainer = styled.div`
 
   &:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    cursor: pointer; // 포인터 모양으로 변경
+    cursor: pointer;
   }
 `;
 

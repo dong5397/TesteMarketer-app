@@ -5,10 +5,13 @@ import { useNavigate, useParams } from "react-router-dom";
 
 function DetailPost() {
   const [post, setPost] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
   const navigate = useNavigate();
   const { postId } = useParams();
 
   useEffect(() => {
+    // 게시물 가져오기
     fetch(`http://localhost:3000/api/v1/post/${postId}`)
       .then((response) => {
         if (!response.ok) {
@@ -17,16 +20,91 @@ function DetailPost() {
         return response.json();
       })
       .then((data) => {
-        console.log("Fetched post data:", data); // 콘솔 로그 추가
-        setPost(data.data); // 변경된 부분
+        setPost(data.data);
       })
       .catch((error) => {
         console.error("Error fetching post:", error);
+      });
+
+    // 댓글 가져오기
+    fetch(`http://localhost:3000/api/v1/post/${postId}/comments`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch comments");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setComments(data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching comments:", error);
       });
   }, [postId]);
 
   const handleRouter = () => {
     navigate("../MainListPage");
+  };
+
+  const handleCommentSubmit = (e) => {
+    e.preventDefault();
+
+    fetch(`http://localhost:3000/api/v1/post/${postId}/comments`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        comment_text: newComment,
+        comment_date: new Date().toISOString(),
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to post comment");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setComments((prevComments) => [...prevComments, data.data]); // 반환된 데이터를 추가
+        setNewComment("");
+      })
+      .catch((error) => {
+        console.error("Error posting comment:", error);
+      });
+  };
+
+  const handleDeleteComment = (post_id, commentid) => {
+    if (!commentid) {
+      console.error("commentIdToDelete가 유효하지 않습니다.");
+      return;
+    }
+
+    fetch(
+      `http://localhost:3000/api/v1/post/${post_id}/comments/${commentid}`,
+      {
+        method: "DELETE",
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to delete comment");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.resultCode === "S-1") {
+          // 댓글 삭제 성공 시, 클라이언트 상태 업데이트 로직 추가
+          setComments((prevComments) =>
+            prevComments.filter((comment) => comment.commentid !== commentid)
+          );
+        } else {
+          console.error("Failed to delete comment:", data.msg);
+        }
+      })
+      .catch((error) => {
+        console.error("Error deleting comment:", error);
+      });
   };
 
   return (
@@ -54,6 +132,36 @@ function DetailPost() {
                   ) : (
                     <p>Loading...</p>
                   )}
+                  <CommentSection>
+                    <CommentForm onSubmit={handleCommentSubmit}>
+                      <CommentInput
+                        type="text"
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        placeholder="댓글을 입력하세요..."
+                      />
+                      <CommentButton type="submit">댓글 달기</CommentButton>
+                    </CommentForm>
+                    <CommentList>
+                      {comments.map((comment) => (
+                        <Comment key={comment.commentid}>
+                          <CommentContent>
+                            {comment.comment_text}
+                          </CommentContent>
+                          <CommentDate>
+                            {new Date(comment.comment_date).toLocaleString()}
+                          </CommentDate>
+                          <DeleteButton
+                            onClick={() =>
+                              handleDeleteComment(postId, comment.commentid)
+                            }
+                          >
+                            삭제
+                          </DeleteButton>
+                        </Comment>
+                      ))}
+                    </CommentList>
+                  </CommentSection>
                 </Container>
               </DeviceContent>
             </DivContainer>
@@ -139,4 +247,73 @@ const PostTitle = styled.h2`
 const PostContent = styled.p`
   font-size: 18px;
   line-height: 1.6;
+`;
+
+const CommentSection = styled.div`
+  margin-top: 20px;
+`;
+
+const CommentForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+`;
+
+const CommentInput = styled.input`
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+`;
+
+const CommentButton = styled.button`
+  padding: 10px 20px;
+  background-color: #6b66ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #3b36ff;
+  }
+`;
+
+const CommentList = styled.div`
+  max-height: 300px; /* Adjust the height as needed */
+  overflow-y: auto;
+`;
+
+const Comment = styled.div`
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  margin-bottom: 10px;
+`;
+
+const CommentContent = styled.p`
+  font-size: 16px;
+  margin: 0;
+`;
+
+const CommentDate = styled.span`
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
+`;
+
+const DeleteButton = styled.button`
+  padding: 8px 12px;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #ff3b3b;
+  }
 `;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Modal from "react-modal";
 import FoodIndex from "./FoodIndex";
@@ -8,24 +8,16 @@ Modal.setAppElement("#root");
 
 function FoodDetail({ selectedRestaurant, onMapMove }) {
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
-  const [restaurants, setRestaurants] = useState([]);
   const [reviews, setReviews] = useState([]);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch("http://localhost:3000/api/v1/restaurants")
-      .then((response) => response.json())
-      .then((data) => {
-        const sortedRestaurants = Array.isArray(data.data)
-          ? data.data.sort((a, b) => b.rating - a.rating)
-          : [data.data];
-        setRestaurants(sortedRestaurants);
-      });
-  }, []);
-
   const handleDetailModalOpen = () => {
     setDetailModalOpen(true);
+  };
+
+  const handleDetailModalClose = () => {
+    setDetailModalOpen(false);
   };
 
   const handleDetailPost = () => {
@@ -34,7 +26,6 @@ function FoodDetail({ selectedRestaurant, onMapMove }) {
       return;
     }
 
-    console.log("restaurant:", selectedRestaurant);
     navigate(`/review/${selectedRestaurant.restaurants_id}`, {
       state: {
         id: `${selectedRestaurant.restaurants_id}`,
@@ -49,16 +40,20 @@ function FoodDetail({ selectedRestaurant, onMapMove }) {
   };
 
   const handleMapMove = () => {
-    console.log(
-      "Location:",
-      selectedRestaurant.latitude,
-      selectedRestaurant.longitude
-    );
-    onMapMove &&
-      onMapMove({
-        latitude: selectedRestaurant.latitude,
-        longitude: selectedRestaurant.longitude,
-      }); // 위치 정보 전달
+    if (selectedRestaurant && onMapMove) {
+      const latitude = parseFloat(selectedRestaurant.latitude);
+      const longitude = parseFloat(selectedRestaurant.longitude);
+      console.log("Moving map to coordinates:", latitude, longitude);
+      onMapMove(latitude, longitude);
+    } else {
+      console.error(
+        "Selected restaurant 또는 onMapMove 함수가 정의되지 않았습니다."
+      );
+    }
+  };
+
+  const handleReviewDelete = (reviewId) => {
+    // Add review deletion logic here
   };
 
   return (
@@ -78,7 +73,7 @@ function FoodDetail({ selectedRestaurant, onMapMove }) {
       )}
       <Modal
         isOpen={isDetailModalOpen}
-        onRequestClose={() => setDetailModalOpen(false)}
+        onRequestClose={handleDetailModalClose}
         contentLabel="Selected Restaurant"
         style={{
           overlay: {
@@ -105,9 +100,7 @@ function FoodDetail({ selectedRestaurant, onMapMove }) {
               </ReviewContainer>
             ))}
           </ReviewList>
-          <CloseButton onClick={() => setDetailModalOpen(false)}>
-            닫기
-          </CloseButton>
+          <CloseButton onClick={handleDetailModalClose}>닫기</CloseButton>
         </ModalContent>
       </Modal>
     </div>

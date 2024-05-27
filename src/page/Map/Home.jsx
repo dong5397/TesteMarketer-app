@@ -1,27 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import FoodForm from "./FoodForm"; // FoodForm 컴포넌트를 import합니다.
+import FoodForm from "./FoodForm";
 import FoodDetail from "../../components/FoodDetail";
 import SearchBar from "../../components/SearchBar";
+import KakaoMap from "./KakaoMap";
 
-const Home = ({ onRestaurantClick }) => {
+const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false); // 검색창을 열고 닫는 상태를 관리합니다.
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [mapMoveFunction, setMapMoveFunction] = useState(null);
+  const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
   const togglePanel = () => {
     setIsOpen(!isOpen);
-    setIsSearchOpen(false); // 푸드폼 버튼을 누르면 검색창은 닫히도록 설정합니다.
+    setIsSearchOpen(false);
   };
 
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
     if (!isSearchOpen && !isOpen) {
-      setIsOpen(true); // 검색 버튼을 누르면 패널이 함께 열리도록 설정합니다.
+      setIsOpen(true);
     }
   };
-  const handleMapMove = (newPosition) => {
-    setMapPosition(newPosition);
+
+  const handleMapMove = (latitude, longitude) => {
+    console.log("handleMapMove called with:", latitude, longitude);
+    if (mapMoveFunction) {
+      mapMoveFunction(latitude, longitude);
+    } else {
+      console.error("MapMoveFunction이 정의되지 않았습니다.");
+    }
   };
+
+  useEffect(() => {
+    if (mapMoveFunction) {
+      console.log("MapMoveFunction is set");
+    }
+  }, [mapMoveFunction]);
 
   return (
     <Container isOpen={isOpen} isSearchOpen={isSearchOpen}>
@@ -32,14 +47,20 @@ const Home = ({ onRestaurantClick }) => {
         </SearchButton>
       )}
       <Content>
-        <FoodForm />
+        <FoodForm setSelectedRestaurant={setSelectedRestaurant} />
       </Content>
       {isSearchOpen && (
         <SearchContainer>
           <SearchBar />
         </SearchContainer>
       )}
-      <FoodDetail onMapMove={handleMapMove} />
+      <KakaoMap setMapMoveFunction={setMapMoveFunction} />
+      {selectedRestaurant && (
+        <FoodDetail
+          selectedRestaurant={selectedRestaurant}
+          onMapMove={handleMapMove}
+        />
+      )}
     </Container>
   );
 };
@@ -89,8 +110,9 @@ const SearchButton = styled.button`
 const Content = styled.div`
   padding: 10px;
 `;
+
 const SearchContainer = styled.div`
   position: absolute;
   top: 10px;
-  left: 50px; // 'right'를 'left'로 바꿉니다.
+  left: 50px;
 `;

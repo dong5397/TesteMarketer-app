@@ -1,6 +1,6 @@
 import React from "react";
 import Main from "./page/Main";
-import KakaoMap from "../src/page/Map/KaKaoMap";
+import KakaoMap from "../src/page/Map/KaKaoMap"; // 경로 수정 필요
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "../src/page/Map/Home";
 import Header from "./page/Header";
@@ -12,6 +12,7 @@ import ReviewPage from "./page/Review/ReviewPage";
 import MainReviewPages from "./page/Review/MainReviewPages";
 import EditPage from "./components/Community/EditPage";
 import DetailPost from "./components/Community/DetailPost";
+
 function App() {
   return (
     <BrowserRouter>
@@ -37,23 +38,26 @@ const MainHN = () => (
     <Main />
   </div>
 );
+
 const ReviewHN = () => (
   <div>
     <Header />
     <ReviewPage />
   </div>
 );
+
 const FullReviewHN = () => (
   <div>
     <Header />
     <MainReviewPages />
   </div>
 );
+
 const FoodHN = () => (
   <div>
     <Header />
     <Home />
-    <KakaoMap />
+    <KakaoMap /> {/* KakaoMap 컴포넌트 추가 */}
   </div>
 );
 
@@ -70,18 +74,21 @@ const CommunityListHN = () => (
     <MainListPage />
   </div>
 );
+
 const CommunityWriteHN = () => (
   <div>
     <Header />
     <MainWritePage />
   </div>
 );
+
 const CategoryReviewHN = () => (
   <div>
     <Header />
     <CategoryReviewPage />
   </div>
 );
+
 const EditPageHN = () => (
   <div>
     <Header />
@@ -95,4 +102,5 @@ const DetailPostPageHN = () => (
     <DetailPost />
   </div>
 );
+
 export default App;

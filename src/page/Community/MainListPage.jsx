@@ -1,16 +1,40 @@
-import { DeviceFrameset } from "react-device-frameset";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { DeviceFrameset } from "react-device-frameset";
 import ListPage from "../../components/Community/ListPage";
-import { useNavigate } from "react-router-dom"; // useNavigate 추가
+import ListSerchPage from "../../components/Community/ListSerchPage";
 
 function MainListpage() {
-  const navigate = useNavigate(); // useNavigate로 네비게이션 설정
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const navigate = useNavigate();
 
   const handleRoute = () => {
-    navigate("/MainWritePage"); // '/write'로 이동
+    navigate("/MainWritePage");
   };
 
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) {
+      setSearchResults([]); // 공백일 때 검색 결과를 빈 배열로 설정
+      return;
+    }
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/v1/posts?title=${encodeURIComponent(
+          searchQuery
+        )}`
+      );
+      if (!response.ok) {
+        throw new Error("검색 중 오류가 발생했습니다.");
+      }
+      const data = await response.json();
+      setSearchResults(data.data);
+    } catch (error) {
+      console.error(error);
+      alert("검색 중 오류가 발생했습니다.");
+    }
+  };
   return (
     <MainContainer>
       <ListPageWrapper>
@@ -26,8 +50,20 @@ function MainListpage() {
                 <Container>
                   <Header>
                     <h1>Community</h1>
-                    <Button onClick={handleRoute}>글쓰기</Button>{" "}
+                    <Button onClick={handleRoute}>글쓰기</Button>
                   </Header>
+                  <SearchContainer>
+                    <SearchInput
+                      type="text"
+                      placeholder="제목으로 검색"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    <SearchButton onClick={handleSearch}>검색</SearchButton>
+                  </SearchContainer>
+                  <ScrollableList>
+                    <ListSerchPage posts={searchResults} />
+                  </ScrollableList>
                   <ListPage />
                 </Container>
               </DeviceContent>
@@ -87,10 +123,47 @@ const Button = styled.button`
   margin-top: 20px;
   align-self: center;
 `;
+
 const ListPageWrapper = styled.div`
   max-width: 1000px;
   height: 1000px;
   margin: 0 auto;
   padding: 20px;
   gap: 100px;
+`;
+
+const SearchContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+`;
+
+const SearchInput = styled.input`
+  width: 70%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 10px;
+`;
+
+const SearchButton = styled.button`
+  background-color: #357ab7;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #285a8c;
+  }
+`;
+const ScrollableList = styled.div`
+  flex: 1;
+  overflow-y: auto; /* 스크롤 가능하게 설정 */
+  padding: 20px;
+
+  margin-top: 20px;
 `;

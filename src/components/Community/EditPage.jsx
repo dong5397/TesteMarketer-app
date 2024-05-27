@@ -3,13 +3,17 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-
+import { DeviceFrameset } from "react-device-frameset";
+import { useNavigate } from "react-router-dom";
 function EditPage() {
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
   const [message, setMessage] = useState("");
   const { postId } = useParams();
-
+  const navigate = useNavigate();
+  const handleRouter = (e) => {
+    navigate("../MainListPage");
+  };
   useEffect(() => {
     if (postId) {
       fetch(`http://localhost:3000/api/v1/post/${postId}`)
@@ -92,29 +96,55 @@ function EditPage() {
   };
 
   return (
-    <Container>
-      <Form onSubmit={onSubmit}>
-        <Input
-          placeholder="제목을 입력해주세요."
-          type="text"
-          value={title}
-          onChange={onTitleChange}
-        />
-        <TextArea
-          placeholder="내용을 작성해주세요."
-          value={contents}
-          onChange={onContentsChange}
-          rows={8}
-        />
-        <Button type="submit">수정</Button>
-        {message && <Message>{message}</Message>}
-      </Form>
-    </Container>
+    <MainContainer>
+      <WritePageWrapper>
+        <DeviceFrameset
+          device="iPad Mini"
+          color="black"
+          width="100%"
+          height="80%"
+        >
+          <StyledContainer>
+            <DivContainer>
+              <DeviceContent>
+                <Container2>
+                  <Header>
+                    <h1>Community</h1>
+                    <Button onClick={handleRouter}>글목록</Button>{" "}
+                  </Header>
+                  <Container>
+                    <Form onSubmit={onSubmit}>
+                      <Input
+                        placeholder="제목을 입력해주세요."
+                        type="text"
+                        value={title}
+                        onChange={onTitleChange}
+                      />
+                      <TextArea
+                        placeholder="내용을 작성해주세요."
+                        value={contents}
+                        onChange={onContentsChange}
+                        rows={8}
+                      />
+                      <Button1 type="submit">수정</Button1>
+                      {message && <Message>{message}</Message>}
+                    </Form>
+                  </Container>
+                </Container2>
+              </DeviceContent>
+            </DivContainer>
+          </StyledContainer>
+        </DeviceFrameset>
+      </WritePageWrapper>
+    </MainContainer>
   );
 }
 
 export default EditPage;
-
+const MainContainer = styled.div`
+  height: 1200px;
+  background: linear-gradient(#e7e78b, #f0f0c3);
+`;
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -122,7 +152,14 @@ const Container = styled.div`
   padding: 20px;
   background-color: #e1f5fe;
 `;
-
+const Container2 = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const DivContainer = styled.div`
+  flex: 1;
+  display: flex;
+`;
 const Form = styled.form`
   background-color: #ffffff;
   padding: 20px;
@@ -151,7 +188,7 @@ const TextArea = styled.textarea`
   resize: vertical;
 `;
 
-const Button = styled.button`
+const Button1 = styled.button`
   display: block;
   width: 100%;
   padding: 12px;
@@ -168,10 +205,44 @@ const Button = styled.button`
     transform: translateY(-2px);
   }
 `;
-
+const Button = styled.button`
+  background-color: #ff6b6b;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  align-self: center;
+`;
 const Message = styled.p`
   margin-top: 15px;
   color: green;
   font-weight: bold;
   text-align: center;
+`;
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #e1f5fe; /* 연한 하늘색으로 설정 */
+`;
+const Header = styled.header`
+  padding: 20px;
+  background-color: #ffcc66;
+  color: white;
+  text-align: center;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`;
+const WritePageWrapper = styled.div`
+  max-width: 1000px;
+  height: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  gap: 100px;
+`;
+const DeviceContent = styled.div`
+  flex: 1;
 `;

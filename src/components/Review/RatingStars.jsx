@@ -35,7 +35,7 @@ function RatingStars({ rating, onRate }) {
         onMouseLeave={handleMouseLeave}
       >
         {rating >= i || hoverRating >= i ? (
-          <FontAwesomeIcon icon={solidStar} size="2x" />
+          <FontAwesomeIcon icon={solidStar} size="2x" color="#F4CE14" />
         ) : (
           <FontAwesomeIcon icon={regularStar} size="2x" />
         )}

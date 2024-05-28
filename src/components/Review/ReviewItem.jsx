@@ -1,37 +1,54 @@
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import styled from "styled-components";
+import { useState } from "react";
+import styled, { css, keyframes } from "styled-components";
+import RatingStars from "./RatingStars";
 
-function ReviewItem({ review }) {
+function ReviewItem({ review, onDelete }) {
   const { review_id, username, review_contents, review_date, hashtag, rating } =
     review;
 
+  const formatDate = (dateString) => {
+    if (!dateString) {
+      return ""; // 또는 기본 날짜 문자열을 반환할 수 있습니다.
+    }
+    const dateParts = dateString.split("T")[0].split("-");
+    const year = dateParts[0];
+    const month = dateParts[1];
+    const day = dateParts[2];
+    return `${year}-${month}-${day}`;
+  };
+
   const [isClicked, setIsClicked] = useState(false);
 
-  const reviewDeleteHandler = () => {
+  const reviewDeleteHandler = (event) => {
+    event.preventDefault();
     setIsClicked(true);
     setTimeout(() => {
       setIsClicked(false);
-      // 삭제 로직을 여기에 추가하세요
     }, 500);
+    // 삭제 로직을 여기에 추가하세요
+    onDelete(review_id);
   };
 
   return (
     <ReviewItemContainer>
       <Username>{username}</Username>
+      <RatingStars rating={rating} />
       <Content>{review_contents}</Content>
-      <Date>{review_date}</Date>
+
+      <Date>{formatDate(review_date)}</Date>
+
       <HashTagsContainer>
         <HashTag>#{hashtag}</HashTag>
       </HashTagsContainer>
-      <DeleteButton isClicked={isClicked} onClick={reviewDeleteHandler}>
-        <FontAwesomeIcon
-          icon={faTrash}
-          size="2xl"
-          style={{ color: "#ff0000" }}
-        />{" "}
-      </DeleteButton>
+
+      <ActionButtonsContainer>
+        <DeleteButton isClicked={isClicked} onClick={reviewDeleteHandler}>
+          <TrashIcon icon={faTrash} size="2xl" isClicked={isClicked} />
+        </DeleteButton>
+      </ActionButtonsContainer>
     </ReviewItemContainer>
   );
 }
@@ -50,7 +67,7 @@ const Username = styled.span`
   font-size: 34px;
 `;
 
-const Content = styled.p`
+const Content = styled.div`
   font-size: 22px;
 `;
 
@@ -73,15 +90,37 @@ const HashTag = styled.p`
   margin: 5px;
 `;
 
+const ActionButtonsContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 10px;
+`;
+
 const DeleteButton = styled.button`
   border-radius: 100px;
   padding: 10px;
-  background-color: white;
+  background-color: ${({ isClicked }) => (isClicked ? "red" : "white")};
   transition: transform 0.3s ease;
+`;
 
+const bounceAnimation = keyframes`
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-25px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+`;
+const TrashIcon = styled(FontAwesomeIcon)`
+  color: #ff0000;
   ${({ isClicked }) =>
     isClicked &&
-    `
-    animation: ${enlarge} 0.3s forwards;
-  `}
+    css`
+      color: ${({ isClicked }) => (isClicked ? "white" : "red")};
+      animation: ${bounceAnimation} 0.5s;
+    `}
 `;

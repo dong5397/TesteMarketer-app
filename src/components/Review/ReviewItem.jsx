@@ -28,7 +28,7 @@ function ReviewItem({ review, onDelete }) {
     setTimeout(() => {
       setIsClicked(false);
     }, 500);
-    // 삭제 로직을 여기에 추가하세요
+
     onDelete(review_id);
   };
 

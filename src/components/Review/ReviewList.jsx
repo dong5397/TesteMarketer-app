@@ -2,12 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import ReviewItem from "./ReviewItem";
 
-function ReviewList({ reviews }) {
+function ReviewList({ reviews, OnDelete }) {
   return (
     <ReviewListContainer>
       <ul>
         {reviews.map((review) => (
-          <ReviewItem key={review.id} review={review} />
+          <ReviewItem key={review.id} review={review} OnDelete={OnDelete} />
         ))}
       </ul>
     </ReviewListContainer>

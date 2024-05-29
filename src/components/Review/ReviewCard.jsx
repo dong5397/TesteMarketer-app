@@ -172,7 +172,9 @@ const ReviewCard = ({ restaurant }) => {
         </CardHashTag>
         <CardImg
           backgroundImage={
-            showCardInfo ? "../../images/review/click.gif" : restaurant.image
+            showCardInfo
+              ? "../../../public/images/review/click.gif"
+              : restaurant.image
           }
         />
       </CardContent>

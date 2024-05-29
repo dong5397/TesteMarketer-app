@@ -6,6 +6,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ReviewCard from "../../components/Review/ReviewCard";
 import { faUtensils } from "@fortawesome/free-solid-svg-icons";
+
 function CategoryReviewPage() {
   const location = useLocation();
 
@@ -69,14 +70,14 @@ function CategoryReviewPage() {
               <FontAwesomeIcon icon={faUtensils} size="2x" />
             </GreenContainer>
             <Header>
-              <Link to="/review/">
+              <BackButton to="/review/">
                 <PressableIcon
                   icon={faArrowLeft}
                   size="3x"
                   onClick={handleIconClick}
                   pressed={isPressed}
                 />
-              </Link>
+              </BackButton>
               <Title>리뷰 목록</Title>
             </Header>
 
@@ -91,17 +92,17 @@ function CategoryReviewPage() {
                 </div>
               ))}
             </TagsContainer>
-            <ReviewCardContainer>
-              <div>
+            <ReviewCardWrapper>
+              <ReviewCardContainer>
                 {restaurants.map((restaurant, index) => (
                   <ReviewCard
                     key={index} // 고유한 식별자를 key로 사용
                     restaurant={restaurant}
                   />
                 ))}
-              </div>
-              {isLoading && <div>Loading...</div>}
-            </ReviewCardContainer>
+              </ReviewCardContainer>
+              {isLoading && <div></div>}
+            </ReviewCardWrapper>
           </StyledContainer>
         </DeviceFrameset>
       </ReviewPageWrapper>
@@ -124,17 +125,30 @@ const ReviewPageWrapper = styled.div`
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
-  background-color: #e1f5fe;
+  background-color: #fff;
 `;
 const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
   max-width: 90%;
   margin: 0 auto;
   margin-top: 10px;
-  height: 10%;
-  display: flex;
-  gap: 520px;
-  border-bottom: 3px solid black;
+  padding: 10px 0;
+`;
+
+const BackButton = styled(Link)`
+  position: absolute;
+  right: 400px;
+  padding: 10px;
+`;
+
+const Title = styled.h2`
+  font-size: 25px;
+  font-family: "Uiyeun", sans-serif;
+  text-align: center;
+  flex-grow: 1;
 `;
 
 const TagsContainer = styled.div`
@@ -144,8 +158,8 @@ const TagsContainer = styled.div`
   margin: 0 auto;
   white-space: nowrap;
   display: flex;
-  overflow-x: auto;
-  background-color: #e1f5fe;
+  overflow-x: auto; /* 가로 스크롤바 추가 */
+  background-color: #fff;
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.1);
   &::-webkit-scrollbar {
@@ -163,12 +177,12 @@ const GreenContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 120px;
-  background-color: #ffcc66;
+  height: 80px;
+  background-color: #e9e5a9;
   border-radius: 0 0 30px 30px;
 `;
 const TagButton = styled.button`
-  margin-bottom: 20%;
+  margin-bottom: 10%;
   padding: 15px;
   font-size: 20px;
   font-weight: bold;
@@ -182,14 +196,9 @@ const TagButton = styled.button`
   font-family: "Uiyeun", sans-serif;
 
   &:hover {
-    background-color: #f0f0f0;
+    background-color: #e9e5a9;
     color: #000;
   }
-`;
-
-const Title = styled.h2`
-  font-size: 25px;
-  font-family: "Uiyeun", sans-serif;
 `;
 
 const PressableIcon = styled(FontAwesomeIcon)`
@@ -201,11 +210,35 @@ const PressableIcon = styled(FontAwesomeIcon)`
   }
 `;
 
-const ReviewCardContainer = styled.div`
-  max-width: 90%;
-  margin: 5%;
-  height: 100%;
+const ReviewCardWrapper = styled.div`
   display: flex;
-  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  padding: 20px;
   overflow-y: auto;
+`;
+
+const ReviewCardContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 600px;
+  width: 100%;
+  height: 500px; /* 높이 고정 */
+  overflow-y: auto; /* 스크롤바 생성 */
+  padding: 20px;
+  align-items: start;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.1);
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 `;

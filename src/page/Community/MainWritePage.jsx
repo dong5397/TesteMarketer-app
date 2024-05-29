@@ -47,7 +47,7 @@ const Container = styled.div`
 `;
 const Header = styled.header`
   padding: 20px;
-  background-color: #ffcc66;
+  background-color: #e9e5a9;
   color: white;
   text-align: center;
   font-size: 1.5rem;
@@ -57,7 +57,7 @@ const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #e1f5fe; /* 연한 하늘색으로 설정 */
+  background-color: #fff;
 `;
 
 const DivContainer = styled.div`
@@ -75,7 +75,7 @@ const DeviceContent = styled.div`
 `;
 
 const Button = styled.button`
-  background-color: #ff6b6b;
+  background-color: #74a7a7;
   color: white;
   padding: 10px 20px;
   font-size: 1rem;

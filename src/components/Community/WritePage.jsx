@@ -93,7 +93,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   padding: 20px;
-  background-color: #e1f5fe;
+  background-color: #fff;
 `;
 
 const Form = styled.form`
@@ -129,7 +129,7 @@ const Button = styled.button`
   width: 100%;
   padding: 12px;
   font-size: 16px;
-  background-color: #410707;
+  background-color: #74a7a7;
   color: white;
   border: none;
   border-radius: 4px;
@@ -137,7 +137,7 @@ const Button = styled.button`
   transition: background-color 0.3s, transform 0.3s;
 
   &:hover {
-    background-color: #357ab7;
+    background-color: #357e7e;
     transform: translateY(-2px);
   }
 `;

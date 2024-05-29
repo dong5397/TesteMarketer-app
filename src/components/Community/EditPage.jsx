@@ -150,7 +150,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   padding: 20px;
-  background-color: #e1f5fe;
+  background-color: #fff;
 `;
 const Container2 = styled.div`
   display: flex;
@@ -193,7 +193,7 @@ const Button1 = styled.button`
   width: 100%;
   padding: 12px;
   font-size: 16px;
-  background-color: #410707;
+  background-color: #74a7a7;
   color: white;
   border: none;
   border-radius: 4px;
@@ -201,12 +201,12 @@ const Button1 = styled.button`
   transition: background-color 0.3s, transform 0.3s;
 
   &:hover {
-    background-color: #357ab7;
+    background-color: #357e7e;
     transform: translateY(-2px);
   }
 `;
 const Button = styled.button`
-  background-color: #ff6b6b;
+  background-color: #74a7a7;
   color: white;
   padding: 10px 20px;
   font-size: 1rem;
@@ -226,11 +226,11 @@ const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #e1f5fe; /* 연한 하늘색으로 설정 */
+  background-color: #fff; /* 연한 하늘색으로 설정 */
 `;
 const Header = styled.header`
   padding: 20px;
-  background-color: #ffcc66;
+  background-color: #e9e5a9;
   color: white;
   text-align: center;
   font-size: 1.5rem;

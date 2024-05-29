@@ -86,7 +86,7 @@ const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #e1f5fe;
+  background-color: #fff;
 `;
 
 const DivContainer = styled.div`
@@ -105,7 +105,7 @@ const Container = styled.div`
 
 const Header = styled.header`
   padding: 20px;
-  background-color: #ffcc66;
+  background-color: #e9e5a9;
   color: white;
   text-align: center;
   font-size: 1.5rem;
@@ -113,7 +113,7 @@ const Header = styled.header`
 `;
 
 const Button = styled.button`
-  background-color: #ff6b6b;
+  background-color: #74a7a7;
   color: white;
   padding: 10px 20px;
   font-size: 1rem;
@@ -122,6 +122,9 @@ const Button = styled.button`
   cursor: pointer;
   margin-top: 20px;
   align-self: center;
+  &:hover {
+    background-color: #357e7e;
+  }
 `;
 
 const ListPageWrapper = styled.div`
@@ -148,7 +151,7 @@ const SearchInput = styled.input`
 `;
 
 const SearchButton = styled.button`
-  background-color: #ff6b6b;
+  background-color: #74a7a7;
   color: white;
   padding: 10px 20px;
   font-size: 1rem;
@@ -157,14 +160,14 @@ const SearchButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background-color: #f32727;
+    background-color: #357e7e;
   }
 `;
 
 const ScrollableList = styled.div`
   flex: 1;
   overflow-y: auto; /* 스크롤 가능하게 설정 */
-  padding: 20px;
+  padding-left: 20px;
   margin-top: 20px;
 
   /* 스크롤바 스타일링 */

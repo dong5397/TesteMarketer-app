@@ -180,7 +180,7 @@ const Container = styled.div`
 `;
 const Header = styled.header`
   padding: 20px;
-  background-color: #ffcc66;
+  background-color: #e9e5a9;
   color: white;
   text-align: center;
   font-size: 1.5rem;
@@ -190,7 +190,7 @@ const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #e1f5fe;
+  background-color: #fff;
 `;
 
 const DivContainer = styled.div`
@@ -208,7 +208,7 @@ const DeviceContent = styled.div`
 `;
 
 const Button = styled.button`
-  background-color: #ff6b6b;
+  background-color: #74a7a7;
   color: white;
   padding: 10px 20px;
   font-size: 1rem;
@@ -228,7 +228,7 @@ const WritePageWrapper = styled.div`
 
 const PostContainer = styled.div`
   padding: 20px;
-  background-color: #ffffff;
+  background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-top: 20px;
@@ -269,7 +269,7 @@ const CommentInput = styled.input`
 
 const CommentButton = styled.button`
   padding: 10px 20px;
-  background-color: #6b66ff;
+  background-color: #74a7a7;
   color: white;
   border: none;
   border-radius: 5px;
@@ -277,7 +277,7 @@ const CommentButton = styled.button`
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: #3b36ff;
+    background-color: #357e7e;
   }
 `;
 
@@ -306,7 +306,7 @@ const CommentDate = styled.span`
 
 const DeleteButton = styled.button`
   padding: 8px 12px;
-  background-color: #ff6b6b;
+  background-color: #74a7a7;
   color: white;
   border: none;
   border-radius: 4px;
@@ -314,6 +314,6 @@ const DeleteButton = styled.button`
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: #ff3b3b;
+    background-color: #357e7e;
   }
 `;

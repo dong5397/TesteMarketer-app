@@ -2,14 +2,14 @@ import React from "react";
 import styled from "styled-components";
 
 const DeleteButton = styled.button`
-  background-color: #e74c3c;
+  background-color: #74a7a7;
   color: white;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   &:hover {
-    background-color: #c0392b;
+    background-color: #357e7e;
   }
 `;
 

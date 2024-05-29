@@ -168,7 +168,7 @@ const GreenContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 80px;
-  background-color: #ffcc66;
+  background-color: #e9e5a9;
   border-radius: 0 0 30px 30px;
 `;
 
@@ -192,7 +192,7 @@ const SearchBar = styled.input`
 `;
 
 const CategoriesGridContainer = styled.div`
-  background-color: #e1f5fe;
+  background-color: #fff;
   padding: 20px;
   border-radius: 20px;
   margin: 15px 0;
@@ -200,7 +200,7 @@ const CategoriesGridContainer = styled.div`
 
 const CategoriesGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
 `;
 
@@ -217,17 +217,17 @@ const CategoryButton = styled.button`
   align-items: center;
   padding: 15px;
   border: none;
+  border: solid 4px;
   border-radius: 20px;
-  background-color: ${({ active }) => (active ? "#ff7043" : "#f0f0f0")};
+  background-color: ${({ active }) => (active ? "#e7f1c9" : "#f0f0f0")};
   color: ${({ active }) => (active ? "#fff" : "#000")};
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
   width: 150px;
   height: 150px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
   &:hover {
-    background-color: ${({ active }) => (active ? "#ff5722" : "#e0e0e0")};
+    background-color: ${({ active }) => (active ? "#e7f1c9" : " #e9e5a9")};
     color: ${({ active }) => (active ? "#fff" : "#000")};
     transform: translateY(-5px);
   }

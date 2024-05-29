@@ -138,7 +138,7 @@ const Date = styled.p`
 
 const DeleteButton = styled.button`
   padding: 8px 12px;
-  background-color: #ff6b6b;
+  background-color: #74a7a7;
   color: white;
   border: none;
   border-radius: 4px;
@@ -146,13 +146,13 @@ const DeleteButton = styled.button`
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: #ff3b3b;
+    background-color: #357e7e;
   }
 `;
 
 const UpdateButton = styled.button`
   padding: 8px 12px;
-  background-color: #6b66ff;
+  background-color: #74a7a7;
   color: white;
   border: none;
   border-radius: 4px;
@@ -160,7 +160,7 @@ const UpdateButton = styled.button`
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: #3b36ff;
+    background-color: #357e7e;
   }
 `;
 

@@ -88,17 +88,6 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 20px;
-`;
-
-const PostList = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 600px;
-  max-height: 500px;
-  overflow-y: auto;
-  gap: 15px;
-
   /* 스크롤바 스타일링 */
   &::-webkit-scrollbar {
     width: 10px;
@@ -116,6 +105,16 @@ const PostList = styled.div`
   &::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
+`;
+
+const PostList = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 600px;
+  max-height: 500px;
+  overflow-y: auto;
+  gap: 15px;
 `;
 
 const PostContainer = styled.div`

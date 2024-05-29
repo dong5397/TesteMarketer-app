@@ -64,7 +64,6 @@ function MainListpage() {
                   <ScrollableList>
                     <ListSerchPage posts={searchResults} />
                   </ScrollableList>
-
                   <ListPage />
                 </Container>
               </DeviceContent>

@@ -138,7 +138,7 @@ const Date = styled.p`
 
 const DeleteButton = styled.button`
   padding: 8px 12px;
-  background-color: #74a7a7;
+  background-color: #2f4f4f;
   color: white;
   border: none;
   border-radius: 4px;

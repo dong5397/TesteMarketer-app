@@ -56,7 +56,6 @@ const Header = ({ setAuth }) => {
         <NavLink to="/MainListPage">커뮤니티</NavLink>
         <NavLink to="/service">맛 설정 모드</NavLink>
       </NavLinks>
-      <UserInfo></UserInfo>
     </HeaderContainer>
   );
 };
@@ -86,6 +85,9 @@ const LogoContainer = styled(Link)`
 const NavLinks = styled.div`
   display: flex;
   align-items: center;
+  flex-grow: 1;
+  justify-content: center; /* 중앙 정렬 */
+  margin-left: -5%;
 `;
 
 const NavLink = styled(Link)`

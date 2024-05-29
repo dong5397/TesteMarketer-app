@@ -1,3 +1,14 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }],
+  "headers": [
+    {
+      "source": "/src/fonts/(.*)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "font/ttf"
+        }
+      ]
+    }
+  ]
 }

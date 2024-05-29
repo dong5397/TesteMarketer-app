@@ -305,7 +305,7 @@ const CardSection = styled.section`
 `;
 
 const CardTitle = styled.h2`
-  font-size: 32px;
+  font-size: 22px;
   margin-bottom: 10px;
 `;
 

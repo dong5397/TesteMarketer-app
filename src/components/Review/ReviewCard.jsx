@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-
+import click from "../../images/review/click.gif";
 const CardBackground = styled.div`
   position: absolute;
   top: 0;
@@ -170,11 +170,7 @@ const ReviewCard = ({ restaurant }) => {
         <CardHashTag showInfo={showCardInfo}>
           {showCardInfo ? "" : `#${restaurant.menus.join(" #")}`}
         </CardHashTag>
-        <CardImg
-          backgroundImage={
-            showCardInfo ? "/images/click.gif" : restaurant.image
-          }
-        />
+        <CardImg backgroundImage={showCardInfo ? click : restaurant.image} />
       </CardContent>
       <CardInfoBox showInfo={showCardInfo}>
         <ReviewCount>리뷰 {cardInfo.reviewCount}개</ReviewCount>

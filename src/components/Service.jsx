@@ -149,7 +149,7 @@ const Service = () => {
   const [sour, setSour] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/v1/restaurants")
+    fetch("https://makterbackend.fly.dev/api/v1/restaurants")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch data");

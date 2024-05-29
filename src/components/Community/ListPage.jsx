@@ -7,7 +7,7 @@ function CommunityList() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/v1/posts")
+    fetch("https://makterbackend.fly.dev/api/v1/posts")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -25,7 +25,7 @@ function CommunityList() {
 
   const handleDelete = (postId, event) => {
     event.stopPropagation(); // 이벤트 전파 중단
-    fetch(`http://localhost:3000/api/v1/post/${postId}`, {
+    fetch(`https://makterbackend.fly.dev/api/v1/post/${postId}`, {
       method: "DELETE",
     })
       .then((response) => {

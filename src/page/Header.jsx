@@ -10,10 +10,13 @@ const Header = ({ setAuth }) => {
   useEffect(() => {
     const getName = async () => {
       try {
-        const response = await fetch("http://localhost:3000/dashboard", {
-          method: "GET",
-          headers: { token: localStorage.token },
-        });
+        const response = await fetch(
+          "https://makterbackend.fly.dev/dashboard",
+          {
+            method: "GET",
+            headers: { token: localStorage.token },
+          }
+        );
 
         const parseRes = await response.json();
         setName(parseRes.username);
@@ -30,7 +33,7 @@ const Header = ({ setAuth }) => {
   const logout = async (e) => {
     e.preventDefault();
     try {
-      await fetch("http://localhost:3000/api/v1/logout", {
+      await fetch("https://makterbackend.fly.dev/api/v1/logout", {
         method: "GET",
         headers: { token: localStorage.token },
       });

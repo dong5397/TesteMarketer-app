@@ -20,7 +20,7 @@ const KakaoMap = ({ setMapMoveFunction }) => {
 
   useEffect(() => {
     if (kakao) {
-      fetch("http://localhost:3000/api/v1/restaurants")
+      fetch("https://makterbackend.fly.dev/api/v1/restaurants")
         .then((response) => response.json())
         .then((data) => {
           if (data && Array.isArray(data.data)) {

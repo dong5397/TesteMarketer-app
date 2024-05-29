@@ -37,7 +37,9 @@ function ReviewListPage() {
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
     // 서버에 해당 카테고리의 데이터를 요청
-    fetch(`http://localhost:3000/api/v1/restaurants/category/${category}`)
+    fetch(
+      `https://makterbackend.fly.dev/api/v1/restaurants/category/${category}`
+    )
       .then((response) => {
         if (response.ok) {
           return response.json(); // 응답이 성공적이면 JSON 형태로 변환

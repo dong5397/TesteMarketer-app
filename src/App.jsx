@@ -20,7 +20,7 @@ function App() {
         <Route path="/" element={<MainHN />} />
         <Route path="/food" element={<FoodHN />} />
         <Route path="/service" element={<ServiceHN />} />
-        <Route path="/review/" element={<FullReviewHN />} />
+        <Route path="/review" element={<FullReviewHN />} />
         <Route path="/review/:id" element={<ReviewHN />} />
         <Route path="/MainListPage" element={<CommunityListHN />} />
         <Route path="/MainWritePage" element={<CommunityWriteHN />} />

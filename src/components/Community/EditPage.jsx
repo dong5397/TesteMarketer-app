@@ -16,7 +16,7 @@ function EditPage() {
   };
   useEffect(() => {
     if (postId) {
-      fetch(`http://localhost:3000/api/v1/post/${postId}`)
+      fetch(`https://makterbackend.fly.dev/api/v1/post/${postId}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error("게시물 데이터를 불러오는데 실패했습니다.");
@@ -52,7 +52,7 @@ function EditPage() {
       console.log("게시물 수정 요청 중...");
 
       const response = await fetch(
-        `http://localhost:3000/api/v1/post/${postId}`,
+        `https://makterbackend.fly.dev/api/v1/post/${postId}`,
         {
           method: "PUT",
           headers: {

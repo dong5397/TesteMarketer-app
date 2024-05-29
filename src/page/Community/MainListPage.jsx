@@ -21,7 +21,7 @@ function MainListpage() {
     }
     try {
       const response = await fetch(
-        `http://localhost:3000/api/v1/posts?title=${encodeURIComponent(
+        `https://makterbackend.fly.dev/api/v1/posts?title=${encodeURIComponent(
           searchQuery
         )}`
       );

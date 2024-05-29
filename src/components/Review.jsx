@@ -13,18 +13,21 @@ function Review({ onSubmit, restaurant_id }) {
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/api/v1/reviews`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          restaurant_id,
-          review_text: reviewText,
-          review_date: new Date().toISOString().slice(0, 10), // 현재 날짜를 YYYY-MM-DD 형식으로 전송
-          user_id: 1, // 실제 애플리케이션에서는 사용자 인증을 통해 얻은 사용자 ID를 사용해야 합니다.
-        }),
-      });
+      const response = await fetch(
+        `https://makterbackend.fly.dev/api/v1/reviews`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            restaurant_id,
+            review_text: reviewText,
+            review_date: new Date().toISOString().slice(0, 10), // 현재 날짜를 YYYY-MM-DD 형식으로 전송
+            user_id: 1, // 실제 애플리케이션에서는 사용자 인증을 통해 얻은 사용자 ID를 사용해야 합니다.
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(

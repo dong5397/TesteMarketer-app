@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for maketerfront on 2024-05-23T09:33:16+09:00
+# fly.toml app configuration file generated for maketerfront on 2024-05-28T16:18:02+09:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -17,6 +17,4 @@ primary_region = 'nrt'
   processes = ['app']
 
 [[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
-  cpus = 1
+  size = 'shared-cpu-1x'

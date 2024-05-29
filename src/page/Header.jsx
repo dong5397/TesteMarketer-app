@@ -56,9 +56,7 @@ const Header = ({ setAuth }) => {
         <NavLink to="/MainListPage">커뮤니티</NavLink>
         <NavLink to="/service">맛 설정 모드</NavLink>
       </NavLinks>
-      <UserInfo>
-        <LogoutButton onClick={logout}>Logout</LogoutButton>
-      </UserInfo>
+      <UserInfo></UserInfo>
     </HeaderContainer>
   );
 };

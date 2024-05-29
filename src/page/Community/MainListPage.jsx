@@ -63,8 +63,8 @@ function MainListpage() {
                   </SearchContainer>
                   <ScrollableList>
                     <ListSerchPage posts={searchResults} />
-                    <ListPage />
                   </ScrollableList>
+                  <ListPage />
                 </Container>
               </DeviceContent>
             </DivContainer>
@@ -148,7 +148,7 @@ const SearchInput = styled.input`
 `;
 
 const SearchButton = styled.button`
-  background-color: #357ab7;
+  background-color: #ff6b6b;
   color: white;
   padding: 10px 20px;
   font-size: 1rem;
@@ -157,7 +157,7 @@ const SearchButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background-color: #285a8c;
+    background-color: #f32727;
   }
 `;
 

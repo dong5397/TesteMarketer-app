@@ -95,9 +95,9 @@ const PostList = styled.div`
   flex-direction: column;
   width: 100%;
   max-width: 600px;
-  max-height: 500px;
-  overflow-y: auto;
+  max-height: 300px;
   gap: 15px;
+  overflow-y: auto;
 `;
 
 const PostContainer = styled.div`

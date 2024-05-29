@@ -1,7 +1,7 @@
 @font-face {
   font-family: "GowunDodum-Regular";
   font-weight: normal;
-  src: url("./src/fonts/온글잎\ 밑미.ttf") format("truetype");
+  src: url("/src/fonts/GowunDodum-Regular.ttf") format("truetype");
 }
 
 body {

@@ -98,6 +98,24 @@ const PostList = styled.div`
   max-height: 500px;
   overflow-y: auto;
   gap: 15px;
+
+  /* 스크롤바 스타일링 */
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 `;
 
 const PostContainer = styled.div`

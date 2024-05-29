@@ -170,9 +170,7 @@ const ReviewCard = ({ restaurant }) => {
         <CardHashTag showInfo={showCardInfo}>
           {showCardInfo ? "" : `#${restaurant.menus.join(" #")}`}
         </CardHashTag>
-        <CardImg
-          backgroundImage={showCardInfo ? { click } : restaurant.image}
-        />
+        <CardImg backgroundImage={showCardInfo ? click : restaurant.image} />
       </CardContent>
       <CardInfoBox showInfo={showCardInfo}>
         <ReviewCount>리뷰 {cardInfo.reviewCount}개</ReviewCount>

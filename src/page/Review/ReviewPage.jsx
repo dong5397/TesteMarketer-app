@@ -16,45 +16,41 @@ import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { DeviceFrameset } from "react-device-frameset";
 import "react-device-frameset/styles/marvel-devices.min.css";
 import { useLocation } from "react-router-dom";
+import { faUtensils } from "@fortawesome/free-solid-svg-icons";
+import { faBurger } from "@fortawesome/free-solid-svg-icons";
 
 function ReviewPage() {
   const location = useLocation();
   const restranutInfo = { ...location.state };
   const { id } = useParams();
 
-  const [showReviewList, setShowReviewList] = useState(true);
-  const [showWriteReview, setShowWriteReview] = useState(false);
   const [reviews, setReviews] = useState([]);
+  const [isActive, setIsActive] = useState(true);
+
+  const handleToggle = () => {
+    setIsActive(!isActive);
+  };
+
+  const fetchReviews = async (restaurantId) => {
+    try {
+      const response = await fetch(
+        `https://makterback.fly.dev/api/v1/reviews/${restaurantId}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch reviews");
+      }
+
+      const data = await response.json();
+      console.log(data.reviews);
+      setReviews(data.reviews);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchReviews = async (restaurantId) => {
-      try {
-        const response = await fetch(
-          `https://makterbackend.fly.dev/api/v1/reviews/${restaurantId}`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch reviews");
-        }
-
-        const data = await response.json();
-        console.log(data.reviews);
-        setReviews(data.reviews);
-      } catch (error) {
-        console.error("Error fetching reviews:", error);
-      }
-    };
     fetchReviews(restranutInfo.id); // restranutInfo.id를 사용하여 요청 보내기
   }, [restranutInfo.id]); // restranutInfo.id가 변경될 때마다 실행
-
-  const handleReviewListClick = () => {
-    setShowReviewList(true);
-    setShowWriteReview(false);
-  };
-
-  const handleWriteReviewClick = () => {
-    setShowReviewList(false);
-    setShowWriteReview(true);
-  };
 
   const lastId = useRef(4);
 
@@ -69,6 +65,47 @@ function ReviewPage() {
 
     setReviews(updateReviews);
     lastId.current++;
+
+    // 서버로 데이터 전송
+    fetch("https://makterback.fly.dev/api/v1/reviews", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        restaurant_id: id, // 레스토랑 ID
+        contents: content,
+        username: username,
+        rating: rating,
+        hashtags: hashtags,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        fetchReviews(id); // 리뷰 작성 후에 목록 갱신
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+  const OnDelete = async (reviewId) => {
+    try {
+      const response = await fetch(
+        `https://makterback.fly.dev/api/v1/reviews/${reviewId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to delete review");
+      }
+      // 삭제 성공 시 화면에서도 즉시 업데이트
+      fetchReviews(id); // 리뷰 작성 후에 목록 갱신
+    } catch (error) {
+      console.error("Error deleting review:", error);
+    }
   };
 
   return (
@@ -80,21 +117,33 @@ function ReviewPage() {
       <Container>
         <ContentsContainer>
           <DeviceFrameset
-            device="iPad Mini"
+            device="iPhone X"
             color="black"
             width="100%"
-            height="75%"
+            height="100%"
           >
             <ImgSection backgroundImage={restranutInfo.image}>
               <CardSection>
                 <CardTitle>{restranutInfo.name}</CardTitle>
                 <RatingStars rating={restranutInfo.rating} />
+
+                <AdditionalInfo>
+                  <ReviewPanel>
+                    <ToggleContainer onClick={handleToggle}>
+                      <ReviewButton active={isActive}>
+                        리뷰 {restranutInfo.rating}{" "}
+                      </ReviewButton>
+                      <ReviewButton active={!isActive}>리뷰 작성</ReviewButton>
+                      <ToggleSlider active={isActive} />
+                    </ToggleContainer>
+                  </ReviewPanel>
+                </AdditionalInfo>
               </CardSection>
             </ImgSection>
             <AdditionalInfoBox>
               <AdditionalInfo>
-                <InfoIcon icon={faStar} size="2x" />
-                <InfoText>평균 평점: {restranutInfo.rating}</InfoText>
+                <InfoIcon icon={faBurger} size="2x" />
+                <InfoText>{restranutInfo.category}</InfoText>
               </AdditionalInfo>
               <AdditionalInfo>
                 <InfoIcon icon={faClock} size="2x" />
@@ -112,23 +161,11 @@ function ReviewPage() {
           </DeviceFrameset>
         </ContentsContainer>
         <ReviewContainer>
-          <ReviewPanel>
-            <ReviewButton
-              onClick={handleReviewListClick}
-              active={showReviewList}
-            >
-              리뷰 목록
-            </ReviewButton>
-            <ReviewButton
-              onClick={handleWriteReviewClick}
-              active={showWriteReview}
-            >
-              리뷰 작성
-            </ReviewButton>
-          </ReviewPanel>
-
-          {showReviewList && <ReviewList reviews={reviews} />}
-          {showWriteReview && <WriteReview onSubmit={onSubmit} />}
+          {isActive ? (
+            <WriteReview onSubmit={onSubmit} />
+          ) : (
+            <ReviewList reviews={reviews} onDelete={OnDelete} />
+          )}
         </ReviewContainer>
 
         <Carousel autoPlay></Carousel>
@@ -164,10 +201,14 @@ const HeaderContainer = styled.header`
 `;
 
 const ReviewContainer = styled.main`
-  max-width: 65%;
+  max-width: 85%;
+  min-height: 750px;
   margin: auto;
   margin-right: 40px;
-  height: 1000px;
+
+  max-height: 750px;
+
+  overflow: auto;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -175,22 +216,46 @@ const ReviewContainer = styled.main`
   background-color: white;
 `;
 
-const ReviewPanel = styled.header`
-  max-width: 100%;
-  height: 10%;
+const ReviewPanel = styled.div`
+  height: 50px;
+  width: 200px;
+  border-radius: 50px;
+  background-color: #cde8e5;
+  display: flex;
+`;
+
+const ToggleContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 50px;
   background-color: #cde8e5;
 `;
 
 const ReviewButton = styled.button`
-  width: 50%;
-  height: 100%;
-  font-size: 28px;
+  flex: 1;
+  font-size: 14px;
   font-weight: 900;
   border: none;
   border-radius: 50px;
-  background-color: ${({ active }) => (active ? "white" : "#cde8e5")};
+  background-color: transparent;
   color: ${({ active }) => (active ? "#dd5746" : "black")};
+  transition: color 0.5s ease-in-out;
+  z-index: 1;
+`;
+
+const ToggleSlider = styled.div`
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  background-color: #f4ce14;
+  border-radius: 50px;
+  transition: transform 0.4s cubic-bezier(0.24, 0, 0.5, 1);
+  transform: ${({ active }) =>
+    active ? "translateX(50%)" : "translateX(-50%)"};
 `;
 
 const ContentsContainer = styled.div`
@@ -268,19 +333,4 @@ const InfoIcon = styled(FontAwesomeIcon)`
 const InfoText = styled.span`
   font-size: 22px;
   font-weight: 600;
-`;
-
-const Button = styled.button`
-  background-color: #f1c40f;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  font-size: 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: #e67e22;
-  }
 `;

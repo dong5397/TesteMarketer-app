@@ -63,8 +63,8 @@ function MainListpage() {
                   </SearchContainer>
                   <ScrollableList>
                     <ListSerchPage posts={searchResults} />
+                    <ListPage />
                   </ScrollableList>
-                  <ListPage />
                 </Container>
               </DeviceContent>
             </DivContainer>
@@ -160,10 +160,28 @@ const SearchButton = styled.button`
     background-color: #285a8c;
   }
 `;
+
 const ScrollableList = styled.div`
   flex: 1;
   overflow-y: auto; /* 스크롤 가능하게 설정 */
   padding: 20px;
-
   margin-top: 20px;
+
+  /* 스크롤바 스타일링 */
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 `;

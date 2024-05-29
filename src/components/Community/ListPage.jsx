@@ -88,23 +88,6 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  /* 스크롤바 스타일링 */
-  &::-webkit-scrollbar {
-    width: 10px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
 `;
 
 const PostList = styled.div`

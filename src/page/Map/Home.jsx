@@ -24,7 +24,7 @@ const Home = () => {
   };
 
   const handleMapMove = (latitude, longitude) => {
-    console.log("handleMapMove called with:", latitude, longitude);
+    console.log("Home: handleMapMove called with:", latitude, longitude);
     if (mapMoveFunction) {
       mapMoveFunction(latitude, longitude);
     } else {
@@ -34,7 +34,7 @@ const Home = () => {
 
   useEffect(() => {
     if (mapMoveFunction) {
-      console.log("MapMoveFunction is set");
+      console.log("Home: MapMoveFunction is set");
     }
   }, [mapMoveFunction]);
 

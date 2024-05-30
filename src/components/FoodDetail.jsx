@@ -43,6 +43,10 @@ function FoodDetail({ selectedRestaurant, onMapMove }) {
     if (selectedRestaurant && onMapMove) {
       const latitude = parseFloat(selectedRestaurant.latitude);
       const longitude = parseFloat(selectedRestaurant.longitude);
+      if (isNaN(latitude) || isNaN(longitude)) {
+        console.error("Invalid coordinates:", latitude, longitude);
+        return;
+      }
       console.log(
         "FoodDetail: Moving map to coordinates:",
         latitude,

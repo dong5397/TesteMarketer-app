@@ -76,11 +76,11 @@ const KakaoMap = ({ setMapMoveFunction }) => {
         if (setMapMoveFunction) {
           setMapMoveFunction((latitude, longitude) => {
             const position = new kakao.maps.LatLng(latitude, longitude);
-            console.log("Setting map center to:", position);
+            console.log("KakaoMap: Setting map center to:", position);
             if (mapInstance.current) {
               mapInstance.current.setCenter(position);
               mapInstance.current.setLevel(4);
-              console.log("Map center set to:", position);
+              console.log("KakaoMap: Map center set to:", position);
             } else {
               console.error("Map instance is not defined");
             }

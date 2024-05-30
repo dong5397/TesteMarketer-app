@@ -25,6 +25,10 @@ const Home = () => {
 
   const handleMapMove = (latitude, longitude) => {
     console.log("Home: handleMapMove called with:", latitude, longitude);
+    if (isNaN(latitude) || isNaN(longitude)) {
+      console.error("Home: Invalid coordinates:", latitude, longitude);
+      return;
+    }
     if (mapMoveFunction) {
       mapMoveFunction(latitude, longitude);
     } else {

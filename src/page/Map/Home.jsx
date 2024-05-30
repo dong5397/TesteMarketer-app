@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import FoodForm from "./FoodForm";
-
 import SearchBar from "../../components/SearchBar";
 
 const Home = ({ handleMapMove }) => {

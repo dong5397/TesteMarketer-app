@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
-const KakaoMap = ({ mapMoveFunction }) => {
+const KakaoMap = ({ mapMoveFunction, handleRestaurantClick }) => {
   const [kakaoLoaded, setKakaoLoaded] = useState(false);
   const [restaurants, setRestaurants] = useState([]);
   const mapContainer = useRef(null);
@@ -73,6 +73,7 @@ const KakaoMap = ({ mapMoveFunction }) => {
           mapInstance.current.setCenter(position);
           mapInstance.current.setLevel(6);
           console.log("Map moved to (marker click):", position);
+          handleRestaurantClick(restaurant); // 마커 클릭 시 식당 정보 설정
         });
 
         marker.setMap(mapInstance.current);

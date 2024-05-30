@@ -3,7 +3,7 @@ import styled from "styled-components";
 import FoodForm from "./FoodForm";
 import FoodDetail from "../../components/FoodDetail";
 import SearchBar from "../../components/SearchBar";
-import KakaoMap from "./KaKaoMap";
+import KakaoMap from "../../page/Map/KaKaoMap";
 
 const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,11 +24,7 @@ const Home = () => {
   };
 
   const handleMapMove = (latitude, longitude) => {
-    console.log("Home: handleMapMove called with:", latitude, longitude);
-    if (isNaN(latitude) || isNaN(longitude)) {
-      console.error("Home: Invalid coordinates:", latitude, longitude);
-      return;
-    }
+    console.log("handleMapMove called with:", latitude, longitude);
     if (mapMoveFunction) {
       mapMoveFunction(latitude, longitude);
     } else {
@@ -38,7 +34,7 @@ const Home = () => {
 
   useEffect(() => {
     if (mapMoveFunction) {
-      console.log("Home: MapMoveFunction is set");
+      console.log("MapMoveFunction is set");
     }
   }, [mapMoveFunction]);
 

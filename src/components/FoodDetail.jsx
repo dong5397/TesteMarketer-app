@@ -28,15 +28,13 @@ function FoodDetail({ selectedRestaurant, onMapMove }) {
 
     navigate(`/review/${selectedRestaurant.restaurants_id}`, {
       state: {
-        id: selectedRestaurant.restaurants_id,
-        name: selectedRestaurant.restaurants_name,
-        address: selectedRestaurant.address,
-        phone: selectedRestaurant.phone,
-        opening_hours: selectedRestaurant.opening_hours,
-        rating: selectedRestaurant.rating,
-        image: selectedRestaurant.image,
-        latitude: selectedRestaurant.latitude,
-        longitude: selectedRestaurant.longitude,
+        id: `${selectedRestaurant.restaurants_id}`,
+        name: `${selectedRestaurant.restaurants_name}`,
+        address: `${selectedRestaurant.address}`,
+        phone: `${selectedRestaurant.phone}`,
+        opening_hours: `${selectedRestaurant.opening_hours}`,
+        rating: `${selectedRestaurant.rating}`,
+        image: `${selectedRestaurant.image}`,
       },
     });
   };
@@ -45,15 +43,7 @@ function FoodDetail({ selectedRestaurant, onMapMove }) {
     if (selectedRestaurant && onMapMove) {
       const latitude = parseFloat(selectedRestaurant.latitude);
       const longitude = parseFloat(selectedRestaurant.longitude);
-      if (isNaN(latitude) || isNaN(longitude)) {
-        console.error("Invalid coordinates:", latitude, longitude);
-        return;
-      }
-      console.log(
-        "FoodDetail: Moving map to coordinates:",
-        latitude,
-        longitude
-      );
+      console.log("Moving map to coordinates:", latitude, longitude);
       onMapMove(latitude, longitude);
     } else {
       console.error(

@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 const KakaoMap = ({ setMapMoveFunction }) => {
   const [kakao, setKakao] = useState(null);
-  const [restaurants, setRestaurants] = useState([]);
   const mapContainer = useRef(null);
   const mapInstance = useRef(null);
 
@@ -19,26 +18,7 @@ const KakaoMap = ({ setMapMoveFunction }) => {
   }, []);
 
   useEffect(() => {
-    if (kakao) {
-      fetch("https://makterbackend.fly.dev/api/v1/restaurants")
-        .then((response) => response.json())
-        .then((data) => {
-          if (data && Array.isArray(data.data)) {
-            setRestaurants(data.data);
-          } else if (data && !Array.isArray(data)) {
-            setRestaurants([data]);
-          } else {
-            console.error("Unexpected data format:", data);
-          }
-        })
-        .catch((error) => {
-          console.error("API 요청 중 오류 발생:", error);
-        });
-    }
-  }, [kakao]);
-
-  useEffect(() => {
-    if (kakao && mapContainer.current && restaurants.length > 0) {
+    if (kakao && mapContainer.current) {
       kakao.maps.load(() => {
         const mapOption = {
           center: new kakao.maps.LatLng(36.350411, 127.384548),
@@ -51,30 +31,16 @@ const KakaoMap = ({ setMapMoveFunction }) => {
         );
         console.log("Map instance created:", mapInstance.current);
 
-        restaurants.forEach((restaurant) => {
-          const markerPosition = new kakao.maps.LatLng(
-            parseFloat(restaurant.latitude),
-            parseFloat(restaurant.longitude)
-          );
-          const marker = new kakao.maps.Marker({
-            position: markerPosition,
-          });
-
-          kakao.maps.event.addListener(marker, "click", function () {
-            const position = new kakao.maps.LatLng(
-              parseFloat(restaurant.latitude),
-              parseFloat(restaurant.longitude)
-            );
-            mapInstance.current.setCenter(position);
-            mapInstance.current.setLevel(4);
-            console.log("Map moved to (marker click):", position);
-          });
-
-          marker.setMap(mapInstance.current);
-        });
-
         if (setMapMoveFunction) {
           setMapMoveFunction((latitude, longitude) => {
+            if (isNaN(latitude) || isNaN(longitude)) {
+              console.error(
+                "KakaoMap: Invalid coordinates received:",
+                latitude,
+                longitude
+              );
+              return;
+            }
             const position = new kakao.maps.LatLng(latitude, longitude);
             console.log("KakaoMap: Setting map center to:", position);
             if (mapInstance.current) {
@@ -88,7 +54,7 @@ const KakaoMap = ({ setMapMoveFunction }) => {
         }
       });
     }
-  }, [kakao, restaurants, setMapMoveFunction]);
+  }, [kakao, setMapMoveFunction]);
 
   return (
     <Container>

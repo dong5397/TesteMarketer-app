@@ -89,7 +89,7 @@ const FoodBox = ({ handleMapMove }) => {
             }
           >
             <h2>식당 이름: {restaurant.restaurants_name}</h2>
-            <p>주소: {restaurant.address}</p>
+            <p>주소 : {restaurant.address}</p>
             <p>평점: {restaurant.rating}</p>
             <Image src={restaurant.image} alt={restaurant.restaurants_name} />
           </Box>

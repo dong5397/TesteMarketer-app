@@ -3,7 +3,7 @@ import styled from "styled-components";
 import FoodForm from "./FoodForm";
 import FoodDetail from "../../components/FoodDetail";
 import SearchBar from "../../components/SearchBar";
-import KakaoMap from "../../page/Map/KaKaoMap";
+import KakaoMap from "../../components/KakaoMap";
 
 const Home = () => {
   const [isOpen, setIsOpen] = useState(false);

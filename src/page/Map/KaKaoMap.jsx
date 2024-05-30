@@ -6,6 +6,7 @@ const KakaoMap = ({ setMapMoveFunction }) => {
   const mapContainer = useRef(null);
   const mapInstance = useRef(null);
 
+  // 카카오 지도 스크립트 로드
   useEffect(() => {
     const script = document.createElement("script");
     script.onload = () => {
@@ -13,16 +14,35 @@ const KakaoMap = ({ setMapMoveFunction }) => {
       console.log("Kakao script loaded:", window.kakao);
     };
     script.src =
-      "https://dapi.kakao.com/v2/maps/sdk.js?appkey=4d90cac7ec413eb4aec50eac7135504d&autoload=false";
+      "https://dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_APP_KEY&autoload=false";
     document.head.appendChild(script);
   }, []);
 
   useEffect(() => {
-    if (kakao && mapContainer.current) {
+    if (kakao) {
+      fetch("https://makterbackend.fly.dev/api/v1/restaurants")
+        .then((response) => response.json())
+        .then((data) => {
+          if (data && Array.isArray(data.data)) {
+            setRestaurants(data.data);
+          } else if (data && !Array.isArray(data)) {
+            setRestaurants([data]);
+          } else {
+            console.error("Unexpected data format:", data);
+          }
+        })
+        .catch((error) => {
+          console.error("API 요청 중 오류 발생:", error);
+        });
+    }
+  }, [kakao]);
+  // 카카오 지도 초기화 및 레스토랑 데이터 로드
+  useEffect(() => {
+    if (kakao) {
       kakao.maps.load(() => {
         const mapOption = {
-          center: new kakao.maps.LatLng(36.350411, 127.384548),
-          level: 8,
+          center: new kakao.maps.LatLng(36.350411, 127.384548), // 초기 지도 중심 좌표
+          level: 8, // 초기 지도 줌 레벨
         };
 
         mapInstance.current = new kakao.maps.Map(
@@ -32,6 +52,7 @@ const KakaoMap = ({ setMapMoveFunction }) => {
         console.log("Map instance created:", mapInstance.current);
 
         if (setMapMoveFunction) {
+          // setMapMoveFunction을 통해 좌표 이동 함수 설정
           setMapMoveFunction((latitude, longitude) => {
             if (isNaN(latitude) || isNaN(longitude)) {
               console.error(

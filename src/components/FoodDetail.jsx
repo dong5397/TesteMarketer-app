@@ -28,13 +28,13 @@ function FoodDetail({ selectedRestaurant, onMapMove }) {
 
     navigate(`/review/${selectedRestaurant.restaurants_id}`, {
       state: {
-        id: `${selectedRestaurant.restaurants_id}`,
-        name: `${selectedRestaurant.restaurants_name}`,
-        address: `${selectedRestaurant.address}`,
-        phone: `${selectedRestaurant.phone}`,
-        opening_hours: `${selectedRestaurant.opening_hours}`,
-        rating: `${selectedRestaurant.rating}`,
-        image: `${selectedRestaurant.image}`,
+        id: selectedRestaurant.restaurants_id,
+        name: selectedRestaurant.restaurants_name,
+        address: selectedRestaurant.address,
+        phone: selectedRestaurant.phone,
+        opening_hours: selectedRestaurant.opening_hours,
+        rating: selectedRestaurant.rating,
+        image: selectedRestaurant.image,
         latitude: selectedRestaurant.latitude, // 문자열이 아닌 숫자로 전달
         longitude: selectedRestaurant.longitude,
       },

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
-function FoodDetail({ selectedRestaurant, onMapMove }) {
+function FoodDetail({ selectedRestaurant, handleMapMove }) {
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
   const [reviews, setReviews] = useState([]);
 
@@ -39,21 +39,15 @@ function FoodDetail({ selectedRestaurant, onMapMove }) {
     });
   };
 
-  const handleMapMove = () => {
-    if (selectedRestaurant && onMapMove) {
-      const latitude = parseFloat(selectedRestaurant.latitude);
-      const longitude = parseFloat(selectedRestaurant.longitude);
-      console.log("Moving map to coordinates:", latitude, longitude);
-      onMapMove(latitude, longitude);
+  const moveToMap = () => {
+    if (handleMapMove && selectedRestaurant) {
+      console.log(selectedRestaurant.latitude, selectedRestaurant.longitude);
+      handleMapMove(selectedRestaurant.latitude, selectedRestaurant.longitude);
     } else {
       console.error(
-        "Selected restaurant 또는 onMapMove 함수가 정의되지 않았습니다."
+        "handleMapMove 함수가 정의되지 않았거나 selectedRestaurant가 없습니다."
       );
     }
-  };
-
-  const handleReviewDelete = (reviewId) => {
-    // Add review deletion logic here
   };
 
   return (
@@ -67,7 +61,7 @@ function FoodDetail({ selectedRestaurant, onMapMove }) {
             <Button onClick={handleDetailPost}>리뷰 작성하기</Button>
           </p>
           <p>
-            <Button onClick={handleMapMove}>지도로 이동</Button>
+            <Button onClick={moveToMap}>지도로 이동</Button>
           </p>
         </div>
       )}

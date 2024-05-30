@@ -3,7 +3,7 @@ import styled from "styled-components";
 import FoodDetail from "./FoodDetail";
 import { useNavigate } from "react-router-dom";
 
-const FoodBox = () => {
+const FoodBox = ({ handleMapMove }) => {
   const [restaurants, setRestaurants] = useState([]);
   const [selectedRestaurantId, setSelectedRestaurantId] = useState(null);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
@@ -11,7 +11,6 @@ const FoodBox = () => {
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
-  const [mapPosition, setMapPosition] = useState({});
 
   const modalRef = useRef();
   const navigate = useNavigate();
@@ -76,10 +75,6 @@ const FoodBox = () => {
     }
   };
 
-  const handleMapMove = (newPosition) => {
-    setMapPosition(newPosition);
-  };
-
   return (
     <Container onClick={handleContainerClick}>
       {loading && <p>Loading...</p>}
@@ -107,7 +102,7 @@ const FoodBox = () => {
           <CloseButton onClick={handleCloseDetails}>X</CloseButton>
           <FoodDetail
             selectedRestaurant={selectedRestaurant}
-            onMapMove={handleMapMove}
+            handleMapMove={handleMapMove}
           />
         </RestaurantDetails>
       )}

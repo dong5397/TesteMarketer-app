@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import FoodBox from "../../components/FoodBox";
 
-const FoodForm = () => {
+const FoodForm = ({ handleMapMove }) => {
   return (
     <FormContainer>
-      <FoodBox />
+      <FoodBox handleMapMove={handleMapMove} />
     </FormContainer>
   );
 };

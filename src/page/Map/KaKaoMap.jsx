@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
-const KakaoMap = ({ setMapMoveFunction }) => {
+const KakaoMap = ({ mapMoveFunction }) => {
   const [kakaoLoaded, setKakaoLoaded] = useState(false);
   const [restaurants, setRestaurants] = useState([]);
   const mapContainer = useRef(null);
@@ -31,8 +31,8 @@ const KakaoMap = ({ setMapMoveFunction }) => {
         .then((data) => {
           if (data && Array.isArray(data.data)) {
             setRestaurants(data.data);
-          } else if (data && !Array.isArray(data)) {
-            setRestaurants([data]);
+          } else if (data && !Array.isArray(data.data)) {
+            setRestaurants([data.data]);
           } else {
             console.error("Unexpected data format:", data);
           }
@@ -71,28 +71,24 @@ const KakaoMap = ({ setMapMoveFunction }) => {
             parseFloat(restaurant.longitude)
           );
           mapInstance.current.setCenter(position);
-          mapInstance.current.setLevel(4);
+          mapInstance.current.setLevel(6);
           console.log("Map moved to (marker click):", position);
         });
 
         marker.setMap(mapInstance.current);
       });
-
-      if (setMapMoveFunction) {
-        setMapMoveFunction((latitude, longitude) => {
-          const position = new window.kakao.maps.LatLng(latitude, longitude);
-          console.log("Setting map center to:", position);
-          if (mapInstance.current) {
-            mapInstance.current.setCenter(position);
-            mapInstance.current.setLevel(4);
-            console.log("Map center set to:", position);
-          } else {
-            console.error("Map instance is not defined");
-          }
-        });
-      }
     }
-  }, [kakaoLoaded, restaurants, setMapMoveFunction]);
+  }, [kakaoLoaded, restaurants]);
+
+  useEffect(() => {
+    if (mapMoveFunction && mapInstance.current) {
+      const { latitude, longitude } = mapMoveFunction;
+      const position = new window.kakao.maps.LatLng(latitude, longitude);
+      mapInstance.current.setCenter(position);
+      mapInstance.current.setLevel(6);
+      console.log("Map center set to:", position);
+    }
+  }, [mapMoveFunction]);
 
   return (
     <Container>

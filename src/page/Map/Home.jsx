@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import FoodForm from "./FoodForm";
-import FoodDetail from "../../components/FoodDetail";
-import SearchBar from "../../components/SearchBar";
-import KakaoMap from "../../page/Map/KaKaoMap";
 
-const Home = () => {
+import SearchBar from "../../components/SearchBar";
+
+const Home = ({ handleMapMove }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [mapMoveFunction, setMapMoveFunction] = useState(null);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
   const togglePanel = () => {
@@ -23,21 +21,6 @@ const Home = () => {
     }
   };
 
-  const handleMapMove = (latitude, longitude) => {
-    console.log("handleMapMove called with:", latitude, longitude);
-    if (mapMoveFunction) {
-      mapMoveFunction(latitude, longitude);
-    } else {
-      console.error("MapMoveFunction이 정의되지 않았습니다.");
-    }
-  };
-
-  useEffect(() => {
-    if (mapMoveFunction) {
-      console.log("MapMoveFunction is set");
-    }
-  }, [mapMoveFunction]);
-
   return (
     <Container isOpen={isOpen} isSearchOpen={isSearchOpen}>
       <ToggleButton onClick={togglePanel}>{isOpen ? "<" : ">"}</ToggleButton>
@@ -47,20 +30,17 @@ const Home = () => {
         </SearchButton>
       )}
       <Content>
-        <FoodForm setSelectedRestaurant={setSelectedRestaurant} />
+        <FoodForm
+          setSelectedRestaurant={setSelectedRestaurant}
+          handleMapMove={handleMapMove}
+        />
       </Content>
       {isSearchOpen && (
         <SearchContainer>
           <SearchBar />
         </SearchContainer>
       )}
-      <KakaoMap setMapMoveFunction={setMapMoveFunction} />
-      {selectedRestaurant && (
-        <FoodDetail
-          selectedRestaurant={selectedRestaurant}
-          onMapMove={handleMapMove}
-        />
-      )}
+    
     </Container>
   );
 };

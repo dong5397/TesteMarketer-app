@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Main from "./page/Main";
 import KakaoMap from "../src/page/Map/KaKaoMap"; // 경로 수정 필요
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -14,11 +14,33 @@ import EditPage from "./components/Community/EditPage";
 import DetailPost from "./components/Community/DetailPost";
 
 function App() {
+  const [mapMoveFunction, setMapMoveFunction] = useState(null);
+
+  useEffect(() => {
+    if (mapMoveFunction) {
+      console.log("MapMoveFunction is set");
+    }
+  }, [mapMoveFunction]);
+
+  const handleMapMove = (latitude, longitude) => {
+    console.log("handleMapMove called with:", latitude, longitude);
+    setMapMoveFunction({ latitude, longitude });
+  };
+
+  console.log("handleMapMove called with:", mapMoveFunction);
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainHN />} />
-        <Route path="/food" element={<FoodHN />} />
+        <Route
+          path="/food"
+          element={
+            <FoodHN
+              handleMapMove={handleMapMove}
+              mapMoveFunction={mapMoveFunction}
+            />
+          }
+        />
         <Route path="/service" element={<ServiceHN />} />
         <Route path="/review" element={<FullReviewHN />} />
         <Route path="/review/:id" element={<ReviewHN />} />
@@ -53,11 +75,11 @@ const FullReviewHN = () => (
   </div>
 );
 
-const FoodHN = () => (
+const FoodHN = ({ handleMapMove, mapMoveFunction }) => (
   <div>
     <Header />
-    <Home />
-    <KakaoMap /> {/* KakaoMap 컴포넌트 추가 */}
+    <Home handleMapMove={handleMapMove} mapMoveFunction={mapMoveFunction} />
+    <KakaoMap mapMoveFunction={mapMoveFunction} />
   </div>
 );
 

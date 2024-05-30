@@ -35,7 +35,7 @@ function FoodDetail({ selectedRestaurant, onMapMove }) {
         opening_hours: selectedRestaurant.opening_hours,
         rating: selectedRestaurant.rating,
         image: selectedRestaurant.image,
-        latitude: selectedRestaurant.latitude, // 문자열이 아닌 숫자로 전달
+        latitude: selectedRestaurant.latitude,
         longitude: selectedRestaurant.longitude,
       },
     });

@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 const KakaoMap = ({ setMapMoveFunction }) => {
   const [kakao, setKakao] = useState(null);
+  const [restaurants, setRestaurants] = useState([]);
   const mapContainer = useRef(null);
   const mapInstance = useRef(null);
 
@@ -18,6 +19,7 @@ const KakaoMap = ({ setMapMoveFunction }) => {
     document.head.appendChild(script);
   }, []);
 
+  // 레스토랑 데이터 로드
   useEffect(() => {
     if (kakao) {
       fetch("https://makterbackend.fly.dev/api/v1/restaurants")
@@ -36,9 +38,10 @@ const KakaoMap = ({ setMapMoveFunction }) => {
         });
     }
   }, [kakao]);
-  // 카카오 지도 초기화 및 레스토랑 데이터 로드
+
+  // 카카오 지도 초기화 및 마커 추가
   useEffect(() => {
-    if (kakao) {
+    if (kakao && mapContainer.current && restaurants.length > 0) {
       kakao.maps.load(() => {
         const mapOption = {
           center: new kakao.maps.LatLng(36.350411, 127.384548), // 초기 지도 중심 좌표
@@ -50,6 +53,18 @@ const KakaoMap = ({ setMapMoveFunction }) => {
           mapOption
         );
         console.log("Map instance created:", mapInstance.current);
+
+        restaurants.forEach((restaurant) => {
+          const markerPosition = new kakao.maps.LatLng(
+            parseFloat(restaurant.latitude),
+            parseFloat(restaurant.longitude)
+          );
+          const marker = new kakao.maps.Marker({
+            position: markerPosition,
+          });
+
+          marker.setMap(mapInstance.current);
+        });
 
         if (setMapMoveFunction) {
           // setMapMoveFunction을 통해 좌표 이동 함수 설정
@@ -75,7 +90,7 @@ const KakaoMap = ({ setMapMoveFunction }) => {
         }
       });
     }
-  }, [kakao, setMapMoveFunction]);
+  }, [kakao, restaurants, setMapMoveFunction]);
 
   return (
     <Container>

@@ -15,7 +15,8 @@ import DetailPost from "./components/Community/DetailPost";
 import FoodIndex from "./components/FoodIndex"; // FoodIndex 임포트 추가
 import styled from "styled-components"; // styled-components 임포트 추가
 import ServiceFoods from "./components/ServiceFoods";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faX } from "@fortawesome/free-solid-svg-icons";
 function App() {
   const [mapMoveFunction, setMapMoveFunction] = useState(null);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
@@ -121,7 +122,9 @@ const FoodHN = ({
     {isModalOpen && selectedRestaurant && (
       <Modal>
         <FoodIndex restaurant={selectedRestaurant} />
-        <CloseButton onClick={handleCloseDetails}>X</CloseButton>
+        <CloseButton onClick={handleCloseDetails}>
+          <FontAwesomeIcon icon={faX} size="l" style={{ color: "#083f1b" }} />
+        </CloseButton>
       </Modal>
     )}
   </div>
@@ -182,17 +185,16 @@ const Modal = styled.div`
   left: 50%;
   transform: translate(-50%, 0);
   z-index: 1000;
-  background: white;
+
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 `;
 
 const CloseButton = styled.button`
   position: absolute;
   top: 10px;
   right: 10px;
-  padding: 5px;
+  padding: 20px;
   background: none;
   border: none;
   font-size: 20px;

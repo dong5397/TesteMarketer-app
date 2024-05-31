@@ -73,19 +73,21 @@ function FoodDetail({ selectedRestaurant, handleMapMove }) {
             zIndex: 1000,
           },
           content: {
-            width: "90%",
-            maxWidth: "600px",
+            width: "50%",
+
+            maxWidth: "400px",
+            maxHeight: "600px",
             margin: "0 auto",
             position: "relative",
             background: "none",
             border: "none",
+            padding: "20px",
+            borderRadius: "10px",
           },
         }}
       >
         <ModalContent>
           {selectedRestaurant && <FoodIndex restaurant={selectedRestaurant} />}
-
-          <CloseButton onClick={handleDetailModalClose}>닫기</CloseButton>
         </ModalContent>
       </Modal>
     </div>
@@ -94,7 +96,9 @@ function FoodDetail({ selectedRestaurant, handleMapMove }) {
 
 export default FoodDetail;
 
-const ModalContent = styled.div``;
+const ModalContent = styled.div`
+  width: 100%;
+`;
 
 const Button = styled.button`
   background-color: #d1d195;
@@ -110,10 +114,4 @@ const Button = styled.button`
   &:hover {
     background-color: #b6b654;
   }
-`;
-
-const CloseButton = styled(Button)`
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
 `;

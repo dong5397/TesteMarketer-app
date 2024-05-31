@@ -39,7 +39,6 @@ const Home = ({ handleMapMove }) => {
           <SearchBar />
         </SearchContainer>
       )}
-    
     </Container>
   );
 };

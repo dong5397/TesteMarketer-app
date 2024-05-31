@@ -1,4 +1,3 @@
-// FoodIndex.jsx
 import React from "react";
 import styled from "styled-components";
 
@@ -6,6 +5,9 @@ function FoodIndex({ restaurant }) {
   return (
     <Card>
       <Title>{restaurant.restaurants_name}</Title>
+      <ImageWrapper>
+        <Img src={restaurant.image} alt={restaurant.restaurants_name} />
+      </ImageWrapper>
       <Info>
         <Label>주소:</Label>
         <Text>{restaurant.address}</Text>
@@ -19,8 +21,8 @@ function FoodIndex({ restaurant }) {
         <Text>{restaurant.opening_hours}</Text>
       </Info>
       <Info>
-        <Label>맛:</Label>
-        <Text>{restaurant.taste_level}</Text>
+        <Label>카테고리:</Label>
+        <Text>{restaurant.category}</Text>
       </Info>
       <Info>
         <Label>별 점:</Label>
@@ -33,57 +35,64 @@ function FoodIndex({ restaurant }) {
 export default FoodIndex;
 
 const Card = styled.div`
-  padding: 25px;
-  border-radius: 20px;
-  background: #ffffff;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  &:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-  }
+  width: 250px; /* Set a smaller width */
+  height: 450px;
+  padding: 15px; /* Reduced padding */
+  border-radius: 10px; /* Adjusted border radius */
+  border: solid 2px; /* Reduced border width */
+  background: linear-gradient(135deg, #f0f0c3 0%, #e7e78b 100%);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Reduced shadow size */
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 `;
 
 const Title = styled.h2`
-  font-size: 30px;
-  color: #333;
-  margin-bottom: 20px;
+  font-size: 20px; /* Reduced font size */
+  color: black;
+  margin-bottom: 15px; /* Reduced margin */
   text-align: center;
   font-weight: 700;
-  letter-spacing: 1px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: 1.2px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   transition: color 0.3s ease;
-  &:hover {
-    color: #e67e22;
-  }
+`;
+
+const ImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px; /* Reduced margin */
+`;
+
+const Img = styled.img`
+  width: 100%;
+  height: auto;
+  max-width: 100px; /* Reduced max width */
+  aspect-ratio: 1 / 1; /* Maintain square aspect ratio */
+  border-radius: 10px; /* Adjusted border radius */
+  border: solid 2px; /* Reduced border width */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 `;
 
 const Info = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
-  padding: 10px 0;
-  border-bottom: 1px solid #f1f1f1;
+  margin-bottom: 10px; /* Reduced margin */
+  padding: 8px 0; /* Reduced padding */
+  border-bottom: 2px solid; /* Reduced border width */
   transition: background-color 0.3s ease;
-  &:hover {
-    background-color: #f9f9f9;
-  }
 `;
 
 const Label = styled.span`
-  font-size: 18px;
-  color: #555;
-  font-weight: 600;
+  font-size: 14px; /* Reduced font size */
+  font-weight: bold;
+  color: black;
 `;
 
 const Text = styled.span`
-  font-size: 18px;
-  color: #777;
+  font-size: 14px; /* Reduced font size */
+  font-weight: bold;
+  color: black;
   text-align: right;
   transition: color 0.3s ease, transform 0.3s ease;
-  &:hover {
-    color: #3498db;
-    transform: translateX(5px);
-  }
 `;

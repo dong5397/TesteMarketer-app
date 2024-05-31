@@ -12,16 +12,17 @@ import ReviewPage from "./page/Review/ReviewPage";
 import MainReviewPages from "./page/Review/MainReviewPages";
 import EditPage from "./components/Community/EditPage";
 import DetailPost from "./components/Community/DetailPost";
-import FoodBox from "../src/components/FoodBox"; 
 import FoodIndex from "./components/FoodIndex"; // FoodIndex 임포트 추가
 import styled from "styled-components"; // styled-components 임포트 추가
+import ServiceFoods from "./components/ServiceFoods";
 
 function App() {
   const [mapMoveFunction, setMapMoveFunction] = useState(null);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState(null);
-
+  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+  const [restaurants, setRestaurants] = useState([]);
   useEffect(() => {
     if (mapMoveFunction) {
       console.log("MapMoveFunction is set");
@@ -63,6 +64,7 @@ function App() {
           }
         />
         <Route path="/service" element={<ServiceHN />} />
+        <Route path="/servicefoods" element={<ServiceFoodHN />} />
         <Route path="/review" element={<FullReviewHN />} />
         <Route path="/review/:id" element={<ReviewHN />} />
         <Route path="/MainListPage" element={<CommunityListHN />} />
@@ -96,19 +98,29 @@ const FullReviewHN = () => (
   </div>
 );
 
-const FoodHN = ({ handleMapMove, mapMoveFunction, selectedRestaurant, handleRestaurantClick, isModalOpen, handleCloseDetails, error }) => (
+const FoodHN = ({
+  handleMapMove,
+  mapMoveFunction,
+  selectedRestaurant,
+  handleRestaurantClick,
+  isModalOpen,
+  handleCloseDetails,
+  error,
+}) => (
   <div>
     <Header />
-    <Home handleMapMove={handleMapMove} mapMoveFunction={mapMoveFunction} selectedRestaurant={selectedRestaurant} />
-    <KakaoMap 
-      mapMoveFunction={mapMoveFunction} 
+    <Home
+      handleMapMove={handleMapMove}
+      mapMoveFunction={mapMoveFunction}
+      selectedRestaurant={selectedRestaurant}
+    />
+    <KakaoMap
+      mapMoveFunction={mapMoveFunction}
       handleRestaurantClick={handleRestaurantClick}
     />
     {isModalOpen && selectedRestaurant && (
       <Modal>
-        <FoodIndex
-          restaurant={selectedRestaurant}
-        />
+        <FoodIndex restaurant={selectedRestaurant} />
         <CloseButton onClick={handleCloseDetails}>X</CloseButton>
       </Modal>
     )}
@@ -119,6 +131,13 @@ const ServiceHN = () => (
   <div>
     <Header />
     <ServicePage />
+  </div>
+);
+
+const ServiceFoodHN = () => (
+  <div>
+    <Header />
+    <ServiceFoods />
   </div>
 );
 

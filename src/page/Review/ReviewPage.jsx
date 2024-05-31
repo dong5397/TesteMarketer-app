@@ -84,6 +84,7 @@ function ReviewPage() {
       .then((data) => {
         console.log("Success:", data);
         fetchReviews(id); // 리뷰 작성 후에 목록 갱신
+        handleToggle();
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -127,17 +128,15 @@ function ReviewPage() {
                 <CardTitle>{restranutInfo.name}</CardTitle>
                 <RatingStars rating={restranutInfo.rating} />
 
-                <AdditionalInfo>
-                  <ReviewPanel>
-                    <ToggleContainer onClick={handleToggle}>
-                      <ReviewButton active={isActive}>
-                        리뷰 {restranutInfo.rating}{" "}
-                      </ReviewButton>
-                      <ReviewButton active={!isActive}>리뷰 작성</ReviewButton>
-                      <ToggleSlider active={isActive} />
-                    </ToggleContainer>
-                  </ReviewPanel>
-                </AdditionalInfo>
+                <ReviewPanel>
+                  <ToggleContainer onClick={handleToggle}>
+                    <ReviewButton active={isActive}>
+                      리뷰 {restranutInfo.rating}{" "}
+                    </ReviewButton>
+                    <ReviewButton active={!isActive}>리뷰 작성</ReviewButton>
+                    <ToggleSlider active={isActive} />
+                  </ToggleContainer>
+                </ReviewPanel>
               </CardSection>
             </ImgSection>
             <AdditionalInfoBox>
@@ -147,6 +146,7 @@ function ReviewPage() {
               </AdditionalInfo>
               <AdditionalInfo>
                 <InfoIcon icon={faClock} size="2x" />
+
                 <InfoText>영업 시간: {restranutInfo.opening_hours}</InfoText>
               </AdditionalInfo>
               <AdditionalInfo>
@@ -182,6 +182,7 @@ const ReveiwP = styled.div`
 
 const Container = styled.div`
   max-width: 1280px;
+  height: 1200px;
   margin: 0 auto;
   padding: 20px;
   display: flex;
@@ -203,7 +204,7 @@ const HeaderContainer = styled.header`
 const ReviewContainer = styled.main`
   max-width: 85%;
   min-height: 750px;
-  margin: auto;
+
   margin-right: 40px;
 
   max-height: 750px;
@@ -310,27 +311,40 @@ const CardTitle = styled.h2`
 `;
 
 const AdditionalInfoBox = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding: 20px;
   position: absolute;
-  flex-direction: column;
   width: 100%;
   bottom: 20px;
-  padding: 10px;
-  align-items: center;
   border-radius: 30px;
+  background-color: rgba(255, 255, 255, 0.8); /* 배경색 추가 */
 `;
 
 const AdditionalInfo = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 15px;
+  padding: 10px; /* 패딩 추가 */
+  background-color: #ffffff; /* 배경색 추가 */
+  border-radius: 10px; /* 모서리 둥글게 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+  transition: transform 0.2s; /* 트랜지션 추가 */
+  font-size: 16px; /* 폰트 크기 조절 */
+
+  &:hover {
+    transform: translateY(-5px); /* 호버 시 살짝 올라감 */
+  }
 `;
 
 const InfoIcon = styled(FontAwesomeIcon)`
   margin-right: 10px;
+  font-size: 24px; /* 아이콘 크기 조절 */
+  color: #555; /* 아이콘 색상 조절 */
 `;
 
 const InfoText = styled.span`
-  font-size: 22px;
+  font-size: 16px; /* 텍스트 크기 조절 */
   font-weight: 600;
+  color: #333; /* 텍스트 색상 조절 */
 `;

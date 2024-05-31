@@ -4,76 +4,86 @@ import styled from "styled-components";
 
 function FoodIndex({ restaurant }) {
   return (
-    <Container>
+    <Card>
       <Title>{restaurant.restaurants_name}</Title>
-      <InfoContainer>
-        <InfoLabel>주소:</InfoLabel>
-        <InfoText>{restaurant.address}</InfoText>
-      </InfoContainer>
-      <InfoContainer>
-        <InfoLabel>전화번호:</InfoLabel>
-        <InfoText>{restaurant.phone}</InfoText>
-      </InfoContainer>
-      <InfoContainer>
-        <InfoLabel>영업 시간:</InfoLabel>
-        <InfoText>{restaurant.opening_hours}</InfoText>
-      </InfoContainer>
-      <InfoContainer>
-        <InfoLabel>맛:</InfoLabel>
-        <InfoText>{restaurant.taste_level}</InfoText>
-      </InfoContainer>
-      <InfoContainer>
-        <InfoLabel>별 점:</InfoLabel>
-        <InfoText>{restaurant.rating}</InfoText>
-      </InfoContainer>
-    </Container>
+      <Info>
+        <Label>주소:</Label>
+        <Text>{restaurant.address}</Text>
+      </Info>
+      <Info>
+        <Label>전화번호:</Label>
+        <Text>{restaurant.phone}</Text>
+      </Info>
+      <Info>
+        <Label>영업 시간:</Label>
+        <Text>{restaurant.opening_hours}</Text>
+      </Info>
+      <Info>
+        <Label>맛:</Label>
+        <Text>{restaurant.taste_level}</Text>
+      </Info>
+      <Info>
+        <Label>별 점:</Label>
+        <Text>{restaurant.rating}</Text>
+      </Info>
+    </Card>
   );
 }
 
 export default FoodIndex;
 
-const Container = styled.div`
-  padding: 20px;
-  border-radius: 10px;
-
-  background: linear-gradient(#e7e78b, #f0f0c3);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease-in-out;
+const Card = styled.div`
+  padding: 25px;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   &:hover {
-    transform: translateY(-5px);
+    transform: translateY(-10px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
   }
 `;
 
 const Title = styled.h2`
-  font-size: 24px;
+  font-size: 30px;
   color: #333;
-  margin-bottom: 12px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-  transition: color 0.3s ease-in-out;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  transition: color 0.3s ease;
   &:hover {
-    color: #f1c40f;
+    color: #e67e22;
   }
 `;
 
-const InfoContainer = styled.div`
+const Info = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
-`;
-
-const InfoLabel = styled.p`
-  font-size: 16px;
-  color: #333;
-  font-weight: bold;
-  margin-right: 10px;
-`;
-
-const InfoText = styled.p`
-  font-size: 16px;
-  color: #555;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out;
+  margin-bottom: 15px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f1f1f1;
+  transition: background-color 0.3s ease;
   &:hover {
+    background-color: #f9f9f9;
+  }
+`;
+
+const Label = styled.span`
+  font-size: 18px;
+  color: #555;
+  font-weight: 600;
+`;
+
+const Text = styled.span`
+  font-size: 18px;
+  color: #777;
+  text-align: right;
+  transition: color 0.3s ease, transform 0.3s ease;
+  &:hover {
+    color: #3498db;
     transform: translateX(5px);
   }
 `;

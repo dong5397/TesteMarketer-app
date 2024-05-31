@@ -8,7 +8,6 @@ Modal.setAppElement("#root");
 
 function FoodDetail({ selectedRestaurant, handleMapMove }) {
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
-  const [reviews, setReviews] = useState([]);
 
   const navigate = useNavigate();
 
@@ -72,28 +71,20 @@ function FoodDetail({ selectedRestaurant, handleMapMove }) {
         style={{
           overlay: {
             zIndex: 1000,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
           },
           content: {
             width: "90%",
             maxWidth: "600px",
             margin: "0 auto",
             position: "relative",
+            background: "none",
+            border: "none",
           },
         }}
       >
         <ModalContent>
           {selectedRestaurant && <FoodIndex restaurant={selectedRestaurant} />}
-          <ReviewList>
-            {reviews.map((review) => (
-              <ReviewContainer key={review.review_id}>
-                <ReviewText>리뷰: {review.review_text}</ReviewText>
-                <Button onClick={() => handleReviewDelete(review.review_id)}>
-                  삭제하기
-                </Button>
-              </ReviewContainer>
-            ))}
-          </ReviewList>
+
           <CloseButton onClick={handleDetailModalClose}>닫기</CloseButton>
         </ModalContent>
       </Modal>
@@ -103,24 +94,7 @@ function FoodDetail({ selectedRestaurant, handleMapMove }) {
 
 export default FoodDetail;
 
-const ModalContent = styled.div`
-  width: 100%;
-`;
-
-const ReviewList = styled.div`
-  margin-top: 20px;
-`;
-
-const ReviewContainer = styled.div`
-  margin-bottom: 10px;
-`;
-
-const ReviewText = styled.p`
-  font-size: 18px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 12px;
-`;
+const ModalContent = styled.div``;
 
 const Button = styled.button`
   background-color: #d1d195;

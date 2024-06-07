@@ -152,7 +152,7 @@ const Panel = styled.div`
     height: 200px;
     top: 70px;
     left: 100px;
-    z-index: 1;
+    z-index: 2;
     animation-name: review-move;
     animation-delay: 0.5s;
     animation-duration: 0.8s;
@@ -171,8 +171,8 @@ const Panel = styled.div`
     width: 150px;
     height: 150px;
     top: 120px;
-    left: 0px;
-    z-index: 2;
+    left: 20px;
+    z-index: 1;
     animation-name: review3-move;
     animation-delay: 1s;
     animation-duration: 0.8s;
@@ -579,7 +579,11 @@ const Main1 = () => {
                   <Inner>
                     <Img src="/images/2/review.png" className="review" />
                     <Img src="/images/2/review2.png" className="review2" />
-                    <Img src="/images/2/review3.png" className="review3" />
+                    <Img
+                      style={{ width: "120px", height: "150px" }}
+                      src="/images/2/review3.png"
+                      className="review3"
+                    />
                   </Inner>
                   <Link className="link link-01" href="/review">
                     리뷰 보기

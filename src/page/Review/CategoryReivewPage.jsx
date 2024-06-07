@@ -267,17 +267,15 @@ const GreenContainer = styled.div`
   height: 80px;
   background-color: #e9e5a9;
   border-radius: 0 0 30px 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const TagButton = styled.button`
   padding: 10px 20px;
   font-size: 16px;
   font-weight: bold;
-  border: 2px solid #000;
+  margin-left: 2px;
   background-color: #fff;
   border-radius: 10px;
-  color: #000;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s, transform 0.3s;
   font-family: "Uiyeun", sans-serif;
@@ -285,7 +283,6 @@ const TagButton = styled.button`
   &:hover {
     background-color: #e9e5a9;
     color: #000;
-    transform: scale(1.05);
   }
 `;
 

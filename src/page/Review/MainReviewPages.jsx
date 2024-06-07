@@ -76,10 +76,6 @@ function ReviewListPage() {
       });
   };
 
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
   const getCategoryIcon = (category) => {
     switch (category) {
       case "한식":
@@ -115,14 +111,7 @@ function ReviewListPage() {
           <GreenContainer>
             <FontAwesomeIcon icon={faUtensils} size="2x" />
           </GreenContainer>
-          <SearchBarContainer>
-            <SearchBar
-              type="text"
-              placeholder="검색어를 입력하세요..."
-              value={searchTerm}
-              onChange={handleSearch}
-            />
-          </SearchBarContainer>
+
           <CategoriesGridContainer>
             <CategoriesGrid>
               {categories.map((category, index) => (
@@ -202,6 +191,7 @@ const CategoriesGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
+  padding-top: 50px;
 `;
 
 const CategoryContainer = styled.div`
@@ -229,7 +219,6 @@ const CategoryButton = styled.button`
   &:hover {
     background-color: ${({ active }) => (active ? "#e7f1c9" : " #e9e5a9")};
     color: ${({ active }) => (active ? "#fff" : "#000")};
-    transform: translateY(-5px);
   }
 `;
 

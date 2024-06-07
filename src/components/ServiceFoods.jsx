@@ -27,7 +27,8 @@ const Container = styled.div`
   padding: 20px;
   display: flex;
   flex-wrap: wrap;
-  gap: 20px; /* Add some space between the cards */
+  justify-content: center; /* Center content horizontally */
+
   height: 800px; /* Set max height */
   overflow-y: auto; /* Enable vertical scrolling */
 `;
@@ -44,11 +45,13 @@ const Layout = styled.div`
 const CardWrapper = styled.div`
   flex: 1 1 calc(50% - 20px); /* 50% width minus the gap */
   box-sizing: border-box;
+  margin: 10px; /* Add margin for spacing between cards */
+  max-width: 350px; /* Optional: Limit the maximum width of each card */
 `;
 
 const BackButton = styled.button`
   padding: 10px 20px;
-  background-color: #ebe04f;
+  background-color: #67ab49;
   border: 2px solid #050505;
   border-radius: 5px;
   font-size: 14px;
@@ -57,7 +60,7 @@ const BackButton = styled.button`
   margin-bottom: 20px;
 
   &:hover {
-    background-color: #dad04f;
+    background-color: #14892c;
     border-color: #050505;
   }
 `;

@@ -49,6 +49,10 @@ function DetailPost() {
   const handleCommentSubmit = (e) => {
     e.preventDefault();
 
+    if (newComment.trim() === "") {
+      return; // 댓글이 비어 있으면 아무 작업도 하지 않음
+    }
+
     fetch(`https://makterbackend.fly.dev/api/v1/post/${postId}/comments`, {
       method: "POST",
       headers: {

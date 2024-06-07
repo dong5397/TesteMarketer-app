@@ -3,10 +3,9 @@ import styled from "styled-components";
 import FoodForm from "./FoodForm";
 import SearchBar from "../../components/SearchBar";
 
-const Home = ({ handleMapMove }) => {
+const Home = ({ handleMapMove, setSelectedRestaurant, handleMarkerClick }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
   const togglePanel = () => {
     setIsOpen(!isOpen);
@@ -32,6 +31,7 @@ const Home = ({ handleMapMove }) => {
         <FoodForm
           setSelectedRestaurant={setSelectedRestaurant}
           handleMapMove={handleMapMove}
+          handleMarkerClick={handleMarkerClick}
         />
       </Content>
       {isSearchOpen && (

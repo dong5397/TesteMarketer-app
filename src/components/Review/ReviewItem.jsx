@@ -6,9 +6,16 @@ import styled, { css, keyframes } from "styled-components";
 import RatingStars from "./RatingStars";
 
 function ReviewItem({ review, onDelete }) {
-  const { review_id, username, review_contents, review_date, hashtag, rating } =
-    review;
+  const {
+    review_id,
+    username,
+    review_contents,
+    review_date,
+    hashtags,
+    rating,
+  } = review;
 
+  console.log(review);
   const formatDate = (dateString) => {
     if (!dateString) {
       return ""; // 또는 기본 날짜 문자열을 반환할 수 있습니다.
@@ -28,7 +35,7 @@ function ReviewItem({ review, onDelete }) {
     setTimeout(() => {
       setIsClicked(false);
     }, 500);
-
+    // 삭제 로직을 여기에 추가하세요
     onDelete(review_id);
   };
 
@@ -41,9 +48,10 @@ function ReviewItem({ review, onDelete }) {
       <Date>{formatDate(review_date)}</Date>
 
       <HashTagsContainer>
-        <HashTag>#{hashtag}</HashTag>
+        {hashtags.map((hashtag, index) => (
+          <HashTag key={index}>#{hashtag}</HashTag>
+        ))}
       </HashTagsContainer>
-
       <ActionButtonsContainer>
         <DeleteButton isClicked={isClicked} onClick={reviewDeleteHandler}>
           <TrashIcon icon={faTrash} size="2xl" isClicked={isClicked} />

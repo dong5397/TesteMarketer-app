@@ -17,6 +17,7 @@ import styled from "styled-components"; // styled-components 임포트 추가
 import ServiceFoods from "./components/ServiceFoods";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
+
 function App() {
   const [mapMoveFunction, setMapMoveFunction] = useState(null);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
@@ -24,6 +25,7 @@ function App() {
   const [error, setError] = useState(null);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
+
   useEffect(() => {
     if (mapMoveFunction) {
       console.log("MapMoveFunction is set");
@@ -57,6 +59,7 @@ function App() {
               handleMapMove={handleMapMove}
               mapMoveFunction={mapMoveFunction}
               selectedRestaurant={selectedRestaurant}
+              setSelectedRestaurant={setSelectedRestaurant}
               handleRestaurantClick={handleRestaurantClick}
               isModalOpen={isModalOpen}
               handleCloseDetails={handleCloseDetails}
@@ -103,6 +106,7 @@ const FoodHN = ({
   handleMapMove,
   mapMoveFunction,
   selectedRestaurant,
+  setSelectedRestaurant,
   handleRestaurantClick,
   isModalOpen,
   handleCloseDetails,
@@ -113,7 +117,7 @@ const FoodHN = ({
     <Home
       handleMapMove={handleMapMove}
       mapMoveFunction={mapMoveFunction}
-      selectedRestaurant={selectedRestaurant}
+      setSelectedRestaurant={setSelectedRestaurant}
     />
     <KakaoMap
       mapMoveFunction={mapMoveFunction}

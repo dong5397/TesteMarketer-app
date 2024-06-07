@@ -86,7 +86,7 @@ const KakaoMap = ({ mapMoveFunction, handleRestaurantClick }) => {
       const { latitude, longitude } = mapMoveFunction;
       const position = new window.kakao.maps.LatLng(latitude, longitude);
       mapInstance.current.setCenter(position);
-      mapInstance.current.setLevel(6);
+      mapInstance.current.setLevel(4);
       console.log("Map center set to:", position);
     }
   }, [mapMoveFunction]);

@@ -109,6 +109,12 @@ const SubmitButton = styled.button`
     background-color: #14892c;
     border-color: #14892c;
   }
+
+  &:disabled {
+    background-color: #ccc;
+    border-color: #ccc;
+    cursor: not-allowed;
+  }
 `;
 
 const Progress = styled.div`
@@ -137,6 +143,7 @@ const Service = ({ restaurantsData }) => {
   const [sweet, setSweet] = useState("");
   const [salty, setSalty] = useState("");
   const [sour, setSour] = useState("");
+  const [isFormValid, setIsFormValid] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -157,6 +164,18 @@ const Service = ({ restaurantsData }) => {
     }
   }, [restaurantsData]);
 
+  useEffect(() => {
+    const totalQuestions = 5;
+    const checkedItems = document.querySelectorAll(
+      'input[type="radio"]:checked'
+    );
+    const newProgress = (checkedItems.length / totalQuestions) * 100;
+    setProgress(newProgress);
+
+    // Check if all questions are answered
+    setIsFormValid(checkedItems.length === totalQuestions);
+  }, [foodType, spicy, sweet, salty, sour]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -171,13 +190,6 @@ const Service = ({ restaurantsData }) => {
     } else if (name === "sour") {
       setSour(value);
     }
-
-    const totalQuestions = 5;
-    const checkedItems = document.querySelectorAll(
-      'input[type="radio"]:checked'
-    );
-    const newProgress = (checkedItems.length / totalQuestions) * 100;
-    setProgress(newProgress);
   };
 
   const handleSubmit = () => {
@@ -387,7 +399,11 @@ const Service = ({ restaurantsData }) => {
               </LikertList>
               <Buttons>
                 <ClearButton type="reset">Clear</ClearButton>
-                <SubmitButton type="button" onClick={handleSubmit}>
+                <SubmitButton
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={!isFormValid}
+                >
                   Submit
                 </SubmitButton>
               </Buttons>

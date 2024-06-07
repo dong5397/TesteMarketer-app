@@ -110,7 +110,7 @@ function CategoryReviewPage() {
               <BackButton to="/review/">
                 <PressableIcon
                   icon={faArrowLeft}
-                  size="2x"
+                  size="xl"
                   onClick={handleIconClick}
                   pressed={isPressed}
                 />
@@ -184,9 +184,8 @@ const ReviewPageWrapper = styled.div`
   max-width: 1000px;
   width: 100%;
   margin: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
   border-radius: 10px;
-  background-color: #fff;
 `;
 
 const StyledContainer = styled.div`
@@ -205,13 +204,12 @@ const Header = styled.div`
   width: 100%;
   margin: 0 auto;
   padding: 10px 0;
-  border-bottom: 2px solid #e9e5a9;
 `;
 
 const BackButton = styled(Link)`
   position: absolute;
   left: 20px;
-  padding: 10px;
+  padding: 5px;
   background-color: #e9e5a9;
   border-radius: 5px;
   color: #000;
@@ -223,14 +221,6 @@ const BackButton = styled(Link)`
   }
 `;
 
-const Title = styled.h2`
-  font-size: 28px;
-  font-family: "Uiyeun", sans-serif;
-  text-align: center;
-  flex-grow: 1;
-  color: #333;
-`;
-
 const FilterContainer = styled.div`
   display: flex;
   gap: 10px;
@@ -238,7 +228,7 @@ const FilterContainer = styled.div`
 
 const FilterButton = styled.button`
   padding: 5px 10px;
-  font-size: 20px;
+  font-size: 14px;
   font-weight: bold;
   background-color: #e9e5a9;
   border: none;
@@ -277,17 +267,15 @@ const GreenContainer = styled.div`
   height: 80px;
   background-color: #e9e5a9;
   border-radius: 0 0 30px 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const TagButton = styled.button`
   padding: 10px 20px;
   font-size: 16px;
   font-weight: bold;
-  border: 2px solid #000;
+  margin-left: 2px;
   background-color: #fff;
   border-radius: 10px;
-  color: #000;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s, transform 0.3s;
   font-family: "Uiyeun", sans-serif;
@@ -295,7 +283,6 @@ const TagButton = styled.button`
   &:hover {
     background-color: #e9e5a9;
     color: #000;
-    transform: scale(1.05);
   }
 `;
 

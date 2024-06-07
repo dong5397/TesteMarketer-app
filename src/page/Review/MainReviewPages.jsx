@@ -76,10 +76,6 @@ function ReviewListPage() {
       });
   };
 
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
   const getCategoryIcon = (category) => {
     switch (category) {
       case "한식":
@@ -195,6 +191,7 @@ const CategoriesGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
+  padding-top: 50px;
 `;
 
 const CategoryContainer = styled.div`

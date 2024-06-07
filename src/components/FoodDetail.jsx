@@ -51,19 +51,21 @@ function FoodDetail({ selectedRestaurant, handleMapMove }) {
 
   return (
     <div>
-      {selectedRestaurant && (
-        <div key={selectedRestaurant.restaurants_id}>
-          <p>
-            <Button onClick={handleDetailModalOpen}>세부 정보 보기</Button>
-          </p>
-          <p>
-            <Button onClick={handleDetailPost}>리뷰 작성하기</Button>
-          </p>
-          <p>
-            <Button onClick={moveToMap}>지도로 이동</Button>
-          </p>
-        </div>
-      )}
+      <ButtonContainer>
+        {selectedRestaurant && (
+          <div key={selectedRestaurant.restaurants_id}>
+            <p>
+              <Button onClick={handleDetailModalOpen}>세부 정보 보기</Button>
+            </p>
+            <p>
+              <Button onClick={handleDetailPost}>리뷰 작성하기</Button>
+            </p>
+            <p>
+              <Button onClick={moveToMap}>지도로 이동</Button>
+            </p>
+          </div>
+        )}
+      </ButtonContainer>
       <Modal
         isOpen={isDetailModalOpen}
         onRequestClose={handleDetailModalClose}
@@ -113,5 +115,24 @@ const Button = styled.button`
 
   &:hover {
     background-color: #b6b654;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  p {
+    margin: 0;
   }
 `;

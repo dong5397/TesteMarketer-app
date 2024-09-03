@@ -1,149 +1,19 @@
-// Service.js
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { DeviceFrameset } from "react-device-frameset";
 import { useNavigate } from "react-router-dom";
-
-const Layout = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center; /* Center align the items vertically */
-  width: 100%;
-  padding: 20px;
-  flex-direction: column; /* Ensure items are stacked vertically */
-`;
-
-const Form = styled.div`
-  flex: 1;
-  max-width: 1000px;
-  width: 100%; /* Ensure the form takes full width of its container */
-`;
-
-const Wrap = styled.div`
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border: 5px solid black;
-  width: 100%;
-  padding: 20px;
-`;
-
-const LikertHeader = styled.h1`
-  padding-left: 4.25%;
-  margin: 20px 0 0;
-  text-align: center;
-  font-family: "GowunDodum-Regular";
-`;
-
-const Statement = styled.label`
-  display: block;
-  font-size: 25px;
-  font-weight: bold;
-  padding: 30px 0 0 4.25%;
-  margin-bottom: 25px;
-  font-family: "GowunDodum-Regular";
-`;
-
-const LikertList = styled.ul`
-  list-style: none;
-  margin: 0 auto;
-  padding: 0 0 35px;
-  display: block;
-  border-bottom: 4px solid #000000;
-
-  &:last-of-type {
-    border-bottom: 0;
-  }
-`;
-
-const LikertItem = styled.li`
-  display: inline-block;
-  width: 20%;
-  text-align: center;
-  vertical-align: top;
-`;
-
-const LikertInput = styled.input`
-  display: block;
-  position: relative;
-  top: 0;
-  left: 50%;
-  margin-left: -6px;
-`;
-
-const LikertLabel = styled.label`
-  width: 100%;
-  font-family: "GowunDodum-Regular";
-  font-size: 20px;
-`;
-
-const Buttons = styled.div`
-  margin: 30px 0;
-  padding: 0 4.25%;
-  text-align: center;
-`;
-
-const ClearButton = styled.button`
-  padding: 10px 20px;
-  background-color: #e9e9e9;
-  border: 2px solid #e9e9e9;
-  border-radius: 5px;
-  font-size: 14px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #ccc;
-    border-color: #ccc;
-  }
-`;
-
-const SubmitButton = styled.button`
-  padding: 10px 20px;
-  background-color: #67ab49;
-  border: 2px solid #67ab49;
-  border-radius: 5px;
-  font-size: 14px;
-  color: #fff;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #14892c;
-    border-color: #14892c;
-  }
-
-  &:disabled {
-    background-color: #ccc;
-    border-color: #ccc;
-    cursor: not-allowed;
-  }
-`;
-
-const Progress = styled.div`
-  width: 100%;
-  background-color: #ddd;
-  height: 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  border: 2px solid black;
-`;
-
-const ProgressBar = styled.div`
-  width: ${({ progress }) => progress}%;
-  background-color: #67ab49;
-  height: 100%;
-  border-radius: 10px;
-  border-right: 2px solid black;
-`;
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+  foodPreferencesState,
+  filteredRestaurantsState,
+} from "../state/surveyAtoms";
 
 const Service = ({ restaurantsData }) => {
   const [progress, setProgress] = useState(0);
-  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
-  const [foodType, setFoodType] = useState("");
-  const [spicy, setSpicy] = useState("");
-  const [sweet, setSweet] = useState("");
-  const [salty, setSalty] = useState("");
-  const [sour, setSour] = useState("");
-  const [isFormValid, setIsFormValid] = useState(false);
+  const [foodPreferences, setFoodPreferences] =
+    useRecoilState(foodPreferencesState);
+  const setFilteredRestaurants = useSetRecoilState(filteredRestaurantsState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -171,42 +41,24 @@ const Service = ({ restaurantsData }) => {
     );
     const newProgress = (checkedItems.length / totalQuestions) * 100;
     setProgress(newProgress);
-
-    // Check if all questions are answered
-    setIsFormValid(checkedItems.length === totalQuestions);
-  }, [foodType, spicy, sweet, salty, sour]);
+  }, [foodPreferences]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === "food_type") {
-      setFoodType(value);
-    } else if (name === "spicy") {
-      setSpicy(value);
-    } else if (name === "sweet") {
-      setSweet(value);
-    } else if (name === "salty") {
-      setSalty(value);
-    } else if (name === "sour") {
-      setSour(value);
-    }
+    setFoodPreferences((prevPreferences) => ({
+      ...prevPreferences,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = () => {
-    const answers = {
-      food_type: foodType,
-      spicy: getLikertValue(spicy),
-      sweet: getLikertValue(sweet),
-      sour: getLikertValue(sour),
-      salty: getLikertValue(salty),
-    };
-
     const userPreference = {
-      Spicy: answers.spicy,
-      Sweet: answers.sweet,
-      Sour: answers.sour,
-      Salty: answers.salty,
-      food_type: answers.food_type,
+      Spicy: getLikertValue(foodPreferences.spicy),
+      Sweet: getLikertValue(foodPreferences.sweet),
+      Sour: getLikertValue(foodPreferences.sour),
+      Salty: getLikertValue(foodPreferences.salty),
+      food_type: foodPreferences.foodType,
     };
 
     filterRestaurants(userPreference);
@@ -243,11 +95,9 @@ const Service = ({ restaurantsData }) => {
       menus: el.food_menu.menus.map((menu) => menu.name),
     }));
 
-    navigate(`/servicefoods`, {
-      state: {
-        restaurants: formattedRestaurants,
-      },
-    });
+    setFilteredRestaurants(formattedRestaurants);
+
+    navigate(`/servicefoods`);
   };
 
   const getLikertValue = (value) => {
@@ -285,23 +135,23 @@ const Service = ({ restaurantsData }) => {
               <Statement>어떤 종류의 음식을 가장 좋아하시나요?</Statement>
               <LikertList>
                 <LikertItem>
-                  <LikertInput type="radio" name="food_type" value="Korean" />
+                  <LikertInput type="radio" name="foodType" value="Korean" />
                   <LikertLabel>한식</LikertLabel>
                 </LikertItem>
                 <LikertItem>
-                  <LikertInput type="radio" name="food_type" value="Western" />
+                  <LikertInput type="radio" name="foodType" value="Western" />
                   <LikertLabel>양식</LikertLabel>
                 </LikertItem>
                 <LikertItem>
-                  <LikertInput type="radio" name="food_type" value="Chinese" />
+                  <LikertInput type="radio" name="foodType" value="Chinese" />
                   <LikertLabel>중식</LikertLabel>
                 </LikertItem>
                 <LikertItem>
-                  <LikertInput type="radio" name="food_type" value="Japanese" />
+                  <LikertInput type="radio" name="foodType" value="Japanese" />
                   <LikertLabel>일식</LikertLabel>
                 </LikertItem>
                 <LikertItem>
-                  <LikertInput type="radio" name="food_type" value="Random" />
+                  <LikertInput type="radio" name="foodType" value="Random" />
                   <LikertLabel>기타</LikertLabel>
                 </LikertItem>
               </LikertList>
@@ -402,7 +252,7 @@ const Service = ({ restaurantsData }) => {
                 <SubmitButton
                   type="button"
                   onClick={handleSubmit}
-                  disabled={!isFormValid}
+                  disabled={progress < 100}
                 >
                   Submit
                 </SubmitButton>

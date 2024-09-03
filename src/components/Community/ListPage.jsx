@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { postsState } from "../../state/communityAtom";
 
 function CommunityList() {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useRecoilState(postsState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,7 +23,7 @@ function CommunityList() {
       .catch((error) => {
         console.error(error.message);
       });
-  }, []);
+  }, [setPosts]);
 
   const handleDelete = (postId, event) => {
     event.stopPropagation(); // 이벤트 전파 중단
@@ -83,6 +85,7 @@ function CommunityList() {
 
 export default CommunityList;
 
+// Styled Components
 const Container = styled.div`
   display: flex;
   flex-direction: column;

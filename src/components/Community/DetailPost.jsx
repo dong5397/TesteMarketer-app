@@ -1,12 +1,18 @@
 import { DeviceFrameset } from "react-device-frameset";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+  postState,
+  commentsState,
+  newCommentState,
+} from "../../state/communityAtom";
 
 function DetailPost() {
-  const [post, setPost] = useState(null);
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState("");
+  const [post, setPost] = useRecoilState(postState);
+  const [comments, setComments] = useRecoilState(commentsState);
+  const [newComment, setNewComment] = useRecoilState(newCommentState);
   const navigate = useNavigate();
   const { postId } = useParams();
 
@@ -40,7 +46,7 @@ function DetailPost() {
       .catch((error) => {
         console.error("Error fetching comments:", error);
       });
-  }, [postId]);
+  }, [postId, setPost, setComments]);
 
   const handleRouter = () => {
     navigate("../MainListPage");

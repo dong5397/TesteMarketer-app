@@ -126,22 +126,15 @@ const CardHashTag = styled.div`
   font-family: "Uiyeun", sans-serif;
   text-align: center;
 `;
-
 const ReviewCard = ({ restaurant }) => {
   const { id, name, image, rating, opening_hours, phone, address, category } =
     restaurant;
 
   const navigate = useNavigate();
-
   const [showCardInfo, setShowCardInfo] = useState(false);
-  const [cardInfo, setCardInfo] = useState({
-    reviewCount: 0,
-    viewCount: 0,
-    rating: 0,
-  });
+  const [cardInfo, setCardInfo] = useRecoilState(cardInfoState); // 리코일 상태 사용
 
   const handleDetailPost = (restaurant) => {
-    console.log(restaurant);
     navigate(`/review/${id}`, {
       state: {
         id: `${id}`,

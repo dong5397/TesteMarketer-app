@@ -1,11 +1,12 @@
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
-import { useState } from "react";
-import styled, { css, keyframes } from "styled-components";
+import React, { useState } from "react";
+import styled, { keyframes } from "styled-components";
+import { useRecoilState } from "recoil";
+import { reviewsState } from "../../state/reviewAtoms";
 import RatingStars from "./RatingStars";
 
-function ReviewItem({ review, onDelete }) {
+function ReviewItem({ review }) {
   const {
     review_id,
     username,
@@ -15,28 +16,25 @@ function ReviewItem({ review, onDelete }) {
     rating,
   } = review;
 
-  console.log(review);
+  const [reviews, setReviews] = useRecoilState(reviewsState);
+  const [isClicked, setIsClicked] = useState(false);
+
   const formatDate = (dateString) => {
     if (!dateString) {
-      return ""; // 또는 기본 날짜 문자열을 반환할 수 있습니다.
+      return "";
     }
-    const dateParts = dateString.split("T")[0].split("-");
-    const year = dateParts[0];
-    const month = dateParts[1];
-    const day = dateParts[2];
+    const [year, month, day] = dateString.split("T")[0].split("-");
     return `${year}-${month}-${day}`;
   };
-
-  const [isClicked, setIsClicked] = useState(false);
 
   const reviewDeleteHandler = (event) => {
     event.preventDefault();
     setIsClicked(true);
     setTimeout(() => {
       setIsClicked(false);
+      // 리뷰 삭제 후 상태 업데이트
+      setReviews(reviews.filter((r) => r.review_id !== review_id));
     }, 500);
-    // 삭제 로직을 여기에 추가하세요
-    onDelete(review_id);
   };
 
   return (
@@ -44,9 +42,7 @@ function ReviewItem({ review, onDelete }) {
       <Username>{username}</Username>
       <RatingStars rating={rating} />
       <Content>{review_contents}</Content>
-
       <Date>{formatDate(review_date)}</Date>
-
       <HashTagsContainer>
         {hashtags.map((hashtag, index) => (
           <HashTag key={index}>#{hashtag}</HashTag>
@@ -54,7 +50,7 @@ function ReviewItem({ review, onDelete }) {
       </HashTagsContainer>
       <ActionButtonsContainer>
         <DeleteButton isClicked={isClicked} onClick={reviewDeleteHandler}>
-          <TrashIcon icon={faTrash} size="2xl" isClicked={isClicked} />
+          <TrashIcon icon={faTrash} size="2xl" />
         </DeleteButton>
       </ActionButtonsContainer>
     </ReviewItemContainer>
@@ -110,6 +106,7 @@ const DeleteButton = styled.button`
   padding: 10px;
   background-color: ${({ isClicked }) => (isClicked ? "red" : "white")};
   transition: transform 0.3s ease;
+  animation: ${({ isClicked }) => (isClicked ? bounceAnimation : "none")} 0.5s;
 `;
 
 const bounceAnimation = keyframes`
@@ -123,12 +120,7 @@ const bounceAnimation = keyframes`
     transform: translateY(-10px);
   }
 `;
+
 const TrashIcon = styled(FontAwesomeIcon)`
-  color: #ff0000;
-  ${({ isClicked }) =>
-    isClicked &&
-    css`
-      color: ${({ isClicked }) => (isClicked ? "white" : "red")};
-      animation: ${bounceAnimation} 0.5s;
-    `}
+  color: ${({ isClicked }) => (isClicked ? "white" : "#ff0000")};
 `;

@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
+import { useRecoilState } from "recoil";
+import {
+  usernameState,
+  contentState,
+  hashtagsState,
+  ratingState,
+} from "../../state/reviewAtoms";
 import HashTag from "./HashTag";
 import RatingStars from "./RatingStars";
 
 function WriteReview({ onSubmit }) {
-  const [username, setUsername] = useState("");
-  const [content, setContent] = useState("");
-  const [hashtags, setHashtags] = useState([]);
-  const [rating, setRating] = useState(0);
+  const [username, setUsername] = useRecoilState(usernameState);
+  const [content, setContent] = useRecoilState(contentState);
+  const [hashtags, setHashtags] = useRecoilState(hashtagsState);
+  const [rating, setRating] = useRecoilState(ratingState);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,7 +37,7 @@ function WriteReview({ onSubmit }) {
       </RatingContainer>
       <Form onSubmit={handleSubmit}>
         <InputLabel>제목</InputLabel>
-        <SmallInput
+        <Input
           type="text"
           placeholder="제목"
           value={username}
@@ -89,6 +96,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 `;
 
 const InputLabel = styled.label`
@@ -100,15 +108,6 @@ const InputLabel = styled.label`
 `;
 
 const Input = styled.input`
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 18px;
-`;
-
-const SmallInput = styled.input`
   width: 100%;
   padding: 10px;
   margin-bottom: 20px;

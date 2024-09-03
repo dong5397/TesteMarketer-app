@@ -1,19 +1,26 @@
-// EditPage.jsx
-
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { DeviceFrameset } from "react-device-frameset";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import {
+  postTitleState,
+  postContentState,
+  messageState,
+} from "../../state/communityAtom";
+
 function EditPage() {
-  const [title, setTitle] = useState("");
-  const [contents, setContents] = useState("");
-  const [message, setMessage] = useState("");
+  const [title, setTitle] = useRecoilState(postTitleState);
+  const [contents, setContents] = useRecoilState(postContentState);
+  const [message, setMessage] = useRecoilState(messageState);
   const { postId } = useParams();
   const navigate = useNavigate();
-  const handleRouter = (e) => {
+
+  const handleRouter = () => {
     navigate("../MainListPage");
   };
+
   useEffect(() => {
     if (postId) {
       fetch(`https://makterbackend.fly.dev/api/v1/post/${postId}`)
@@ -24,8 +31,8 @@ function EditPage() {
           return response.json();
         })
         .then((data) => {
-          setTitle(data.title);
-          setContents(data.content);
+          setTitle(data.title || ""); // 기본값으로 빈 문자열을 설정
+          setContents(data.content || ""); // 기본값으로 빈 문자열을 설정
         })
         .catch((error) => {
           console.error(error);
@@ -35,7 +42,7 @@ function EditPage() {
       setTitle("");
       setContents("");
     }
-  }, [postId]);
+  }, [postId, setTitle, setContents, setMessage]);
 
   const onUpdate = async () => {
     if (!title || !contents) {
@@ -43,7 +50,7 @@ function EditPage() {
     }
 
     const dataToSend = {
-      postId: postId, // postId를 데이터에 포함시켜서 서버로 보냅니다.
+      postId: postId,
       post_title: title,
       post_content: contents,
     };
@@ -110,19 +117,19 @@ function EditPage() {
                 <Container2>
                   <Header>
                     <h1>Community</h1>
-                    <Button onClick={handleRouter}>글목록</Button>{" "}
+                    <Button onClick={handleRouter}>글목록</Button>
                   </Header>
                   <Container>
                     <Form onSubmit={onSubmit}>
                       <Input
                         placeholder="제목을 입력해주세요."
                         type="text"
-                        value={title}
+                        value={title || ""} // undefined가 되지 않도록 보장
                         onChange={onTitleChange}
                       />
                       <TextArea
                         placeholder="내용을 작성해주세요."
-                        value={contents}
+                        value={contents || ""} // undefined가 되지 않도록 보장
                         onChange={onContentsChange}
                         rows={8}
                       />
@@ -141,6 +148,8 @@ function EditPage() {
 }
 
 export default EditPage;
+
+// Styled Components
 const MainContainer = styled.div`
   height: 1200px;
   background: linear-gradient(#e7e78b, #f0f0c3);

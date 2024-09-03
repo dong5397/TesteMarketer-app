@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
+import { useRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { DeviceFrameset } from "react-device-frameset";
 import ListPage from "../../components/Community/ListPage";
 import ListSerchPage from "../../components/Community/ListSerchPage";
+import {
+  searchQueryState,
+  searchResultsState,
+} from "../../state/communityAtom";
 
 function MainListpage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useRecoilState(searchQueryState);
+  const [searchResults, setSearchResults] = useRecoilState(searchResultsState);
   const navigate = useNavigate();
 
   const handleRoute = () => {
@@ -35,6 +40,7 @@ function MainListpage() {
       alert("검색 중 오류가 발생했습니다.");
     }
   };
+
   return (
     <MainContainer>
       <ListPageWrapper>

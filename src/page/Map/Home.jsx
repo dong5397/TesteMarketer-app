@@ -1,11 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import FoodForm from "./FoodForm";
 import SearchBar from "../../components/SearchBar";
+import { useRecoilState } from "recoil";
+import {
+  isOpenState,
+  isSearchOpenState,
+  selectedRestaurantState,
+} from "../../state/mapAtoms";
+import FoodDetail from "../../components/FoodDetail";
 
-const Home = ({ handleMapMove, setSelectedRestaurant, handleMarkerClick }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+const Home = () => {
+  const [isOpen, setIsOpen] = useRecoilState(isOpenState);
+  const [isSearchOpen, setIsSearchOpen] = useRecoilState(isSearchOpenState);
+  const selectedRestaurant = useRecoilState(selectedRestaurantState)[0];
 
   const togglePanel = () => {
     setIsOpen(!isOpen);
@@ -20,24 +28,23 @@ const Home = ({ handleMapMove, setSelectedRestaurant, handleMarkerClick }) => {
   };
 
   return (
-    <Container isOpen={isOpen} isSearchOpen={isSearchOpen}>
+    <Container $isOpen={isOpen}>
       <ToggleButton onClick={togglePanel}>{isOpen ? "<" : ">"}</ToggleButton>
       {isOpen && (
-        <SearchButton isOpen={isSearchOpen} onClick={toggleSearch}>
+        <SearchButton onClick={toggleSearch}>
           {isSearchOpen ? "닫기" : "검색"}
         </SearchButton>
       )}
       <Content>
-        <FoodForm
-          setSelectedRestaurant={setSelectedRestaurant}
-          handleMapMove={handleMapMove}
-          handleMarkerClick={handleMarkerClick}
-        />
+        <FoodForm />
       </Content>
       {isSearchOpen && (
         <SearchContainer>
           <SearchBar />
         </SearchContainer>
+      )}
+      {selectedRestaurant && (
+        <FoodDetail triggerModal={false} /> // 모달이 아닌 일반 컴포넌트로 렌더링
       )}
     </Container>
   );
@@ -45,8 +52,9 @@ const Home = ({ handleMapMove, setSelectedRestaurant, handleMarkerClick }) => {
 
 export default Home;
 
+// Styled Components는 그대로 유지
 const Container = styled.div`
-  width: ${(props) => (props.isOpen ? "400px" : "50px")};
+  width: ${(props) => (props.$isOpen ? "400px" : "50px")};
   height: 100%;
   position: fixed;
   top: 15%;

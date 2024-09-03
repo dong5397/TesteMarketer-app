@@ -1,7 +1,8 @@
-// ServiceFoods.js
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useRecoilValue } from "recoil";
+import { restaurantsState } from "../state/mapAtoms";
 import RestaurantCard from "./RestaurantCard";
 import { DeviceFrameset } from "react-device-frameset";
 
@@ -16,7 +17,7 @@ const ServiceContainer = styled.div`
 const Form = styled.div`
   flex: 1;
   max-width: 1000px;
-  width: 100%; /* Ensure the form takes full width of its container */
+  width: 100%;
 `;
 
 const Container = styled.div`
@@ -27,26 +28,25 @@ const Container = styled.div`
   padding: 20px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* Center content horizontally */
-
-  height: 800px; /* Set max height */
-  overflow-y: auto; /* Enable vertical scrolling */
+  justify-content: center;
+  height: 800px;
+  overflow-y: auto;
 `;
 
 const Layout = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center; /* Center align the items vertically */
+  align-items: center;
   width: 100%;
   padding: 20px;
-  flex-direction: column; /* Ensure items are stacked vertically */
+  flex-direction: column;
 `;
 
 const CardWrapper = styled.div`
-  flex: 1 1 calc(50% - 20px); /* 50% width minus the gap */
+  flex: 1 1 calc(50% - 20px);
   box-sizing: border-box;
-  margin: 10px; /* Add margin for spacing between cards */
-  max-width: 350px; /* Optional: Limit the maximum width of each card */
+  margin: 10px;
+  max-width: 350px;
 `;
 
 const BackButton = styled.button`
@@ -66,9 +66,8 @@ const BackButton = styled.button`
 `;
 
 const ServiceFoods = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const { restaurants } = location.state || { restaurants: [] };
+  const restaurants = useRecoilValue(restaurantsState);
 
   const handleBackClick = () => {
     navigate("/service");

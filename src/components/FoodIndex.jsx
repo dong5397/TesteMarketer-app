@@ -1,7 +1,24 @@
 import React from "react";
 import styled from "styled-components";
+import { useRecoilValue } from "recoil";
+import {
+  selectedRestaurantFromButtonState,
+  selectedRestaurantFromMapState,
+  isFromMapClickState,
+} from "../state/mapAtoms";
 
-function FoodIndex({ restaurant }) {
+function FoodIndex() {
+  const isFromMapClick = useRecoilValue(isFromMapClickState);
+  const restaurant = useRecoilValue(
+    isFromMapClick
+      ? selectedRestaurantFromMapState
+      : selectedRestaurantFromButtonState
+  );
+
+  if (!restaurant) {
+    return <p>선택된 레스토랑이 없습니다.</p>;
+  }
+
   return (
     <Card>
       <Title>{restaurant.restaurants_name}</Title>

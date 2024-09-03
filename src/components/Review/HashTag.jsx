@@ -11,8 +11,9 @@ function HashTag({ hashtags, setHashtags }) {
   const handleInputKeyDown = (event) => {
     if (event.key === "Enter" && inputValue.trim() !== "") {
       event.preventDefault();
-      if (!hashtags.includes(inputValue.trim())) {
-        setHashtags([...hashtags, inputValue.trim()]);
+      const newTag = inputValue.trim();
+      if (!hashtags.includes(newTag)) {
+        setHashtags([...hashtags, newTag]);
       }
       setInputValue("");
     }

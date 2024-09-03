@@ -1,11 +1,23 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+  selectedRestaurantFromMapState,
+  isFromMapClickState,
+  mapMoveFunctionState,
+} from "../../state/mapAtoms";
+import FoodIndex from "../../components/FoodIndex";
 
-const KakaoMap = ({ mapMoveFunction, handleRestaurantClick }) => {
-  const [kakaoLoaded, setKakaoLoaded] = useState(false);
-  const [restaurants, setRestaurants] = useState([]);
+const KakaoMap = () => {
+  const [selectedRestaurant, setSelectedRestaurant] = useRecoilState(
+    selectedRestaurantFromMapState
+  );
+  const [, setIsFromMapClick] = useRecoilState(isFromMapClickState);
+  const setMapMoveFunction = useSetRecoilState(mapMoveFunctionState);
   const mapContainer = useRef(null);
   const mapInstance = useRef(null);
+  const modalRef = useRef(null);
+  const kakaoLoaded = useRef(false);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -14,8 +26,8 @@ const KakaoMap = ({ mapMoveFunction, handleRestaurantClick }) => {
     script.async = true;
     script.onload = () => {
       window.kakao.maps.load(() => {
-        setKakaoLoaded(true);
-        console.log("Kakao script loaded:", window.kakao);
+        kakaoLoaded.current = true;
+        initializeMap();
       });
     };
     script.onerror = () => {
@@ -24,76 +36,108 @@ const KakaoMap = ({ mapMoveFunction, handleRestaurantClick }) => {
     document.head.appendChild(script);
   }, []);
 
-  useEffect(() => {
-    if (kakaoLoaded) {
-      fetch("https://makterbackend.fly.dev/api/v1/restaurants")
-        .then((response) => response.json())
-        .then((data) => {
-          if (data && Array.isArray(data.data)) {
-            setRestaurants(data.data);
-          } else if (data && !Array.isArray(data.data)) {
-            setRestaurants([data.data]);
-          } else {
-            console.error("Unexpected data format:", data);
-          }
-        })
-        .catch((error) => {
-          console.error("API 요청 중 오류 발생:", error);
-        });
-    }
-  }, [kakaoLoaded]);
+  const initializeMap = () => {
+    if (!mapContainer.current || !kakaoLoaded.current) return;
 
-  useEffect(() => {
-    if (kakaoLoaded && mapContainer.current && restaurants.length > 0) {
-      const mapOption = {
-        center: new window.kakao.maps.LatLng(36.350411, 127.384548),
-        level: 8,
-      };
+    const mapOption = {
+      center: new window.kakao.maps.LatLng(36.350411, 127.384548),
+      level: 7,
+    };
 
-      mapInstance.current = new window.kakao.maps.Map(
-        mapContainer.current,
-        mapOption
+    mapInstance.current = new window.kakao.maps.Map(
+      mapContainer.current,
+      mapOption
+    );
+
+    setMapMoveFunction(() => moveMapToLocation); // Expose the map move function
+
+    loadRestaurantsAndAddMarkers();
+  };
+
+  const moveMapToLocation = (latitude, longitude) => {
+    const position = new window.kakao.maps.LatLng(latitude, longitude);
+    mapInstance.current.setCenter(position);
+    mapInstance.current.setLevel(4); // Zoom in to the selected restaurant
+  };
+
+  const loadRestaurantsAndAddMarkers = () => {
+    fetch("https://makterbackend.fly.dev/api/v1/restaurants")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data && Array.isArray(data.data)) {
+          addMarkersToMap(data.data);
+        } else if (data && !Array.isArray(data.data)) {
+          addMarkersToMap([data.data]);
+        } else {
+          console.error("Unexpected data format:", data);
+        }
+      })
+      .catch((error) => {
+        console.error("API 요청 중 오류 발생:", error);
+      });
+  };
+
+  const addMarkersToMap = (restaurants) => {
+    if (!mapInstance.current) return;
+
+    restaurants.forEach((restaurant) => {
+      const markerPosition = new window.kakao.maps.LatLng(
+        parseFloat(restaurant.latitude),
+        parseFloat(restaurant.longitude)
       );
-      console.log("Map instance created:", mapInstance.current);
+      const marker = new window.kakao.maps.Marker({
+        position: markerPosition,
+      });
 
-      restaurants.forEach((restaurant) => {
-        const markerPosition = new window.kakao.maps.LatLng(
+      const infowindow = new window.kakao.maps.InfoWindow({
+        content: `<div style="padding:5px;font-size:12px;">${restaurant.restaurants_name}</div>`,
+      });
+
+      window.kakao.maps.event.addListener(marker, "mouseover", function () {
+        infowindow.open(mapInstance.current, marker);
+      });
+
+      window.kakao.maps.event.addListener(marker, "mouseout", function () {
+        infowindow.close();
+      });
+
+      window.kakao.maps.event.addListener(marker, "click", function () {
+        const position = new window.kakao.maps.LatLng(
           parseFloat(restaurant.latitude),
           parseFloat(restaurant.longitude)
         );
-        const marker = new window.kakao.maps.Marker({
-          position: markerPosition,
-        });
+        mapInstance.current.setCenter(position);
+        mapInstance.current.setLevel(4);
 
-        window.kakao.maps.event.addListener(marker, "click", function () {
-          const position = new window.kakao.maps.LatLng(
-            parseFloat(restaurant.latitude),
-            parseFloat(restaurant.longitude)
-          );
-          mapInstance.current.setCenter(position);
-          mapInstance.current.setLevel(6);
-          console.log("Map moved to (marker click):", position);
-          handleRestaurantClick(restaurant); // 마커 클릭 시 식당 정보 설정
-        });
-
-        marker.setMap(mapInstance.current);
+        setSelectedRestaurant(restaurant);
+        setIsFromMapClick(true);
       });
+
+      marker.setMap(mapInstance.current);
+    });
+  };
+
+  const handleClickOutside = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      setSelectedRestaurant(null); // 모달을 닫음
     }
-  }, [kakaoLoaded, restaurants]);
+  };
 
   useEffect(() => {
-    if (mapMoveFunction && mapInstance.current) {
-      const { latitude, longitude } = mapMoveFunction;
-      const position = new window.kakao.maps.LatLng(latitude, longitude);
-      mapInstance.current.setCenter(position);
-      mapInstance.current.setLevel(4);
-      console.log("Map center set to:", position);
-    }
-  }, [mapMoveFunction]);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <Container>
       <MapContainer id="map" ref={mapContainer} />
+      {selectedRestaurant && (
+        <FoodIndexContainer ref={modalRef}>
+          <FoodIndex />
+        </FoodIndexContainer>
+      )}
     </Container>
   );
 };
@@ -107,6 +151,7 @@ const Container = styled.div`
   padding-left: 10%;
   padding-right: 10%;
   background: linear-gradient(#e7e78b, #f0f0c3);
+  position: relative;
 `;
 
 const MapContainer = styled.div`
@@ -114,4 +159,18 @@ const MapContainer = styled.div`
   height: 100%;
   border-radius: 30px;
   border: 5px solid black;
+`;
+
+const FoodIndexContainer = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  z-index: 100;
+  width: 300px;
+  height: auto;
+  overflow-y: auto;
 `;

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
+import { topRatedRestaurantsState } from "../state/reviewAtoms";
 
-// RankDataFetcher 컴포넌트는 데이터를 가져오고 상태를 관리
 function RankDataFetcher({ children }) {
-  const [searchResults, setSearchResults] = useState([]);
+  const setTopRatedRestaurants = useSetRecoilState(topRatedRestaurantsState);
 
   useEffect(() => {
     fetch("https://makterbackend.fly.dev/api/v1/restaurants")
@@ -10,15 +11,15 @@ function RankDataFetcher({ children }) {
       .then((data) => {
         if (data && Array.isArray(data.data)) {
           const sortedData = [...data.data].sort((a, b) => b.rating - a.rating);
-
-          setSearchResults(sortedData.slice(0, 10));
+          setTopRatedRestaurants(sortedData.slice(0, 10)); // 상태 업데이트
         } else {
           console.error("API 응답에 문제가 있습니다:", data);
         }
-      });
-  }, []);
+      })
+      .catch((error) => console.error("데이터 가져오기 중 오류 발생:", error));
+  }, [setTopRatedRestaurants]);
 
-  return children(searchResults);
+  return children;
 }
 
 export default RankDataFetcher;

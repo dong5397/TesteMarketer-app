@@ -1,22 +1,24 @@
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
-import Modal from "react-modal";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  selectedRestaurantFromButtonState,
+  isDetailModalOpenState,
+  mapMoveFunctionState,
+} from "../state/mapAtoms";
 import FoodIndex from "./FoodIndex";
 import { useNavigate } from "react-router-dom";
 
-Modal.setAppElement("#root");
-
-function FoodDetail({ selectedRestaurant, handleMapMove }) {
-  const [isDetailModalOpen, setDetailModalOpen] = useState(false);
-
+function FoodDetail() {
+  const selectedRestaurant = useRecoilValue(selectedRestaurantFromButtonState);
+  const setIsDetailModalOpen = useSetRecoilState(isDetailModalOpenState);
+  const mapMoveFunction = useRecoilValue(mapMoveFunctionState); // Get the map move function
+  const [showFoodIndex, setShowFoodIndex] = useState(false);
+  const modalRef = useRef(null);
   const navigate = useNavigate();
 
-  const handleDetailModalOpen = () => {
-    setDetailModalOpen(true);
-  };
-
-  const handleDetailModalClose = () => {
-    setDetailModalOpen(false);
+  const handleShowFoodIndex = () => {
+    setShowFoodIndex(true);
   };
 
   const handleDetailPost = () => {
@@ -39,68 +41,67 @@ function FoodDetail({ selectedRestaurant, handleMapMove }) {
   };
 
   const moveToMap = () => {
-    if (handleMapMove && selectedRestaurant) {
-      console.log(selectedRestaurant.latitude, selectedRestaurant.longitude);
-      handleMapMove(selectedRestaurant.latitude, selectedRestaurant.longitude);
+    if (selectedRestaurant && mapMoveFunction) {
+      const { latitude, longitude } = selectedRestaurant;
+      mapMoveFunction(latitude, longitude); // Call the map move function
     } else {
       console.error(
-        "handleMapMove 함수가 정의되지 않았거나 selectedRestaurant가 없습니다."
+        "지도 이동 함수가 정의되지 않았거나 선택된 레스토랑이 없습니다."
       );
     }
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        setIsDetailModalOpen(false); // 모달 닫기
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setIsDetailModalOpen]);
+
   return (
     <Container>
-      <ButtonContainer>
+      <ButtonContainer ref={modalRef}>
         {selectedRestaurant && (
           <div key={selectedRestaurant.restaurants_id}>
-            <Button onClick={handleDetailModalOpen}>세부 정보 보기</Button>
-            <Button onClick={handleDetailPost}>리뷰 작성하기</Button>
-            <Button onClick={moveToMap}>지도로 이동</Button>
+            {showFoodIndex ? (
+              <FoodIndex />
+            ) : (
+              <>
+                <Button onClick={handleShowFoodIndex}>세부 정보 보기</Button>
+                <Button onClick={handleDetailPost}>리뷰 작성하기</Button>
+                <Button onClick={moveToMap}>지도로 이동</Button>
+              </>
+            )}
           </div>
         )}
       </ButtonContainer>
-      <Modal
-        isOpen={isDetailModalOpen}
-        onRequestClose={handleDetailModalClose}
-        contentLabel="Selected Restaurant"
-        style={{
-          overlay: {
-            zIndex: 1000,
-          },
-          content: {
-            width: "50%",
-            maxWidth: "400px",
-            maxHeight: "600px",
-            margin: "0 auto",
-            position: "relative",
-            background: "none",
-            border: "none",
-            padding: "20px",
-            borderRadius: "10px",
-          },
-        }}
-      >
-        <ModalContent>
-          {selectedRestaurant && <FoodIndex restaurant={selectedRestaurant} />}
-        </ModalContent>
-      </Modal>
     </Container>
   );
 }
 
 export default FoodDetail;
 
+// 스타일 컴포넌트
 const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
   background: none;
 `;
 
-const ModalContent = styled.div`
-  width: 100%;
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  border-radius: 10px;
 `;
 
 const Button = styled.button`
@@ -113,7 +114,6 @@ const Button = styled.button`
   border-radius: 8px;
   border: solid 1px;
   cursor: pointer;
-
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 200px;
@@ -128,15 +128,4 @@ const Button = styled.button`
     background-color: #9d9d4d;
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
   }
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;

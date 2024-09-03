@@ -1,28 +1,34 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
+import { useRecoilState } from "recoil";
+import {
+  restaurantsState,
+  selectedRestaurantFromButtonState, // 수정된 부분
+  isDetailModalOpenState,
+  loadingState,
+  errorState,
+  isFromMapClickState, // 추가
+} from "../state/mapAtoms";
 import FoodDetail from "./FoodDetail";
-import { useNavigate } from "react-router-dom";
 
-const FoodBox = ({ handleMapMove }) => {
-  const [restaurants, setRestaurants] = useState([]);
-  const [selectedRestaurantId, setSelectedRestaurantId] = useState(null);
-  const [selectedRestaurant, setSelectedRestaurant] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const FoodBox = () => {
+  const [restaurants, setRestaurants] = useRecoilState(restaurantsState);
+  const [selectedRestaurant, setSelectedRestaurant] = useRecoilState(
+    selectedRestaurantFromButtonState // 수정된 부분
+  );
+  const [isDetailModalOpen, setIsDetailModalOpen] = useRecoilState(
+    isDetailModalOpenState
+  );
+  const [loading, setLoading] = useRecoilState(loadingState);
+  const [error, setError] = useRecoilState(errorState);
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
-
-  const modalRef = useRef();
-  const navigate = useNavigate();
+  const [, setIsFromMapClick] = useRecoilState(isFromMapClickState); // 추가
+  const modalRef = useRef(null);
 
   useEffect(() => {
+    setLoading(true);
     fetch("https://makterbackend.fly.dev/api/v1/restaurants")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        return response.json();
-      })
+      .then((response) => response.json())
       .then((data) => {
         const sortedRestaurants = Array.isArray(data.data)
           ? data.data.sort((a, b) => b.rating - a.rating)
@@ -31,42 +37,22 @@ const FoodBox = ({ handleMapMove }) => {
         setLoading(false);
       })
       .catch((error) => {
+        console.error(error);
         setError(error.message);
         setLoading(false);
       });
-  }, []);
+  }, [setRestaurants, setLoading, setError]);
 
-  useEffect(() => {
-    if (selectedRestaurantId) {
-      fetch(
-        `https://makterbackend.fly.dev/api/v1/restaurants/${selectedRestaurantId}`
-      )
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to fetch data");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setSelectedRestaurant(data.data);
-          setIsModalOpen(true);
-        })
-        .catch((error) => {
-          setError(error.message);
-        });
-    }
-  }, [selectedRestaurantId]);
-
-  const handleRestaurantClick = (id, event) => {
+  const handleRestaurantClick = (restaurant, event) => {
+    setSelectedRestaurant(restaurant); // 클릭한 식당 정보를 상태에 저장
+    setIsFromMapClick(false); // 식당 박스를 클릭한 경우 false로 설정
     const { clientX, clientY } = event;
-    setSelectedRestaurantId(id);
     setModalPosition({ x: clientX, y: clientY });
+    setIsDetailModalOpen(true);
   };
 
   const handleCloseDetails = () => {
-    setIsModalOpen(false);
-    setSelectedRestaurant(null);
-    setSelectedRestaurantId(null);
+    setIsDetailModalOpen(false);
   };
 
   const handleContainerClick = (event) => {
@@ -84,26 +70,21 @@ const FoodBox = ({ handleMapMove }) => {
         restaurants.map((restaurant, index) => (
           <Box
             key={index}
-            onClick={(event) =>
-              handleRestaurantClick(restaurant.restaurants_id, event)
-            }
+            onClick={(event) => handleRestaurantClick(restaurant, event)}
           >
             <h2>식당 이름: {restaurant.restaurants_name}</h2>
-            <p>주소 : {restaurant.address}</p>
+            <p>주소: {restaurant.address}</p>
             <p>평점: {restaurant.rating}</p>
             <Image src={restaurant.image} alt={restaurant.restaurants_name} />
           </Box>
         ))}
-      {isModalOpen && (
+
+      {isDetailModalOpen && (
         <RestaurantDetails
           ref={modalRef}
-          style={{ top: modalPosition.y, left: modalPosition.x }}
+          style={{ top: `${modalPosition.y}px`, left: `${modalPosition.x}px` }}
         >
-          <CloseButton onClick={handleCloseDetails}>X</CloseButton>
-          <FoodDetail
-            selectedRestaurant={selectedRestaurant}
-            handleMapMove={handleMapMove}
-          />
+          <FoodDetail />
         </RestaurantDetails>
       )}
     </Container>
@@ -157,7 +138,7 @@ const Image = styled.img`
   border-radius: 8px;
 `;
 
-const RestaurantDetails = styled(BaseBox)`
+const RestaurantDetails = styled.div`
   border-color: #ccc;
   position: fixed;
   z-index: 9999999;

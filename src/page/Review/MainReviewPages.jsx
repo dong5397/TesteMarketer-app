@@ -1,38 +1,37 @@
-import React, { useState } from "react";
+import React from "react";
 import { DeviceFrameset } from "react-device-frameset";
 import styled from "styled-components";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import PropTypes from "prop-types";
+import { useRecoilState } from "recoil";
+import ReviewPage from "./ReviewPage"; // 페이지 컴포넌트
+import {
+  selectedCategoryState,
+  searchTermState,
+  categoriesState, // reviewAtoms에서 불러옴
+} from "../../state/reviewAtoms";
+import { restaurantsState } from "../../state/mapAtoms"; // mapAtoms에서 불러옴
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUtensils } from "@fortawesome/free-solid-svg-icons";
-import { faUtensilSpoon } from "@fortawesome/free-solid-svg-icons";
-import { faFish } from "@fortawesome/free-solid-svg-icons";
-import { faCookie } from "@fortawesome/free-solid-svg-icons";
-import { faPizzaSlice } from "@fortawesome/free-solid-svg-icons";
-import { faDrumstickBite } from "@fortawesome/free-solid-svg-icons";
-import { faIceCream } from "@fortawesome/free-solid-svg-icons";
-import { faCoffee } from "@fortawesome/free-solid-svg-icons";
-import { faHamburger } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUtensils,
+  faUtensilSpoon,
+  faFish,
+  faCookie,
+  faPizzaSlice,
+  faDrumstickBite,
+  faIceCream,
+  faCoffee,
+  faHamburger,
+} from "@fortawesome/free-solid-svg-icons";
 
 function ReviewListPage() {
   const navigate = useNavigate();
 
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [restaurants, setRestaurants] = useState({});
-  const [searchTerm, setSearchTerm] = useState("");
-  const [categories, setCategories] = useState([
-    "한식",
-    "일식",
-    "중식",
-    "양식",
-    "치킨",
-    "디저트",
-    "음료",
-    "버거",
-  ]);
+  const [selectedCategory, setSelectedCategory] = useRecoilState(
+    selectedCategoryState
+  );
+  const [restaurants, setRestaurants] = useRecoilState(restaurantsState);
+  const [searchTerm, setSearchTerm] = useRecoilState(searchTermState);
+  const [categories] = useRecoilState(categoriesState);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -100,7 +99,7 @@ function ReviewListPage() {
   };
 
   return (
-    <ReviewPage>
+    <ReviewPageContainer>
       <ReviewPageWrapper>
         <DeviceFrameset
           device="iPad Mini"
@@ -132,13 +131,13 @@ function ReviewListPage() {
           </CategoriesGridContainer>
         </DeviceFrameset>
       </ReviewPageWrapper>
-    </ReviewPage>
+    </ReviewPageContainer>
   );
 }
 
 export default ReviewListPage;
 
-const ReviewPage = styled.div`
+const ReviewPageContainer = styled.div`
   background: linear-gradient(#e7e78b, #f0f0c3);
   height: 100%;
 `;

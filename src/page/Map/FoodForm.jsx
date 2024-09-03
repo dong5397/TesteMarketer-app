@@ -2,10 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import FoodBox from "../../components/FoodBox";
 
-const FoodForm = ({ handleMapMove }) => {
+const FoodForm = () => {
+  // 선택된 레스토랑이 있어도 `FoodBox`가 렌더링되도록 설정
   return (
     <FormContainer>
-      <FoodBox handleMapMove={handleMapMove} />
+      <FoodBox />
     </FormContainer>
   );
 };

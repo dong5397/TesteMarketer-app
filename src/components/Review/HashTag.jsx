@@ -1,7 +1,12 @@
-import { useState } from "react";
+// src/components/Review/HashTag.jsx
+
+import React, { useState } from "react"; // `useState`를 추가로 import 합니다.
+import { useRecoilState } from "recoil";
+import { hashtagsState } from "../../state/reviewAtoms";
 import styled from "styled-components";
 
-function HashTag({ hashtags, setHashtags }) {
+function HashTag() {
+  const [hashtags, setHashtags] = useRecoilState(hashtagsState);
   const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (event) => {
@@ -11,9 +16,8 @@ function HashTag({ hashtags, setHashtags }) {
   const handleInputKeyDown = (event) => {
     if (event.key === "Enter" && inputValue.trim() !== "") {
       event.preventDefault();
-      const newTag = inputValue.trim();
-      if (!hashtags.includes(newTag)) {
-        setHashtags([...hashtags, newTag]);
+      if (!hashtags.includes(inputValue.trim())) {
+        setHashtags([...hashtags, inputValue.trim()]);
       }
       setInputValue("");
     }
@@ -48,6 +52,8 @@ function HashTag({ hashtags, setHashtags }) {
 }
 
 export default HashTag;
+
+// 나머지 스타일 컴포넌트 유지
 
 const Wrapper = styled.div`
   width: 100%;

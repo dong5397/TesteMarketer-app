@@ -1,32 +1,35 @@
+// 파일: src/pages/CategoryReviewPage.jsx
+
 import { useState, useEffect } from "react";
+import { useRecoilState } from "recoil";
+import {
+  currentPageState,
+  filterState,
+  cardInfoState,
+  reviewRestaurantsState,
+} from "../../state/reviewAtoms"; // Recoil 상태 불러오기
 import { faArrowLeft, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DeviceFrameset } from "react-device-frameset";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import ReviewCard from "../../components/Review/ReviewCard";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import {
-  currentPageState,
-  filterState,
-  sortedRestaurantsState,
-  cardInfoState,
-  isLoadingState, // Added isLoading state
-} from "../../state/reviewAtoms";
 
 function CategoryReviewPage() {
   const location = useLocation();
   const { restaurants } = location.state || { restaurants: [] };
+  console.log(restaurants);
 
+  const [isLoading, setIsLoading] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
 
+  // Recoil 상태 사용
   const [currentPage, setCurrentPage] = useRecoilState(currentPageState);
   const [filter, setFilter] = useRecoilState(filterState);
   const [sortedRestaurants, setSortedRestaurants] = useRecoilState(
-    sortedRestaurantsState
+    reviewRestaurantsState
   );
-  const [isLoading, setIsLoading] = useRecoilState(isLoadingState); // Use isLoading state
-  const setCardInfo = useSetRecoilState(cardInfoState);
+  const [cardInfo, setCardInfo] = useRecoilState(cardInfoState);
 
   const itemsPerPage = 4;
 
@@ -44,8 +47,8 @@ function CategoryReviewPage() {
 
     if (scrollTop + clientHeight >= scrollHeight - 100 && !isLoading) {
       setIsLoading(true);
-      // Fetch additional data
-      // Example: fetchAdditionalData();
+      // 추가 데이터를 불러오는 함수 호출
+      // 예: fetchAdditionalData();
     }
   };
 
@@ -62,7 +65,7 @@ function CategoryReviewPage() {
         rating: location.state.rating,
       });
     }
-  }, [location.state, setCardInfo]);
+  }, [location.state]);
 
   const handleNextPage = () => {
     setCurrentPage((prevPage) => prevPage + 1);
@@ -74,10 +77,7 @@ function CategoryReviewPage() {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = sortedRestaurants.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+  const currentItems = restaurants.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);
@@ -100,7 +100,7 @@ function CategoryReviewPage() {
         break;
     }
     setSortedRestaurants(sortedArray);
-  }, [filter, restaurants, setSortedRestaurants]);
+  }, [filter, restaurants]);
 
   return (
     <ReviewPage>
@@ -167,7 +167,7 @@ function CategoryReviewPage() {
               </PageButton>
               <PageButton
                 onClick={handleNextPage}
-                disabled={indexOfLastItem >= sortedRestaurants.length}
+                disabled={indexOfLastItem >= restaurants.length}
               >
                 다음 페이지
               </PageButton>
@@ -181,8 +181,6 @@ function CategoryReviewPage() {
 
 export default CategoryReviewPage;
 
-// Styled components go here...
-
 const ReviewPage = styled.div`
   background: linear-gradient(#e7e78b, #f0f0c3);
   min-height: 100vh;
@@ -195,7 +193,6 @@ const ReviewPageWrapper = styled.div`
   max-width: 1000px;
   width: 100%;
   margin: 20px;
-
   border-radius: 10px;
 `;
 
@@ -324,7 +321,6 @@ const ReviewCardContainer = styled.div`
   overflow-y: auto;
   padding: 20px;
   border-radius: 10px;
-
   background-color: #fff;
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.1);

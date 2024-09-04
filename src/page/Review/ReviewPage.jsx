@@ -1,7 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef } from "react";
+import { useRecoilState } from "recoil";
+import { reviewsState, isActiveState } from "../../state/reviewAtoms"; // 필요한 Recoil 상태들 불러오기
 import styled from "styled-components";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useParams, useLocation } from "react-router-dom";
 import RatingStars from "../../components/Review/RatingStars";
 import ReviewList from "../../components/Review/ReviewList";
@@ -17,52 +19,49 @@ import { DeviceFrameset } from "react-device-frameset";
 import "react-device-frameset/styles/marvel-devices.min.css";
 
 function ReviewPage() {
-  const { id } = useParams();
   const location = useLocation();
-  const restranutInfo = { ...location.state };
+  const restaurantInfo = { ...location.state };
+  const { id } = useParams();
 
-  const [reviews, setReviews] = useState([]);
-  const [isActive, setIsActive] = useState(true);
+  const [reviews, setReviews] = useRecoilState(reviewsState);
+  const [isActive, setIsActive] = useRecoilState(isActiveState); // Recoil로 관리하는 상태
+  const lastId = useRef(4);
 
   const handleToggle = () => {
     setIsActive(!isActive);
   };
 
-  const fetchReviews = async (restaurantId) => {
+  const fetchReviews = async (restaurant_Id) => {
     try {
       const response = await fetch(
-        `https://makterback.fly.dev/api/v1/reviews/${restaurantId}`
+        `https://makterbackend.fly.dev/api/v1/reviews/${restaurant_Id}`
       );
       if (!response.ok) {
-        throw new Error("Failed to fetch reviews");
+        throw new Error(`Failed to fetch reviews: ${response.statusText}`);
       }
-
       const data = await response.json();
       setReviews(data.reviews);
     } catch (error) {
-      console.error("Error fetching reviews:", error);
+      console.error("Error fetching reviews:", error.message);
     }
   };
 
   useEffect(() => {
-    fetchReviews(restranutInfo.id);
-  }, [restranutInfo.id]);
-
-  const lastId = useRef(4);
+    if (restaurantInfo.id) {
+      fetchReviews(restaurantInfo.id);
+    }
+  }, [restaurantInfo.id]);
 
   const onSubmit = (username, content, hashtags, rating) => {
-    const updateReviews = reviews.concat({
-      id: lastId.current,
-      username,
-      content,
-      hashtags,
-      rating,
-    });
+    const updatedReviews = [
+      ...reviews,
+      { id: lastId.current, username, content, hashtags, rating },
+    ];
 
-    setReviews(updateReviews);
+    setReviews(updatedReviews);
     lastId.current++;
 
-    fetch("https://makterback.fly.dev/api/v1/reviews", {
+    fetch("https://makterbackend.fly.dev/api/v1/reviews", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -75,111 +74,196 @@ function ReviewPage() {
         hashtags: hashtags,
       }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to create review: ${response.statusText}`);
+        }
+        return response.json();
+      })
       .then((data) => {
+        console.log("Success:", data);
         fetchReviews(id);
         handleToggle();
       })
       .catch((error) => {
-        console.error("Error:", error);
+        console.error("Error:", error.message);
       });
   };
 
-  const onDelete = async (reviewId) => {
+  const OnDelete = async (review_id) => {
     try {
       const response = await fetch(
-        `https://makterback.fly.dev/api/v1/reviews/${reviewId}`,
+        `https://makterbackend.fly.dev/api/v1/reviews/${review_id}`,
         {
           method: "DELETE",
         }
       );
       if (!response.ok) {
-        throw new Error("Failed to delete review");
+        throw new Error(`Failed to delete review: ${response.statusText}`);
       }
       fetchReviews(id);
     } catch (error) {
-      console.error("Error deleting review:", error);
+      console.error("Error deleting review:", error.message);
     }
   };
 
   return (
-    <ReviewPageWrapper>
+    <ReveiwP>
       <HeaderContainer>
         <Title>식당 리뷰</Title>
       </HeaderContainer>
-
-      <MainContainer>
-        <DetailsContainer>
+      <Container>
+        <ContentsContainer>
           <DeviceFrameset
             device="iPhone X"
             color="black"
             width="100%"
             height="100%"
           >
-            <ImageSection backgroundImage={restranutInfo.image}>
-              <DetailsCard>
-                <RestaurantName>{restranutInfo.name}</RestaurantName>
-                <RatingStars rating={restranutInfo.rating} />
-
-                <TogglePanel>
-                  <ToggleWrapper onClick={handleToggle}>
-                    <ToggleButton active={isActive}>
-                      리뷰 {restranutInfo.rating}
-                    </ToggleButton>
-                    <ToggleButton active={!isActive}>리뷰 작성</ToggleButton>
-                    <Slider active={isActive} />
-                  </ToggleWrapper>
-                </TogglePanel>
-              </DetailsCard>
-            </ImageSection>
-            <InfoContainer>
-              <InfoBlock>
-                <Icon icon={faBurger} size="2x" />
-                <InfoText>{restranutInfo.category}</InfoText>
-              </InfoBlock>
-              <InfoBlock>
-                <Icon icon={faClock} size="2x" />
-                <InfoText>영업 시간: {restranutInfo.opening_hours}</InfoText>
-              </InfoBlock>
-              <InfoBlock>
-                <Icon icon={faMapMarkerAlt} size="2x" />
-                <InfoText>위치: {restranutInfo.address}</InfoText>
-              </InfoBlock>
-              <InfoBlock>
-                <Icon icon={faPhone} size="2x" />
-                <InfoText>연락처: {restranutInfo.phone}</InfoText>
-              </InfoBlock>
-            </InfoContainer>
+            <ImgSection $backgroundImage={restaurantInfo.image}>
+              <CardSection>
+                <CardTitle>{restaurantInfo.name}</CardTitle>
+                <RatingStars rating={restaurantInfo.rating} />
+                <ReviewPanel>
+                  <ToggleContainer onClick={handleToggle}>
+                    <ReviewButton $active={isActive}>
+                      리뷰 {restaurantInfo.rating}
+                    </ReviewButton>
+                    <ReviewButton $active={!isActive}>리뷰 작성</ReviewButton>
+                    <ToggleSlider $active={isActive} />
+                  </ToggleContainer>
+                </ReviewPanel>
+              </CardSection>
+            </ImgSection>
+            <AdditionalInfoBox>
+              <AdditionalInfo>
+                <InfoIcon icon={faBurger} size="2x" />
+                <InfoText>{restaurantInfo.category}</InfoText>
+              </AdditionalInfo>
+              <AdditionalInfo>
+                <InfoIcon icon={faClock} size="2x" />
+                <InfoText>영업 시간: {restaurantInfo.opening_hours}</InfoText>
+              </AdditionalInfo>
+              <AdditionalInfo>
+                <InfoIcon icon={faMapMarkerAlt} size="2x" />
+                <InfoText>위치: {restaurantInfo.address}</InfoText>
+              </AdditionalInfo>
+              <AdditionalInfo>
+                <InfoIcon icon={faPhone} size="2x" />
+                <InfoText>연락처: {restaurantInfo.phone}</InfoText>
+              </AdditionalInfo>
+            </AdditionalInfoBox>
           </DeviceFrameset>
-        </DetailsContainer>
-        <ReviewSection>
+        </ContentsContainer>
+        <ReviewContainer>
           {isActive ? (
             <WriteReview onSubmit={onSubmit} />
           ) : (
-            <ReviewList reviews={reviews} onDelete={onDelete} />
+            <ReviewList reviews={reviews} onDelete={OnDelete} />
           )}
-        </ReviewSection>
-
-        <Carousel autoPlay></Carousel>
-      </MainContainer>
-    </ReviewPageWrapper>
+        </ReviewContainer>
+        <Carousel autoPlay />
+      </Container>
+    </ReveiwP>
   );
 }
 
 export default ReviewPage;
 
-const ReviewPageWrapper = styled.div`
+const ReveiwP = styled.div`
   background: linear-gradient(#f0f0c3, #e7e7c9);
+`;
+
+const Container = styled.div`
+  max-width: 1280px;
+  height: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  gap: 100px;
 `;
 
 const HeaderContainer = styled.header`
   max-width: 100%;
+  padding: 0 20px;
   padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: sticky;
   background: linear-gradient(#e7e78b, #f0f0c3);
+`;
+
+const ReviewContainer = styled.main`
+  max-width: 85%;
+  min-height: 750px;
+  margin-right: 40px;
+  max-height: 750px;
+  overflow: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 60px;
+  background-color: white;
+`;
+
+const ReviewPanel = styled.div`
+  height: 50px;
+  width: 200px;
+  border-radius: 50px;
+  background-color: #cde8e5;
+  display: flex;
+`;
+
+const ToggleContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px;
+  background-color: #cde8e5;
+`;
+
+const ReviewButton = styled.button`
+  flex: 1;
+  font-size: 14px;
+  font-weight: 900;
+  border: none;
+  border-radius: 50px;
+  background-color: transparent;
+  color: ${({ $active }) => ($active ? "#dd5746" : "black")};
+  transition: color 0.5s ease-in-out;
+  z-index: 1;
+`;
+
+const ToggleSlider = styled.div`
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  background-color: #f4ce14;
+  border-radius: 50px;
+  transition: transform 0.4s cubic-bezier(0.24, 0, 0.5, 1);
+  transform: ${({ $active }) =>
+    $active ? "translateX(50%)" : "translateX(-50%)"};
+`;
+
+const ContentsContainer = styled.div`
+  max-width: 30%;
+  height: 700px;
+  flex: 1;
+  border-radius: 50px;
+`;
+
+const ImgSection = styled.section`
+  max-width: 100%;
+  height: 300px;
+  background-image: url(${(props) => props.$backgroundImage});
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  border-radius: 20px;
 `;
 
 const Title = styled.h1`
@@ -192,33 +276,7 @@ const Title = styled.h1`
   text-align: center;
 `;
 
-const MainContainer = styled.div`
-  max-width: 1280px;
-  height: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  display: flex;
-  gap: 50px;
-`;
-
-const DetailsContainer = styled.div`
-  max-width: 30%;
-  height: 700px;
-  flex: 1;
-  border-radius: 50px;
-`;
-
-const ImageSection = styled.section`
-  max-width: 100%;
-  height: 300px;
-  background-image: url(${(props) => props.backgroundImage});
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  border-radius: 20px;
-`;
-
-const DetailsCard = styled.div`
+const CardSection = styled.section`
   max-width: 340px;
   height: 180px;
   display: flex;
@@ -237,54 +295,12 @@ const DetailsCard = styled.div`
   box-shadow: rgba(10, 100, 90, 0.5) 0px 7px 29px 0px;
 `;
 
-const RestaurantName = styled.h2`
+const CardTitle = styled.h2`
   font-size: 22px;
   margin-bottom: 10px;
 `;
 
-const TogglePanel = styled.div`
-  height: 50px;
-  width: 200px;
-  border-radius: 50px;
-  background-color: #cde8e5;
-  display: flex;
-`;
-
-const ToggleWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50px;
-  background-color: #cde8e5;
-`;
-
-const ToggleButton = styled.button`
-  flex: 1;
-  font-size: 14px;
-  font-weight: 900;
-  border: none;
-  border-radius: 50px;
-  background-color: transparent;
-  color: ${({ active }) => (active ? "#dd5746" : "black")};
-  transition: color 0.5s ease-in-out;
-  z-index: 1;
-`;
-
-const Slider = styled.div`
-  position: absolute;
-  width: 50%;
-  height: 100%;
-  background-color: #f4ce14;
-  border-radius: 50px;
-  transition: transform 0.4s cubic-bezier(0.24, 0, 0.5, 1);
-  transform: ${({ active }) =>
-    active ? "translateX(50%)" : "translateX(-50%)"};
-`;
-
-const InfoContainer = styled.div`
+const AdditionalInfoBox = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
@@ -296,7 +312,7 @@ const InfoContainer = styled.div`
   background-color: rgba(255, 255, 255, 0.8);
 `;
 
-const InfoBlock = styled.div`
+const AdditionalInfo = styled.div`
   display: flex;
   align-items: center;
   padding: 10px;
@@ -311,7 +327,7 @@ const InfoBlock = styled.div`
   }
 `;
 
-const Icon = styled(FontAwesomeIcon)`
+const InfoIcon = styled(FontAwesomeIcon)`
   margin-right: 10px;
   font-size: 24px;
   color: #555;
@@ -321,17 +337,4 @@ const InfoText = styled.span`
   font-size: 16px;
   font-weight: 600;
   color: #333;
-`;
-
-const ReviewSection = styled.div`
-  max-width: 85%;
-  min-height: 750px;
-  margin-right: 40px;
-  max-height: 750px;
-  overflow: auto;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  border-radius: 60px;
-  background-color: white;
 `;

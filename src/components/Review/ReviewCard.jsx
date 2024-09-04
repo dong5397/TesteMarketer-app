@@ -1,9 +1,72 @@
-import React, { useState } from "react";
+import React from "react";
+import { useRecoilState } from "recoil";
+import { cardInfoState } from "../../state/reviewAtoms"; // Recoil 상태 불러오기
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import click from "../../images/review/click.gif";
+
+const ReviewCard = ({ restaurant }) => {
+  const { id, name, image, rating, opening_hours, phone, address, category } =
+    restaurant;
+
+  const navigate = useNavigate();
+  const [showCardInfo, setShowCardInfo] = useState(false);
+  const [cardInfo, setCardInfo] = useRecoilState(cardInfoState); // Recoil을 사용하여 상태 관리
+
+  const handleDetailPost = (restaurant) => {
+    console.log(restaurant);
+    navigate(`/review/${id}`, {
+      state: {
+        id: `${id}`,
+        name: `${name}`,
+        opening_hours: `${opening_hours}`,
+        rating: `${rating}`,
+        image: `${image}`,
+        phone: `${phone}`,
+        address: `${address}`,
+        category: `${category}`,
+      },
+    });
+  };
+
+  return (
+    <CardWrapper
+      onClick={() => handleDetailPost({ restaurant })}
+      onMouseEnter={() => setShowCardInfo(true)}
+      onMouseLeave={() => setShowCardInfo(false)}
+    >
+      <CardBackground backgroundImage={restaurant.image} />
+      <CardContent>
+        <CardTitle showInfo={showCardInfo}>
+          {showCardInfo ? "클릭하여 리뷰보기" : restaurant.name}
+        </CardTitle>
+        <CardHashTag showInfo={showCardInfo}>
+          {showCardInfo ? "" : `#${restaurant.menus.join(" #")}`}
+        </CardHashTag>
+        <CardImg backgroundImage={showCardInfo ? click : restaurant.image} />
+      </CardContent>
+      <CardInfoBox showInfo={showCardInfo}>
+        <ReviewCount>리뷰 {cardInfo.reviewCount}개</ReviewCount>
+        <ViewCount>조회 {cardInfo.viewCount}회</ViewCount>
+        <Rating>
+          <FontAwesomeIcon
+            icon={solidStar}
+            flip="horizontal"
+            size="2x"
+            style={{ color: "#FFD43B" }}
+          />{" "}
+          {restaurant.rating}
+        </Rating>
+      </CardInfoBox>
+    </CardWrapper>
+  );
+};
+
+export default ReviewCard;
+
+// 스타일 컴포넌트
 const CardBackground = styled.div`
   position: absolute;
   top: 0;
@@ -23,9 +86,9 @@ const CardBackground = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* 더 어두운 반투명 오버레이 */
+    background: rgba(0, 0, 0, 0.5);
     z-index: 2;
-    transition: background 0.3s ease; /* 부드러운 전환 효과 */
+    transition: background 0.3s ease;
   }
 `;
 
@@ -51,7 +114,7 @@ const CardWrapper = styled.div`
   }
 
   &:hover ${CardBackground}::after {
-    background: none; /* 호버 시 오버레이 제거 */
+    background: none;
   }
 `;
 
@@ -112,74 +175,16 @@ const CardImg = styled.div`
 
 const CardTitle = styled.h2`
   margin: 10px 0;
-  color: white; /* 글씨를 흰색으로 변경 */
-  font-size: ${({ showInfo }) =>
-    showInfo ? "20px" : "24px"}; /* 폰트 크기 조정 */
+  color: white;
+  font-size: ${({ showInfo }) => (showInfo ? "20px" : "24px")};
   font-family: "Uiyeun", sans-serif;
   text-align: center;
   transition: font-size 0.3s ease, color 0.3s ease;
 `;
 
 const CardHashTag = styled.div`
-  color: white; /* 글씨를 흰색으로 변경 */
+  color: white;
   font-size: 18px;
   font-family: "Uiyeun", sans-serif;
   text-align: center;
 `;
-const ReviewCard = ({ restaurant }) => {
-  const { id, name, image, rating, opening_hours, phone, address, category } =
-    restaurant;
-
-  const navigate = useNavigate();
-  const [showCardInfo, setShowCardInfo] = useState(false);
-  const [cardInfo, setCardInfo] = useRecoilState(cardInfoState); // 리코일 상태 사용
-
-  const handleDetailPost = (restaurant) => {
-    navigate(`/review/${id}`, {
-      state: {
-        id: `${id}`,
-        name: `${name}`,
-        opening_hours: `${opening_hours}`,
-        rating: `${rating}`,
-        image: `${image}`,
-        phone: `${phone}`,
-        address: `${address}`,
-        category: `${category}`,
-      },
-    });
-  };
-
-  return (
-    <CardWrapper
-      onClick={() => handleDetailPost({ restaurant })}
-      onMouseEnter={() => setShowCardInfo(true)}
-      onMouseLeave={() => setShowCardInfo(false)}
-    >
-      <CardBackground backgroundImage={restaurant.image} />
-      <CardContent>
-        <CardTitle showInfo={showCardInfo}>
-          {showCardInfo ? "클릭하여 리뷰보기" : restaurant.name}
-        </CardTitle>
-        <CardHashTag showInfo={showCardInfo}>
-          {showCardInfo ? "" : `#${restaurant.menus.join(" #")}`}
-        </CardHashTag>
-        <CardImg backgroundImage={showCardInfo ? click : restaurant.image} />
-      </CardContent>
-      <CardInfoBox showInfo={showCardInfo}>
-        <ReviewCount>리뷰 {cardInfo.reviewCount}개</ReviewCount>
-        <ViewCount>조회 {cardInfo.viewCount}회</ViewCount>
-        <Rating>
-          <FontAwesomeIcon
-            icon={solidStar}
-            flip="horizontal"
-            size="2x"
-            style={{ color: "#FFD43B" }}
-          />{" "}
-          {restaurant.rating}
-        </Rating>
-      </CardInfoBox>
-    </CardWrapper>
-  );
-};
-
-export default ReviewCard;

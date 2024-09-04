@@ -1,18 +1,10 @@
-import React from "react";
-import { DeviceFrameset } from "react-device-frameset";
+// 파일: MainReviewPages.jsx
+
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useRecoilState } from "recoil";
-import ReviewPage from "./ReviewPage"; // 페이지 컴포넌트
-import {
-  selectedCategoryState,
-  searchTermState,
-  categoriesState, // reviewAtoms에서 불러옴
-} from "../../state/reviewAtoms";
-import { restaurantsState } from "../../state/mapAtoms"; // mapAtoms에서 불러옴
-import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUtensils } from "@fortawesome/free-solid-svg-icons";
 import {
-  faUtensils,
   faUtensilSpoon,
   faFish,
   faCookie,
@@ -22,57 +14,26 @@ import {
   faCoffee,
   faHamburger,
 } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+import { DeviceFrameset } from "react-device-frameset";
 
-function ReviewListPage() {
+function MainReviewPages() {
   const navigate = useNavigate();
-
-  const [selectedCategory, setSelectedCategory] = useRecoilState(
-    selectedCategoryState
-  );
-  const [restaurants, setRestaurants] = useRecoilState(restaurantsState);
-  const [searchTerm, setSearchTerm] = useRecoilState(searchTermState);
-  const [categories] = useRecoilState(categoriesState);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categories, setCategories] = useState([
+    "한식",
+    "일식",
+    "중식",
+    "양식",
+    "치킨",
+    "디저트",
+    "음료",
+    "버거",
+  ]);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
-    // 서버에 해당 카테고리의 데이터를 요청
-    fetch(
-      `https://makterbackend.fly.dev/api/v1/restaurants/category/${category}`
-    )
-      .then((response) => {
-        if (response.ok) {
-          return response.json(); // 응답이 성공적이면 JSON 형태로 변환
-        }
-        throw new Error("Network response was not ok."); // 응답 실패 처리
-      })
-      .then((data) => {
-        console.log(data.data.map((el) => el)); // 받은 데이터를 콘솔에 로그로 출력
-        setRestaurants(data.data);
-
-        // Pass menu items to the next page
-        navigate(`/category/${category}`, {
-          state: {
-            restaurants: data.data.map((el) => ({
-              id: el.restaurants_id,
-              name: el.restaurants_name,
-              phone: el.phone,
-              opening_hours: el.opening_hours,
-              rating: el.rating,
-              category: el.category,
-              address: el.address,
-              image: el.image,
-              menus: el.food_menu.menus.map((menu) => menu.name),
-            })),
-          },
-        });
-      })
-      .catch((error) => {
-        console.error(
-          "There has been a problem with your fetch operation:",
-          error
-        );
-        // 에러 처리 로직
-      });
+    // 카테고리 선택 로직 추가
   };
 
   const getCategoryIcon = (category) => {
@@ -94,12 +55,12 @@ function ReviewListPage() {
       case "버거":
         return faHamburger;
       default:
-        return null;
+        return faUtensils;
     }
   };
 
   return (
-    <ReviewPageContainer>
+    <ReviewPage>
       <ReviewPageWrapper>
         <DeviceFrameset
           device="iPad Mini"
@@ -110,14 +71,13 @@ function ReviewListPage() {
           <GreenContainer>
             <FontAwesomeIcon icon={faUtensils} size="2x" />
           </GreenContainer>
-
           <CategoriesGridContainer>
             <CategoriesGrid>
               {categories.map((category, index) => (
                 <CategoryContainer key={index}>
                   <CategoryButton
                     onClick={() => handleCategorySelect(category)}
-                    active={selectedCategory === category}
+                    $active={selectedCategory === category} // `$active`로 수정
                   >
                     <FontAwesomeIcon
                       icon={getCategoryIcon(category)}
@@ -131,13 +91,14 @@ function ReviewListPage() {
           </CategoriesGridContainer>
         </DeviceFrameset>
       </ReviewPageWrapper>
-    </ReviewPageContainer>
+    </ReviewPage>
   );
 }
 
-export default ReviewListPage;
+export default MainReviewPages;
 
-const ReviewPageContainer = styled.div`
+// 스타일 컴포넌트
+const ReviewPage = styled.div`
   background: linear-gradient(#e7e78b, #f0f0c3);
   height: 100%;
 `;
@@ -145,7 +106,6 @@ const ReviewPageContainer = styled.div`
 const ReviewPageWrapper = styled.div`
   max-width: 1000px;
   height: 1200px;
-
   margin: 0 auto;
   padding: 20px;
   gap: 100px;
@@ -160,25 +120,6 @@ const GreenContainer = styled.div`
   border-radius: 0 0 30px 30px;
 `;
 
-const SearchBarContainer = styled.div`
-  display: flex;
-  align-items: center;
-  width: 60%;
-  margin-bottom: 20px;
-  margin-left: 20%;
-  margin-top: 30px;
-`;
-
-const SearchBar = styled.input`
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: none;
-  border-radius: 20px;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-`;
-
 const CategoriesGridContainer = styled.div`
   background-color: #fff;
   padding: 20px;
@@ -190,7 +131,6 @@ const CategoriesGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
-  padding-top: 50px;
 `;
 
 const CategoryContainer = styled.div`
@@ -208,16 +148,16 @@ const CategoryButton = styled.button`
   border: none;
   border: solid 4px;
   border-radius: 20px;
-  background-color: ${({ active }) => (active ? "#e7f1c9" : "#f0f0f0")};
-  color: ${({ active }) => (active ? "#fff" : "#000")};
+  background-color: ${({ $active }) => ($active ? "#e7f1c9" : "#f0f0f0")};
+  color: ${({ $active }) => ($active ? "#fff" : "#000")};
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
   width: 150px;
   height: 150px;
 
   &:hover {
-    background-color: ${({ active }) => (active ? "#e7f1c9" : " #e9e5a9")};
-    color: ${({ active }) => (active ? "#fff" : "#000")};
+    background-color: ${({ $active }) => ($active ? "#e7f1c9" : " #e9e5a9")};
+    color: ${({ $active }) => ($active ? "#fff" : "#000")};
     transform: translateY(-5px);
   }
 `;

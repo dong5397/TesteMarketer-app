@@ -1,12 +1,13 @@
+// 파일: src/components/Review/ReviewItem.jsx
+
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
-import styled, { keyframes } from "styled-components";
-import { useRecoilState } from "recoil";
-import { reviewsState } from "../../state/reviewAtoms";
+import React from "react";
+import { useState } from "react";
+import styled, { css, keyframes } from "styled-components";
 import RatingStars from "./RatingStars";
 
-function ReviewItem({ review }) {
+function ReviewItem({ review, onDelete }) {
   const {
     review_id,
     username,
@@ -16,25 +17,26 @@ function ReviewItem({ review }) {
     rating,
   } = review;
 
-  const [reviews, setReviews] = useRecoilState(reviewsState);
-  const [isClicked, setIsClicked] = useState(false);
-
   const formatDate = (dateString) => {
     if (!dateString) {
       return "";
     }
-    const [year, month, day] = dateString.split("T")[0].split("-");
+    const dateParts = dateString.split("T")[0].split("-");
+    const year = dateParts[0];
+    const month = dateParts[1];
+    const day = dateParts[2];
     return `${year}-${month}-${day}`;
   };
+
+  const [isClicked, setIsClicked] = useState(false);
 
   const reviewDeleteHandler = (event) => {
     event.preventDefault();
     setIsClicked(true);
     setTimeout(() => {
       setIsClicked(false);
-      // 리뷰 삭제 후 상태 업데이트
-      setReviews(reviews.filter((r) => r.review_id !== review_id));
     }, 500);
+    onDelete(review_id);
   };
 
   return (
@@ -50,7 +52,7 @@ function ReviewItem({ review }) {
       </HashTagsContainer>
       <ActionButtonsContainer>
         <DeleteButton isClicked={isClicked} onClick={reviewDeleteHandler}>
-          <TrashIcon icon={faTrash} size="2xl" />
+          <TrashIcon icon={faTrash} size="2xl" isClicked={isClicked} />
         </DeleteButton>
       </ActionButtonsContainer>
     </ReviewItemContainer>
@@ -106,7 +108,6 @@ const DeleteButton = styled.button`
   padding: 10px;
   background-color: ${({ isClicked }) => (isClicked ? "red" : "white")};
   transition: transform 0.3s ease;
-  animation: ${({ isClicked }) => (isClicked ? bounceAnimation : "none")} 0.5s;
 `;
 
 const bounceAnimation = keyframes`
@@ -120,7 +121,12 @@ const bounceAnimation = keyframes`
     transform: translateY(-10px);
   }
 `;
-
 const TrashIcon = styled(FontAwesomeIcon)`
-  color: ${({ isClicked }) => (isClicked ? "white" : "#ff0000")};
+  color: #ff0000;
+  ${({ isClicked }) =>
+    isClicked &&
+    css`
+      color: ${({ isClicked }) => (isClicked ? "white" : "red")};
+      animation: ${bounceAnimation} 0.5s;
+    `}
 `;

@@ -1,3 +1,4 @@
+// src/components/Review/WriteReview.jsx
 import React from "react";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
@@ -18,7 +19,6 @@ function WriteReview({ onSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     onSubmit(username, content, hashtags, rating);
     setUsername("");
     setContent("");
@@ -37,7 +37,7 @@ function WriteReview({ onSubmit }) {
       </RatingContainer>
       <Form onSubmit={handleSubmit}>
         <InputLabel>제목</InputLabel>
-        <Input
+        <SmallInput
           type="text"
           placeholder="제목"
           value={username}
@@ -70,6 +70,7 @@ const BugerBox = styled.div`
   background-color: #e9e5a9;
   border-radius: 40px;
 `;
+
 const Title = styled.h2`
   font-size: 40px;
   font-weight: bold;
@@ -96,7 +97,6 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
 `;
 
 const InputLabel = styled.label`
@@ -107,7 +107,7 @@ const InputLabel = styled.label`
   width: 100%;
 `;
 
-const Input = styled.input`
+const SmallInput = styled.input`
   width: 100%;
   padding: 10px;
   margin-bottom: 20px;

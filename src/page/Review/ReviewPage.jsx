@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
-import { reviewsState, isActiveState } from "../../state/reviewAtoms"; // 필요한 Recoil 상태들 불러오기
+import { reviewsState, isActiveState } from "../../state/reviewAtoms";
 import styled from "styled-components";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -24,7 +24,7 @@ function ReviewPage() {
   const { id } = useParams();
 
   const [reviews, setReviews] = useRecoilState(reviewsState);
-  const [isActive, setIsActive] = useRecoilState(isActiveState); // Recoil로 관리하는 상태
+  const [isActive, setIsActive] = useRecoilState(isActiveState);
   const lastId = useRef(4);
 
   const handleToggle = () => {
@@ -36,8 +36,11 @@ function ReviewPage() {
       const response = await fetch(
         `https://makterbackend.fly.dev/api/v1/reviews/${restaurant_Id}`
       );
+
       if (!response.ok) {
-        throw new Error(`Failed to fetch reviews: ${response.statusText}`);
+        throw new Error(
+          `Failed to fetch reviews: ${response.status} - ${response.statusText}`
+        );
       }
       const data = await response.json();
       setReviews(data.reviews);
@@ -82,6 +85,7 @@ function ReviewPage() {
       })
       .then((data) => {
         console.log("Success:", data);
+        // 리뷰 작성 후 즉시 서버에서 리뷰 목록을 새로 가져오기
         fetchReviews(id);
         handleToggle();
       })
@@ -101,7 +105,7 @@ function ReviewPage() {
       if (!response.ok) {
         throw new Error(`Failed to delete review: ${response.statusText}`);
       }
-      fetchReviews(id);
+      fetchReviews(id); // 삭제 후 서버에서 리뷰 목록을 새로 가져오기
     } catch (error) {
       console.error("Error deleting review:", error.message);
     }
@@ -169,6 +173,8 @@ function ReviewPage() {
 }
 
 export default ReviewPage;
+
+// Styled Components 유지
 
 const ReveiwP = styled.div`
   background: linear-gradient(#f0f0c3, #e7e7c9);

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useRecoilState } from "recoil";
-import { cardInfoState } from "../../state/reviewAtoms"; // Recoil 상태 불러오기
+import { cardInfoState } from "../../state/reviewAtoms";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
@@ -13,41 +13,40 @@ const ReviewCard = ({ restaurant }) => {
 
   const navigate = useNavigate();
   const [showCardInfo, setShowCardInfo] = useState(false);
-  const [cardInfo, setCardInfo] = useRecoilState(cardInfoState); // Recoil을 사용하여 상태 관리
+  const [cardInfo, setCardInfo] = useRecoilState(cardInfoState);
 
-  const handleDetailPost = (restaurant) => {
-    console.log(restaurant);
+  const handleDetailPost = () => {
     navigate(`/review/${id}`, {
       state: {
-        id: `${id}`,
-        name: `${name}`,
-        opening_hours: `${opening_hours}`,
-        rating: `${rating}`,
-        image: `${image}`,
-        phone: `${phone}`,
-        address: `${address}`,
-        category: `${category}`,
+        id,
+        name,
+        opening_hours,
+        rating,
+        image,
+        phone,
+        address,
+        category,
       },
     });
   };
 
   return (
     <CardWrapper
-      onClick={() => handleDetailPost({ restaurant })}
+      onClick={handleDetailPost}
       onMouseEnter={() => setShowCardInfo(true)}
       onMouseLeave={() => setShowCardInfo(false)}
     >
-      <CardBackground backgroundImage={restaurant.image} />
+      <CardBackground $backgroundImage={image} />
       <CardContent>
-        <CardTitle showInfo={showCardInfo}>
-          {showCardInfo ? "클릭하여 리뷰보기" : restaurant.name}
+        <CardTitle $showInfo={showCardInfo}>
+          {showCardInfo ? "클릭하여 리뷰보기" : name}
         </CardTitle>
-        <CardHashTag showInfo={showCardInfo}>
+        <CardHashTag $showInfo={showCardInfo}>
           {showCardInfo ? "" : `#${restaurant.menus.join(" #")}`}
         </CardHashTag>
-        <CardImg backgroundImage={showCardInfo ? click : restaurant.image} />
+        <CardImg $backgroundImage={showCardInfo ? click : image} />
       </CardContent>
-      <CardInfoBox showInfo={showCardInfo}>
+      <CardInfoBox $showInfo={showCardInfo}>
         <ReviewCount>리뷰 {cardInfo.reviewCount}개</ReviewCount>
         <ViewCount>조회 {cardInfo.viewCount}회</ViewCount>
         <Rating>
@@ -73,7 +72,7 @@ const CardBackground = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url(${(props) => props.backgroundImage});
+  background-image: url(${(props) => props.$backgroundImage});
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -107,6 +106,7 @@ const CardWrapper = styled.div`
   position: relative;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
 
   &:hover {
     transform: scale(1.05);
@@ -140,9 +140,9 @@ const CardInfoBox = styled.div`
   font-size: 16px;
   font-weight: bold;
   color: #153448;
-  opacity: ${({ showInfo }) => (showInfo ? 1 : 0)};
-  transform: ${({ showInfo }) =>
-    showInfo ? "translateY(0)" : "translateY(100%)"};
+  opacity: ${({ $showInfo }) => ($showInfo ? 1 : 0)};
+  transform: ${({ $showInfo }) =>
+    $showInfo ? "translateY(0)" : "translateY(100%)"};
   transition: transform 0.4s ease, opacity 0.4s ease;
 `;
 
@@ -167,7 +167,7 @@ const CardImg = styled.div`
   margin: 0 auto;
   border-radius: 100%;
   border: 3px solid white;
-  background-image: url(${(props) => props.backgroundImage});
+  background-image: url(${(props) => props.$backgroundImage});
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -176,7 +176,7 @@ const CardImg = styled.div`
 const CardTitle = styled.h2`
   margin: 10px 0;
   color: white;
-  font-size: ${({ showInfo }) => (showInfo ? "20px" : "24px")};
+  font-size: ${({ $showInfo }) => ($showInfo ? "20px" : "24px")};
   font-family: "Uiyeun", sans-serif;
   text-align: center;
   transition: font-size 0.3s ease, color 0.3s ease;

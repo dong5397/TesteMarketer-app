@@ -61,7 +61,7 @@ const KakaoMap = () => {
   };
 
   const loadRestaurantsAndAddMarkers = () => {
-    fetch("https://makterback.fly.dev/api/v1/restaurants")
+    fetch("https://makterbackend.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
       .then((data) => {
         if (data && Array.isArray(data.data)) {

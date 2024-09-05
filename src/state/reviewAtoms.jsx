@@ -67,3 +67,13 @@ export const isActiveState = atom({
   key: "isActiveState",
   default: true,
 });
+export const selectedCategoryState = atom({
+  key: "selectedCategoryState",
+  default: null, // Default value
+});
+
+// Define an atom to store the restaurant data
+export const restaurantDataState = atom({
+  key: "restaurantDataState",
+  default: [], // Default empty array
+});

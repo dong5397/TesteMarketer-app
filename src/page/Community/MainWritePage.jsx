@@ -62,6 +62,7 @@ const StyledContainer = styled.div`
   flex-direction: column;
   height: 100%;
   background-color: #fff;
+  overflow: auto; /* Enable scrolling if content overflows */
 `;
 
 const DivContainer = styled.div`
@@ -72,6 +73,7 @@ const DivContainer = styled.div`
 const MainContainer = styled.div`
   height: 1200px;
   background: linear-gradient(#e7e78b, #f0f0c3);
+  overflow: auto; /* Enable scrolling for the main container */
 `;
 
 const DeviceContent = styled.div`

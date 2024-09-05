@@ -71,7 +71,7 @@ const PostList = styled.div`
   flex-direction: column;
   width: 100%;
   max-width: 600px;
-  max-height: 300px; /* 고정된 높이 설정 */
+  max-height: 130px; /* 고정된 높이 설정 */
   overflow-y: auto; /* 수직 스크롤바 추가 */
   gap: 15px;
 `;

@@ -1,5 +1,6 @@
-// src/state/surveyAtoms.js
-import { atom } from "recoil";
+// surveyAtoms.jsx
+import { atom, selector } from "recoil";
+import { restaurantsState } from "./mapAtoms"; // restaurantsState 가져오기
 
 // 설문 진행률 상태
 export const surveyProgressState = atom({
@@ -37,24 +38,80 @@ export const sourPreferenceState = atom({
   default: "", // 신 음식 선호도 기본값
 });
 
-// 필터링된 레스토랑 리스트 상태
-export const filteredRestaurantsState = atom({
-  key: "filteredRestaurantsState",
-  default: [], // 필터링된 레스토랑 리스트 기본값
-});
-
-// 설문 완료 여부 상태
-export const isSurveyCompleteState = atom({
-  key: "isSurveyCompleteState",
-  default: false, // 설문 완료 여부 기본값 (false)
-});
+// 음식 선호도 상태를 한 번에 관리하는 객체
 export const foodPreferencesState = atom({
   key: "foodPreferencesState",
   default: {
     foodType: "",
-    spicy: 0,
-    sweet: 0,
-    salty: 0,
-    sour: 0,
+    spicy: "",
+    sweet: "",
+    salty: "",
+    sour: "",
   },
 });
+
+// 필터링된 레스토랑 리스트 상태
+export const filteredRestaurantsState = selector({
+  key: "filteredRestaurantsState",
+  get: ({ get }) => {
+    const restaurants = get(restaurantsState); // 가져온 restaurantsState 사용
+    const foodPreferences = get(foodPreferencesState);
+
+    const userPreference = {
+      Spicy: getLikertValue(foodPreferences.spicy),
+      Sweet: getLikertValue(foodPreferences.sweet),
+      Sour: getLikertValue(foodPreferences.sour),
+      Salty: getLikertValue(foodPreferences.salty),
+      food_type: foodPreferences.foodType,
+    };
+
+    const filtered = restaurants.filter((restaurant) => {
+      const Spicydifference = Math.abs(restaurant.spicy - userPreference.Spicy);
+      const Sweetdifference = Math.abs(restaurant.sweet - userPreference.Sweet);
+      const Sourdifference = Math.abs(restaurant.sour - userPreference.Sour);
+      const Saltydifference = Math.abs(restaurant.salty - userPreference.Salty);
+      const foodTypeMatch =
+        restaurant.food_type === userPreference.food_type ||
+        userPreference.food_type === "Random";
+
+      return (
+        Spicydifference <= 1 &&
+        Sweetdifference <= 1 &&
+        Sourdifference <= 1 &&
+        Saltydifference <= 1 &&
+        foodTypeMatch
+      );
+    });
+
+    console.log("Filtered Restaurants: ", filtered);
+    return filtered.map((el) => ({
+      id: el.restaurants_id,
+      name: el.restaurants_name,
+      phone: el.phone,
+      opening_hours: el.opening_hours,
+      rating: el.rating,
+      category: el.category,
+      address: el.address,
+      image: el.image,
+      menus: el.food_menu.menus.map((menu) => menu.name),
+    }));
+  },
+});
+
+// Likert 척도 값을 가져오는 도우미 함수
+const getLikertValue = (value) => {
+  switch (value) {
+    case "Verygood":
+      return 5;
+    case "Good":
+      return 4;
+    case "Normal":
+      return 3;
+    case "Bad":
+      return 2;
+    case "Verybad":
+      return 1;
+    default:
+      return 0;
+  }
+};

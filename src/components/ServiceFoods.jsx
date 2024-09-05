@@ -1,10 +1,50 @@
+// ServiceFoods.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useRecoilValue } from "recoil";
-import { restaurantsState } from "../state/mapAtoms";
 import RestaurantCard from "./RestaurantCard";
 import { DeviceFrameset } from "react-device-frameset";
+import { useRecoilValue } from "recoil";
+import { filteredRestaurantsState } from "../state/surveyAtoms"; // 필터링된 식당 상태 가져오기
+
+const ServiceFoods = () => {
+  const navigate = useNavigate();
+  const filteredRestaurants = useRecoilValue(filteredRestaurantsState); // 필터링된 식당 목록 가져오기
+
+  const handleBackClick = () => {
+    navigate("/service");
+  };
+
+  return (
+    <ServiceContainer>
+      <Layout>
+        <BackButton onClick={handleBackClick}>다시 설정 하기</BackButton>
+        <Form>
+          <DeviceFrameset
+            device="iPad Mini"
+            color="black"
+            width="100%"
+            height="auto"
+          >
+            <Container>
+              {filteredRestaurants.length > 0 ? (
+                filteredRestaurants.map((restaurant, index) => (
+                  <CardWrapper key={index}>
+                    <RestaurantCard restaurant={restaurant} />
+                  </CardWrapper>
+                ))
+              ) : (
+                <p>필터링된 식당이 없습니다.</p>
+              )}
+            </Container>
+          </DeviceFrameset>
+        </Form>
+      </Layout>
+    </ServiceContainer>
+  );
+};
+
+export default ServiceFoods;
 
 const ServiceContainer = styled.div`
   background: linear-gradient(#e7e78b, #f0f0c3);
@@ -12,6 +52,15 @@ const ServiceContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 1200px;
+`;
+
+const Layout = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  flex-direction: column;
 `;
 
 const Form = styled.div`
@@ -31,15 +80,6 @@ const Container = styled.div`
   justify-content: center;
   height: 800px;
   overflow-y: auto;
-`;
-
-const Layout = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: 20px;
-  flex-direction: column;
 `;
 
 const CardWrapper = styled.div`
@@ -64,38 +104,3 @@ const BackButton = styled.button`
     border-color: #050505;
   }
 `;
-
-const ServiceFoods = () => {
-  const navigate = useNavigate();
-  const restaurants = useRecoilValue(restaurantsState);
-
-  const handleBackClick = () => {
-    navigate("/service");
-  };
-
-  return (
-    <ServiceContainer>
-      <Layout>
-        <BackButton onClick={handleBackClick}>다시 설정 하기</BackButton>
-        <Form>
-          <DeviceFrameset
-            device="iPad Mini"
-            color="black"
-            width="100%"
-            height="auto"
-          >
-            <Container>
-              {restaurants.map((restaurant, index) => (
-                <CardWrapper key={index}>
-                  <RestaurantCard restaurant={restaurant} />
-                </CardWrapper>
-              ))}
-            </Container>
-          </DeviceFrameset>
-        </Form>
-      </Layout>
-    </ServiceContainer>
-  );
-};
-
-export default ServiceFoods;

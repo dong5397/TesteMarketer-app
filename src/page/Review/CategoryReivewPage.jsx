@@ -1,5 +1,3 @@
-// 파일: src/pages/CategoryReviewPage.jsx
-
 import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import {
@@ -7,18 +5,19 @@ import {
   filterState,
   cardInfoState,
   reviewRestaurantsState,
-} from "../../state/reviewAtoms"; // Recoil 상태 불러오기
+} from "../../state/reviewAtoms";
 import { faArrowLeft, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DeviceFrameset } from "react-device-frameset";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ReviewCard from "../../components/Review/ReviewCard";
 
 function CategoryReviewPage() {
   const location = useLocation();
-  const { restaurants } = location.state || { restaurants: [] };
-  console.log(restaurants);
+  const navigate = useNavigate();
+  const { restaurants = [] } = location.state || {};
+  console.log("Fetched restaurants:", restaurants);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
@@ -47,8 +46,6 @@ function CategoryReviewPage() {
 
     if (scrollTop + clientHeight >= scrollHeight - 100 && !isLoading) {
       setIsLoading(true);
-      // 추가 데이터를 불러오는 함수 호출
-      // 예: fetchAdditionalData();
     }
   };
 
@@ -100,7 +97,12 @@ function CategoryReviewPage() {
         break;
     }
     setSortedRestaurants(sortedArray);
-  }, [filter, restaurants]);
+  }, [filter, restaurants, setSortedRestaurants]);
+
+  const handleCategoryClick = (category) => {
+    console.log("Category clicked:", category);
+    navigate(`/review/category/${category}`);
+  };
 
   return (
     <ReviewPage>
@@ -121,7 +123,7 @@ function CategoryReviewPage() {
                   icon={faArrowLeft}
                   size="xl"
                   onClick={handleIconClick}
-                  pressed={isPressed}
+                  pressed={isPressed ? "true" : undefined}
                 />
               </BackButton>
 
@@ -146,7 +148,12 @@ function CategoryReviewPage() {
                   {restaurant.menus &&
                     restaurant.menus.length > 0 &&
                     restaurant.menus.map((menu, menuIndex) => (
-                      <TagButton key={menuIndex}>{menu}</TagButton>
+                      <TagButton
+                        key={menuIndex}
+                        onClick={() => handleCategoryClick(menu)}
+                      >
+                        {menu}
+                      </TagButton>
                     ))}
                 </div>
               ))}
@@ -181,6 +188,7 @@ function CategoryReviewPage() {
 
 export default CategoryReviewPage;
 
+// 스타일 컴포넌트 정의
 const ReviewPage = styled.div`
   background: linear-gradient(#e7e78b, #f0f0c3);
   min-height: 100vh;
@@ -188,6 +196,8 @@ const ReviewPage = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+// 나머지 스타일 컴포넌트 정의는 동일합니다.
 
 const ReviewPageWrapper = styled.div`
   max-width: 1000px;

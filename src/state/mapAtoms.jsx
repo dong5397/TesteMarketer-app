@@ -1,5 +1,5 @@
 // src/state/mapAtoms.js
-import { atom } from "recoil";
+import { atom } from "recoil"; // selector를 추가로 임포트합니다.
 
 // 지도의 중심 위치 상태
 export const mapCenterState = atom({
@@ -101,6 +101,7 @@ export const isFromMapClickState = atom({
   key: "isFromMapClickState",
   default: false,
 });
+
 // 버튼 클릭으로 선택된 레스토랑
 export const selectedRestaurantFromButtonState = atom({
   key: "selectedRestaurantFromButtonState",
@@ -112,6 +113,7 @@ export const selectedRestaurantFromMapState = atom({
   key: "selectedRestaurantFromMapState",
   default: null,
 });
+
 // FoodBox에서 선택된 레스토랑 상태
 export const selectedRestaurantFromBoxState = atom({
   key: "selectedRestaurantFromBoxState",

@@ -73,3 +73,12 @@ export const postHashtagsState = atom({
   key: "postHashtagsState",
   default: [], // 해시태그 리스트를 저장
 });
+export const titleState = atom({
+  key: "titleState",
+  default: "",
+});
+
+export const contentsState = atom({
+  key: "contentsState",
+  default: "",
+});

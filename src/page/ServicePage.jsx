@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { RecoilRoot } from "recoil"; // RecoilRoot를 추가로 가져옵니다.
 import Service from "../components/Service";
 
 const ServiceContainer = styled.div`
@@ -11,9 +12,12 @@ const ServiceContainer = styled.div`
 
 function ServicePage() {
   return (
-    <ServiceContainer>
-      <Service />
-    </ServiceContainer>
+    <RecoilRoot>
+      {" "}
+      <ServiceContainer>
+        <Service />
+      </ServiceContainer>
+    </RecoilRoot>
   );
 }
 

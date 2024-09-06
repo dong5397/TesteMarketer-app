@@ -1,4 +1,3 @@
-// ServiceFoods.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -10,6 +9,8 @@ import { filteredRestaurantsState } from "../state/surveyAtoms"; // 필터링된
 const ServiceFoods = () => {
   const navigate = useNavigate();
   const filteredRestaurants = useRecoilValue(filteredRestaurantsState); // 필터링된 식당 목록 가져오기
+
+  console.log("Filtered Restaurants in ServiceFoods: ", filteredRestaurants); // 디버깅 로그
 
   const handleBackClick = () => {
     navigate("/service");

@@ -7,13 +7,18 @@ import styled from "styled-components";
 import ReviewItem from "./ReviewItem";
 
 function ReviewList({ onDelete }) {
-  const [reviews, setReviews] = useRecoilState(reviewsState); // Recoil을 사용하여 상태 관리
+  const [reviews] = useRecoilState(reviewsState); // Recoil을 사용하여 상태 관리
 
   return (
     <ReviewListContainer>
       <ul>
         {reviews.map((review) => (
-          <ReviewItem key={review.id} review={review} onDelete={onDelete} />
+          // 고유한 key prop 추가
+          <ReviewItem
+            key={review.review_id || review.id}
+            review={review}
+            onDelete={onDelete}
+          />
         ))}
       </ul>
     </ReviewListContainer>

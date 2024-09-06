@@ -21,7 +21,7 @@ import "react-device-frameset/styles/marvel-devices.min.css";
 function ReviewPage() {
   const location = useLocation();
   const restaurantInfo = { ...location.state };
-  const { id } = useParams();
+  const { id } = useParams(); // restaurant_id 값으로 사용됩니다.
 
   const [reviews, setReviews] = useRecoilState(reviewsState);
   const [isActive, setIsActive] = useRecoilState(isActiveState);
@@ -50,10 +50,10 @@ function ReviewPage() {
   };
 
   useEffect(() => {
-    if (restaurantInfo.id) {
-      fetchReviews(restaurantInfo.id);
+    if (id) {
+      fetchReviews(id); // useParams로 받은 id로 fetchReviews 호출
     }
-  }, [restaurantInfo.id]);
+  }, [id]); // restaurantInfo.id 대신 id로 변경
 
   const onSubmit = (username, content, hashtags, rating) => {
     const updatedReviews = [
@@ -70,7 +70,7 @@ function ReviewPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        restaurant_id: id,
+        restaurant_id: id, // 여기도 id를 사용하도록 수정
         contents: content,
         username: username,
         rating: rating,
@@ -85,8 +85,7 @@ function ReviewPage() {
       })
       .then((data) => {
         console.log("Success:", data);
-        // 리뷰 작성 후 즉시 서버에서 리뷰 목록을 새로 가져오기
-        fetchReviews(id);
+        fetchReviews(id); // 리뷰 작성 후 다시 리뷰 목록을 가져옴
         handleToggle();
       })
       .catch((error) => {
@@ -105,7 +104,7 @@ function ReviewPage() {
       if (!response.ok) {
         throw new Error(`Failed to delete review: ${response.statusText}`);
       }
-      fetchReviews(id); // 삭제 후 서버에서 리뷰 목록을 새로 가져오기
+      fetchReviews(id); // 삭제 후 리뷰 목록을 새로 가져옴
     } catch (error) {
       console.error("Error deleting review:", error.message);
     }
@@ -173,8 +172,6 @@ function ReviewPage() {
 }
 
 export default ReviewPage;
-
-// Styled Components 유지
 
 const ReveiwP = styled.div`
   background: linear-gradient(#f0f0c3, #e7e7c9);

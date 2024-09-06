@@ -2,8 +2,7 @@
 
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import styled, { css, keyframes } from "styled-components";
 import RatingStars from "./RatingStars";
 
@@ -51,8 +50,9 @@ function ReviewItem({ review, onDelete }) {
         ))}
       </HashTagsContainer>
       <ActionButtonsContainer>
-        <DeleteButton isClicked={isClicked} onClick={reviewDeleteHandler}>
-          <TrashIcon icon={faTrash} size="2xl" isClicked={isClicked} />
+        {/* isClicked 대신 $isClicked로 전달 */}
+        <DeleteButton $isClicked={isClicked} onClick={reviewDeleteHandler}>
+          <TrashIcon icon={faTrash} size="2xl" $isClicked={isClicked} />
         </DeleteButton>
       </ActionButtonsContainer>
     </ReviewItemContainer>
@@ -103,10 +103,11 @@ const ActionButtonsContainer = styled.div`
   margin-top: 10px;
 `;
 
+// isClicked를 $isClicked로 변경
 const DeleteButton = styled.button`
   border-radius: 100px;
   padding: 10px;
-  background-color: ${({ isClicked }) => (isClicked ? "red" : "white")};
+  background-color: ${({ $isClicked }) => ($isClicked ? "red" : "white")};
   transition: transform 0.3s ease;
 `;
 
@@ -121,12 +122,14 @@ const bounceAnimation = keyframes`
     transform: translateY(-10px);
   }
 `;
+
+// isClicked를 $isClicked로 변경
 const TrashIcon = styled(FontAwesomeIcon)`
   color: #ff0000;
-  ${({ isClicked }) =>
-    isClicked &&
+  ${({ $isClicked }) =>
+    $isClicked &&
     css`
-      color: ${({ isClicked }) => (isClicked ? "white" : "red")};
+      color: white;
       animation: ${bounceAnimation} 0.5s;
     `}
 `;

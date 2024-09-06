@@ -3,15 +3,11 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import Potodance from "../components/Potodance";
-import LoginModal from "../components/LoginModal";
-import ProfileModal from "../components/ProfileModal";
 
 const Header = ({ setAuth, isAuthenticated }) => {
   const [name, setName] = useState("");
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
-
-  const logoutSuccessfully = () => toast("로그아웃 성공!");
 
   const logout = async (e) => {
     e.preventDefault();

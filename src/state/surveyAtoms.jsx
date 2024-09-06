@@ -1,6 +1,5 @@
-// surveyAtoms.jsx
 import { atom, selector } from "recoil";
-import { restaurantsState } from "./mapAtoms"; // restaurantsState 가져오기
+import { restaurantsState } from "./mapAtoms";
 
 // 설문 진행률 상태
 export const surveyProgressState = atom({
@@ -57,6 +56,7 @@ export const filteredRestaurantsState = selector({
     const restaurants = get(restaurantsState); // 가져온 restaurantsState 사용
     const foodPreferences = get(foodPreferencesState);
 
+    // 사용자 선호도를 Likert 척도로 변환
     const userPreference = {
       Spicy: getLikertValue(foodPreferences.spicy),
       Sweet: getLikertValue(foodPreferences.sweet),
@@ -65,24 +65,46 @@ export const filteredRestaurantsState = selector({
       food_type: foodPreferences.foodType,
     };
 
+    // 필터링 로직
     const filtered = restaurants.filter((restaurant) => {
-      const Spicydifference = Math.abs(restaurant.spicy - userPreference.Spicy);
-      const Sweetdifference = Math.abs(restaurant.sweet - userPreference.Sweet);
-      const Sourdifference = Math.abs(restaurant.sour - userPreference.Sour);
-      const Saltydifference = Math.abs(restaurant.salty - userPreference.Salty);
+      // 레스토랑 속성에 기본값 할당 (기본값 3)
+      const spicyValue = restaurant.spicy !== undefined ? restaurant.spicy : 3;
+      const sweetValue = restaurant.sweet !== undefined ? restaurant.sweet : 3;
+      const sourValue = restaurant.sour !== undefined ? restaurant.sour : 3;
+      const saltyValue = restaurant.salty !== undefined ? restaurant.salty : 3;
+
+      // 필터링 조건 비교
+      const Spicydifference = Math.abs(spicyValue - userPreference.Spicy);
+      const Sweetdifference = Math.abs(sweetValue - userPreference.Sweet);
+      const Sourdifference = Math.abs(sourValue - userPreference.Sour);
+      const Saltydifference = Math.abs(saltyValue - userPreference.Salty);
+
+      // 음식 종류 일치 여부 확인
       const foodTypeMatch =
         restaurant.food_type === userPreference.food_type ||
-        userPreference.food_type === "Random";
+        userPreference.food_type === "" || // 빈 값 허용
+        userPreference.food_type === "Random"; // "Random" 선택 허용
+
+      // 디버깅용 콘솔 로그 추가
+      console.log("Checking restaurant:", restaurant.restaurants_name);
+      console.log("Differences:", {
+        Spicydifference,
+        Sweetdifference,
+        Sourdifference,
+        Saltydifference,
+        foodTypeMatch,
+      });
 
       return (
-        Spicydifference <= 1 &&
-        Sweetdifference <= 1 &&
-        Sourdifference <= 1 &&
-        Saltydifference <= 1 &&
+        Spicydifference <= 2 && // 조건 완화
+        Sweetdifference <= 2 &&
+        Sourdifference <= 2 &&
+        Saltydifference <= 2 &&
         foodTypeMatch
       );
     });
 
+    // 필터링 결과 콘솔 로그 추가
     console.log("Filtered Restaurants: ", filtered);
     return filtered.map((el) => ({
       id: el.restaurants_id,
@@ -93,7 +115,7 @@ export const filteredRestaurantsState = selector({
       category: el.category,
       address: el.address,
       image: el.image,
-      menus: el.food_menu.menus.map((menu) => menu.name),
+      menus: el.food_menu?.menus?.map((menu) => menu.name) || [], // 메뉴가 없는 경우 빈 배열 반환
     }));
   },
 });
@@ -112,6 +134,6 @@ const getLikertValue = (value) => {
     case "Verybad":
       return 1;
     default:
-      return 0;
+      return 3; // 사용자 입력이 없을 때 기본값 3 설정
   }
 };

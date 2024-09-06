@@ -8,6 +8,7 @@ import {
   filteredRestaurantsState,
 } from "../state/surveyAtoms";
 import { restaurantsState } from "../state/mapAtoms";
+
 const Service = ({ restaurantsData }) => {
   const [restaurants, setRestaurants] = useRecoilState(restaurantsState);
   const [foodPreferences, setFoodPreferences] =
@@ -27,6 +28,7 @@ const Service = ({ restaurantsData }) => {
           return response.json();
         })
         .then((data) => {
+          console.log("Fetched data: ", data.data); // 데이터 확인
           setRestaurants(data.data);
         })
         .catch((error) => console.error("Error fetching data:", error));
@@ -201,6 +203,7 @@ const Service = ({ restaurantsData }) => {
 };
 
 export default Service;
+
 // 필요한 스타일 컴포넌트를 추가합니다.
 const Layout = styled.div`
   display: flex;

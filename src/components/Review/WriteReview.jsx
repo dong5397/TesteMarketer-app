@@ -1,4 +1,3 @@
-// src/components/Review/WriteReview.jsx
 import React from "react";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
@@ -61,21 +60,31 @@ function WriteReview({ onSubmit }) {
 
 export default WriteReview;
 
+// Styled Components
 const WriteReviewContainer = styled.div`
   flex: 1;
   padding: 20px;
+
+  @media screen and (max-width: 768px) {
+    margin-top: 20px; /* Adds some space at the top for mobile */
+  }
 `;
 
 const BugerBox = styled.div`
   background-color: #e9e5a9;
   border-radius: 40px;
+  margin-bottom: 20px;
 `;
 
 const Title = styled.h2`
-  font-size: 40px;
+  font-size: 32px;
   font-weight: bold;
   margin-bottom: 20px;
   text-align: center;
+
+  @media screen and (max-width: 768px) {
+    font-size: 28px; /* Smaller font size for mobile */
+  }
 `;
 
 const RatingContainer = styled.div`
@@ -91,6 +100,10 @@ const RatingLabel = styled.label`
   margin-right: 10px;
   border-top: 5px solid #e9e5a9;
   border-bottom: 5px solid #e9e5a9;
+
+  @media screen and (max-width: 768px) {
+    font-size: 20px; /* Smaller font size for mobile */
+  }
 `;
 
 const Form = styled.form`
@@ -105,6 +118,10 @@ const InputLabel = styled.label`
   margin-top: 20px;
   text-align: center;
   width: 100%;
+
+  @media screen and (max-width: 768px) {
+    font-size: 24px; /* Smaller font size for mobile */
+  }
 `;
 
 const SmallInput = styled.input`
@@ -114,6 +131,10 @@ const SmallInput = styled.input`
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 18px;
+
+  @media screen and (max-width: 768px) {
+    font-size: 16px; /* Smaller font size for mobile */
+  }
 `;
 
 const Textarea = styled.textarea`
@@ -124,6 +145,10 @@ const Textarea = styled.textarea`
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 18px;
+
+  @media screen and (max-width: 768px) {
+    font-size: 16px; /* Smaller font size for mobile */
+  }
 `;
 
 const SubmitButton = styled.button`
@@ -139,5 +164,10 @@ const SubmitButton = styled.button`
 
   &:hover {
     background-color: #e0d645;
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 18px; /* Smaller font size for mobile */
+    width: 180px; /* Adjust button width for mobile */
   }
 `;

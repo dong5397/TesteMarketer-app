@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { DeviceFrameset } from "react-device-frameset";
+import { DeviceFrameset } from "react-device-frameset"; // Keep this import
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -95,36 +95,37 @@ function MainReviewPages() {
 
   return (
     <ReviewPage>
+      <H1>Maketer</H1>
+      <H2>대전 전체의 맛집을 찾아줍니다</H2>
       <ReviewPageWrapper>
-        <DeviceFrameset
-          device="iPad Mini"
-          color="black"
-          width="100%"
-          height="75%"
-        >
-          <GreenContainer>
-            <FontAwesomeIcon icon={faUtensils} size="2x" />
-          </GreenContainer>
+        <CenteredContainer>
+          <DeviceFrameset device="iPad Mini">
+            <GreenContainer>
+              <FontAwesomeIcon icon={faUtensils} size="2x" />
+            </GreenContainer>
 
-          <CategoriesGridContainer>
-            <CategoriesGrid>
-              {categories.map((category, index) => (
-                <CategoryContainer key={index}>
-                  <CategoryButton
-                    onClick={() => handleCategorySelect(category)}
-                    active={selectedCategory === category ? "true" : undefined} // 수정된 부분
-                  >
-                    <FontAwesomeIcon
-                      icon={getCategoryIcon(category)}
-                      size="2x"
-                    />
-                    <CategoryLabel>{category}</CategoryLabel>
-                  </CategoryButton>
-                </CategoryContainer>
-              ))}
-            </CategoriesGrid>
-          </CategoriesGridContainer>
-        </DeviceFrameset>
+            <CategoriesGridContainer>
+              <CategoriesGrid>
+                {categories.map((category, index) => (
+                  <CategoryContainer key={index}>
+                    <CategoryButton
+                      onClick={() => handleCategorySelect(category)}
+                      active={
+                        selectedCategory === category ? "true" : undefined
+                      }
+                    >
+                      <FontAwesomeIcon
+                        icon={getCategoryIcon(category)}
+                        size="2x"
+                      />
+                      <CategoryLabel>{category}</CategoryLabel>
+                    </CategoryButton>
+                  </CategoryContainer>
+                ))}
+              </CategoriesGrid>
+            </CategoriesGridContainer>
+          </DeviceFrameset>
+        </CenteredContainer>
       </ReviewPageWrapper>
     </ReviewPage>
   );
@@ -137,18 +138,48 @@ const ReviewPage = styled.div`
   background: linear-gradient(#e7e78b, #f0f0c3);
   height: 100%;
 `;
+const H1 = styled.h1`
+  display: none; /* 기본적으로 숨김 처리 */
 
-// 나머지 스타일 컴포넌트 정의는 동일합니다.
+  @media screen and (max-width: 481px) {
+    display: block; /* 모바일에서만 표시 */
+    font-size: 40px;
+    line-height: 1.2;
+    padding-top: 3%;
+    margin-bottom: 0.3rem;
+    font-family: "GowunDodum-Regular";
+    text-align: center;
+  }
+`;
 
-// 나머지 스타일 컴포넌트 정의는 동일합니다.
+const H2 = styled.h2`
+  display: none; /* 기본적으로 숨김 처리 */
+
+  @media screen and (max-width: 481px) {
+    display: block; /* 모바일에서만 표시 */
+    text-align: center;
+    font-weight: 300;
+    font-size: 20px;
+    font-family: "GowunDodum-Regular";
+  }
+`;
+const CenteredContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
 
 const ReviewPageWrapper = styled.div`
-  max-width: 1000px;
-  height: 1200px;
-
+  height: auto;
+  width: auto;
   margin: 0 auto;
   padding: 20px;
   gap: 100px;
+  @media screen and (max-width: 481px) {
+    width: auto;
+    height: auto;
+  }
 `;
 
 const GreenContainer = styled.div`
@@ -171,7 +202,11 @@ const CategoriesGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
-  padding-top: 50px;
+
+  @media screen and (max-width: 481px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
 `;
 
 const CategoryContainer = styled.div`
@@ -194,8 +229,12 @@ const CategoryButton = styled.button`
   color: ${({ active }) => (active === "true" ? "#fff" : "#000")};
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-  width: 150px;
-  height: 150px;
+  width: 130px;
+  height: 130px;
+  @media screen and (max-width: 481px) {
+    width: 100px;
+    height: 100px;
+  }
 
   &:hover {
     background-color: ${({ active }) =>

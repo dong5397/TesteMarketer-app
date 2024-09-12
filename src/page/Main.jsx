@@ -15,8 +15,6 @@ function Main() {
       <Main1 />
 
       <Main2 />
-
-      <Main4 />
     </MainContainer>
   );
 }

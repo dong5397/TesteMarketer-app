@@ -7,6 +7,7 @@ import {
   mapMoveFunctionState,
 } from "../../state/mapAtoms";
 import FoodIndex from "../../components/FoodIndex";
+import mark from "../../../public/images/mark.png";
 
 const KakaoMap = () => {
   const [selectedRestaurant, setSelectedRestaurant] = useRecoilState(
@@ -80,13 +81,27 @@ const KakaoMap = () => {
   const addMarkersToMap = (restaurants) => {
     if (!mapInstance.current) return;
 
+    const isMobile = window.innerWidth <= 481; // 모바일 화면 감지
+    const markerSize = isMobile
+      ? new window.kakao.maps.Size(24, 24) // 모바일에서 작은 마커 크기
+      : new window.kakao.maps.Size(40, 40); // 데스크톱 기본 크기
+
+    const markerImageSrc = mark; // 음식 마커 이미지 URL
+    const markerImage = new window.kakao.maps.MarkerImage(
+      markerImageSrc,
+      markerSize
+    ); // 마커 이미지 설정
+
     restaurants.forEach((restaurant) => {
       const markerPosition = new window.kakao.maps.LatLng(
         parseFloat(restaurant.latitude),
         parseFloat(restaurant.longitude)
       );
+
+      // 마커 생성
       const marker = new window.kakao.maps.Marker({
         position: markerPosition,
+        image: markerImage, // 마커에 이미지 적용
       });
 
       const infowindow = new window.kakao.maps.InfoWindow({
@@ -132,6 +147,8 @@ const KakaoMap = () => {
 
   return (
     <Container>
+      <H1>Maketer</H1>
+      <H2>대전 전체의 맛집을 찾아줍니다</H2>
       <MapContainer id="map" ref={mapContainer} />
       {selectedRestaurant && (
         <FoodIndexContainer ref={modalRef}>
@@ -153,6 +170,30 @@ const Container = styled.div`
   background: linear-gradient(#e7e78b, #f0f0c3);
   position: relative;
 `;
+const H1 = styled.h1`
+  display: none; /* 기본적으로 숨김 처리 */
+
+  @media screen and (max-width: 481px) {
+    display: block; /* 모바일에서만 표시 */
+    font-size: 40px;
+    line-height: 1.2;
+    margin-bottom: 0.3rem;
+    font-family: "GowunDodum-Regular";
+    text-align: center;
+  }
+`;
+
+const H2 = styled.h2`
+  display: none; /* 기본적으로 숨김 처리 */
+
+  @media screen and (max-width: 481px) {
+    display: block; /* 모바일에서만 표시 */
+    text-align: center;
+    font-weight: 300;
+    font-size: 20px;
+    font-family: "GowunDodum-Regular";
+  }
+`;
 
 const MapContainer = styled.div`
   width: 100%;
@@ -173,4 +214,6 @@ const FoodIndexContainer = styled.div`
   width: 300px;
   height: auto;
   overflow-y: auto;
+  @media screen and (max-width: 481px) {
+  }
 `;

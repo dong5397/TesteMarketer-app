@@ -10,18 +10,19 @@ const PageContainer = styled.div`
   background: linear-gradient(#e7e78b, #f0f0c3); /* 변경된 부분 */
 `;
 const HomeHeader = styled.div`
-  display: flex;
-  width: 1170px;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: center;
   gap: 40px;
   margin: 0 auto;
+  @media screen and (min-width: 481px) {
+    display: flex;
+  }
 `;
 
 const Intro = styled.div`
   color: white;
-  width: 350px;
+
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -37,12 +38,18 @@ const H1 = styled.h1`
   line-height: 1.2;
   margin-bottom: 0.3rem;
   font-family: "GowunDodum-Regular";
+  @media screen and (max-width: 481px) {
+    text-align: center;
+  }
 `;
 
 const H2 = styled.h2`
   font-weight: 300;
   font-size: 30px;
   font-family: "GowunDodum-Regular";
+  @media screen and (max-width: 481px) {
+    text-align: center;
+  }
 `;
 
 const Ul = styled.ul`
@@ -74,14 +81,22 @@ const Trustpilot = styled.div`
   color: rgba(0, 0, 0, 0.7);
   font-weight: 400;
   font-family: "GowunDodum-Regular";
+  @media screen and (max-width: 481px) {
+    text-align: center;
+  }
 `;
 
 const Panels = styled.div`
-  width: 780px;
+  width: 100%;
+  margin: 0 auto; /* 기본적으로 수평 중앙 정렬 */
+
+  @media screen and (min-width: 481px) {
+    width: 780px; /* 481px 이상의 화면에서 고정된 너비를 설정 */
+  }
 `;
 
 const Panel = styled.div`
-  display: flex;
+  display: block;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-between;
@@ -89,7 +104,10 @@ const Panel = styled.div`
   gap: 40px;
   max-width: 780px;
   margin: 0 auto;
-  position: relative; /* 추가된 부분 */
+  position: relative;
+  @media screen and (min-width: 481px) {
+    display: flex;
+  }
 
   //1번 공간
   //1번 공간
@@ -278,7 +296,7 @@ const A = styled.a`
   display: block;
   position: relative;
   height: 340px;
-  width: 50%;
+  width: 50%; /* 기본값: 더 큰 화면에서 50% */
   overflow: hidden;
   text-decoration: none;
   transition: transform 0.2s ease-in-out;
@@ -287,6 +305,11 @@ const A = styled.a`
   transform: translateZ(0);
   will-change: transform;
   perspective: 1000;
+
+  @media screen and (max-width: 480px) {
+    /* 모바일 화면일 때 */
+    width: 100%; /* 모바일 화면에서 100%로 설정 */
+  }
 
   &:before {
     content: "";
@@ -300,6 +323,7 @@ const A = styled.a`
     border-radius: 6px;
     border: 10px solid #000;
   }
+
   &:hover {
     transform: translateY(-5px) scale(1.02, 1.02);
   }

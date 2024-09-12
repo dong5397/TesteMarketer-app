@@ -8,7 +8,7 @@ import {
 } from "../../state/reviewAtoms";
 import { faArrowLeft, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { DeviceFrameset } from "react-device-frameset";
+import { DeviceFrameset } from "react-device-frameset"; // Keep this import
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ReviewCard from "../../components/Review/ReviewCard";
@@ -106,82 +106,83 @@ function CategoryReviewPage() {
 
   return (
     <ReviewPage>
-      <ReviewPageWrapper>
-        <DeviceFrameset
-          device="iPad Mini"
-          color="black"
-          width="100%"
-          height="75%"
-        >
-          <StyledContainer>
-            <GreenContainer>
-              <FontAwesomeIcon icon={faUtensils} size="2x" />
-            </GreenContainer>
-            <Header>
-              <BackButton to="/review/">
-                <PressableIcon
-                  icon={faArrowLeft}
-                  size="xl"
-                  onClick={handleIconClick}
-                  pressed={isPressed ? "true" : undefined}
-                />
-              </BackButton>
+      <H1>Maketer</H1>
+      <H2>대전 전체의 맛집을 찾아줍니다</H2>
+      <CenteredContainer>
+        <DeviceFrameWrapper>
+          <DeviceFrameset device="iPad Mini">
+            <StyledContainer>
+              <GreenContainer>
+                <FontAwesomeIcon icon={faUtensils} size="2x" />
+              </GreenContainer>
+              <Header>
+                <BackButton to="/review/">
+                  <PressableIcon
+                    icon={faArrowLeft}
+                    size="xl"
+                    onClick={handleIconClick}
+                    pressed={isPressed ? "true" : undefined}
+                  />
+                </BackButton>
 
-              <FilterContainer>
-                <FilterButton onClick={() => handleFilterChange("default")}>
-                  기본 순
-                </FilterButton>
-                <FilterButton onClick={() => handleFilterChange("rating")}>
-                  별점 높은 순
-                </FilterButton>
-                <FilterButton onClick={() => handleFilterChange("reviewCount")}>
-                  리뷰 많은 순
-                </FilterButton>
-                <FilterButton onClick={() => handleFilterChange("viewCount")}>
-                  찜 많은 순
-                </FilterButton>
-              </FilterContainer>
-            </Header>
-            <TagsContainer>
-              {currentItems.map((restaurant, index) => (
-                <div key={index}>
-                  {restaurant.menus &&
-                    restaurant.menus.length > 0 &&
-                    restaurant.menus.map((menu, menuIndex) => (
-                      <TagButton
-                        key={menuIndex}
-                        onClick={() => handleCategoryClick(menu)}
-                      >
-                        {menu}
-                      </TagButton>
-                    ))}
-                </div>
-              ))}
-            </TagsContainer>
-            <ReviewCardWrapper>
-              <ReviewCardContainer>
+                <FilterContainer>
+                  <FilterButton onClick={() => handleFilterChange("default")}>
+                    기본 순
+                  </FilterButton>
+                  <FilterButton onClick={() => handleFilterChange("rating")}>
+                    별점 높은 순
+                  </FilterButton>
+                  <FilterButton
+                    onClick={() => handleFilterChange("reviewCount")}
+                  >
+                    리뷰 많은 순
+                  </FilterButton>
+                  <FilterButton onClick={() => handleFilterChange("viewCount")}>
+                    찜 많은 순
+                  </FilterButton>
+                </FilterContainer>
+              </Header>
+              <TagsContainer>
                 {currentItems.map((restaurant, index) => (
-                  <ReviewCard key={index} restaurant={restaurant} />
+                  <div key={index}>
+                    {restaurant.menus &&
+                      restaurant.menus.length > 0 &&
+                      restaurant.menus.map((menu, menuIndex) => (
+                        <TagButton
+                          key={menuIndex}
+                          onClick={() => handleCategoryClick(menu)}
+                        >
+                          {menu}
+                        </TagButton>
+                      ))}
+                  </div>
                 ))}
-              </ReviewCardContainer>
-            </ReviewCardWrapper>
-            <Pagination>
-              <PageButton
-                onClick={handlePreviousPage}
-                disabled={currentPage === 1}
-              >
-                이전 페이지
-              </PageButton>
-              <PageButton
-                onClick={handleNextPage}
-                disabled={indexOfLastItem >= restaurants.length}
-              >
-                다음 페이지
-              </PageButton>
-            </Pagination>
-          </StyledContainer>
-        </DeviceFrameset>
-      </ReviewPageWrapper>
+              </TagsContainer>
+              <ReviewCardWrapper>
+                <ReviewCardContainer>
+                  {currentItems.map((restaurant, index) => (
+                    <ReviewCard key={index} restaurant={restaurant} />
+                  ))}
+                </ReviewCardContainer>
+              </ReviewCardWrapper>
+              <Pagination>
+                <PageButton
+                  onClick={handlePreviousPage}
+                  disabled={currentPage === 1}
+                >
+                  이전 페이지
+                </PageButton>
+                <PageButton
+                  onClick={handleNextPage}
+                  disabled={indexOfLastItem >= restaurants.length}
+                >
+                  다음 페이지
+                </PageButton>
+              </Pagination>
+            </StyledContainer>
+          </DeviceFrameset>
+        </DeviceFrameWrapper>
+      </CenteredContainer>
     </ReviewPage>
   );
 }
@@ -191,19 +192,59 @@ export default CategoryReviewPage;
 // 스타일 컴포넌트 정의
 const ReviewPage = styled.div`
   background: linear-gradient(#e7e78b, #f0f0c3);
-  min-height: 100vh;
+  height: 100%;
+`;
+const H1 = styled.h1`
+  display: none; /* 기본적으로 숨김 처리 */
+
+  @media screen and (max-width: 481px) {
+    display: block; /* 모바일에서만 표시 */
+    font-size: 40px;
+    line-height: 1.2;
+    padding-top: 3%;
+    margin-bottom: 0.3rem;
+    font-family: "GowunDodum-Regular";
+    text-align: center;
+  }
+`;
+
+const H2 = styled.h2`
+  display: none; /* 기본적으로 숨김 처리 */
+
+  @media screen and (max-width: 481px) {
+    display: block; /* 모바일에서만 표시 */
+    text-align: center;
+    font-weight: 300;
+    font-size: 20px;
+    font-family: "GowunDodum-Regular";
+  }
+`;
+const DeviceFrameWrapper = styled.div`
+  width: 100%;
+  max-width: 600px; /* 기본 최대 너비 설정 */
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+
+  @media screen and (max-width: 768px) {
+    max-width: 80%; /* 중간 크기 화면에서 너비 조정 */
+  }
+
+  @media screen and (max-width: 480px) {
+    width: 95%; /* 작은 화면에서 너비 조정 */
+  }
+`;
+const CenteredContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-// 나머지 스타일 컴포넌트 정의는 동일합니다.
-
-const ReviewPageWrapper = styled.div`
-  max-width: 1000px;
   width: 100%;
-  margin: 20px;
-  border-radius: 10px;
+  height: 100%;
+
+  @media screen and (max-width: 768px) {
+    padding: 0 20px; /* Add padding to make it fit within smaller screens */
+  }
 `;
 
 const StyledContainer = styled.div`
@@ -212,6 +253,8 @@ const StyledContainer = styled.div`
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 100%; /* 부모 요소의 높이에 맞추기 */
+  overflow-y: auto; /* 스크롤바가 필요할 때만 나타나도록 설정 */
 `;
 
 const Header = styled.div`
@@ -233,6 +276,10 @@ const BackButton = styled(Link)`
   color: #000;
   text-decoration: none;
   transition: background-color 0.3s;
+  @media screen and (max-width: 480px) {
+    left: 5px;
+    padding: 1px;
+  }
 
   &:hover {
     background-color: #d4d19a;
@@ -242,6 +289,9 @@ const BackButton = styled(Link)`
 const FilterContainer = styled.div`
   display: flex;
   gap: 10px;
+  @media screen and (max-width: 480px) {
+    padding-left: 25px;
+  }
 `;
 
 const FilterButton = styled.button`
@@ -254,6 +304,8 @@ const FilterButton = styled.button`
   color: #000;
   cursor: pointer;
   transition: background-color 0.3s;
+  @media screen and (max-width: 480px) {
+  }
 
   &:hover {
     background-color: #d4d19a;
@@ -262,6 +314,11 @@ const FilterButton = styled.button`
   &:focus {
     outline: none;
     background-color: #d4d19a;
+  }
+
+  @media screen and (max-width: 480px) {
+    padding: 2px 6px; /* Reduce padding for smaller screens */
+    font-size: 10px; /* Reduce font size for smaller screens */
   }
 `;
 
@@ -288,8 +345,8 @@ const GreenContainer = styled.div`
 `;
 
 const TagButton = styled.button`
-  padding: 10px 20px;
-  font-size: 16px;
+  padding: 8px 16px;
+  font-size: 14px;
   font-weight: bold;
   margin-left: 2px;
   background-color: #fff;
@@ -301,6 +358,11 @@ const TagButton = styled.button`
   &:hover {
     background-color: #e9e5a9;
     color: #000;
+  }
+
+  @media screen and (max-width: 480px) {
+    padding: 3px 5px; /* Reduce padding on smaller screens */
+    font-size: 12px; /* Reduce font size on smaller screens */
   }
 `;
 
@@ -319,16 +381,21 @@ const ReviewCardWrapper = styled.div`
   width: 100%;
   padding: 20px;
   overflow-y: auto;
+
+  @media screen and (max-width: 480px) {
+    padding: 10px; /* Reduce padding on smaller screens */
+  }
 `;
 
 const ReviewCardContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  max-width: 800px;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(150px, 1fr)
+  ); /* Responsive column count */
+  gap: 20px; /* Adjusted gap for smaller screens */
   width: 100%;
-  height: 80%;
-  overflow-y: auto;
+  height: auto; /* 높이를 자동으로 설정 */
   padding: 20px;
   border-radius: 10px;
   background-color: #fff;
@@ -344,6 +411,13 @@ const ReviewCardContainer = styled.div`
   }
   &::-webkit-scrollbar-track {
     background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  @media screen and (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr); /* Two columns on smaller screens */
+    gap: 10px; /* Reduce gap on smaller screens */
+    padding: 10px;
+    padding-bottom: 200px; /* Less space at the bottom on smaller screens */
   }
 `;
 

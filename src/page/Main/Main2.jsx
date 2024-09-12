@@ -82,6 +82,9 @@ const Caption = styled.h2`
   text-transform: uppercase;
   font-family: "GowunDodum-Regular";
   font-size: 70px;
+  @media screen and (max-width: 481px) {
+    font-size: 50px;
+  }
 `;
 
 const Text = styled.p`
@@ -91,6 +94,9 @@ const Text = styled.p`
   text-align: center;
   font-size: 50px;
   font-family: "GowunDodum-Regular";
+  @media screen and (max-width: 481px) {
+    font-size: 30px;
+  }
 `;
 
 const Keyframes = styled.div`

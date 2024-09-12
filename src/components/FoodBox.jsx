@@ -74,7 +74,7 @@ const FoodBox = () => {
           >
             <h2>식당 이름: {restaurant.restaurants_name}</h2>
             <p>주소: {restaurant.address}</p>
-            <p>평점: {restaurant.rating}</p>
+            <p className="rating">평점: {restaurant.rating}</p>
             <Image src={restaurant.image} alt={restaurant.restaurants_name} />
           </Box>
         ))}
@@ -94,13 +94,22 @@ const FoodBox = () => {
 export default FoodBox;
 
 const Container = styled.div`
-  display: block;
+  display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   gap: 20px;
-  margin-left: calc(10% + 20px);
+  margin-left: calc(0% + 20px);
   overflow-y: auto;
   max-height: calc(90vh - 40px);
+
+  @media screen and (max-width: 481px) {
+    flex-wrap: nowrap;
+    overflow-x: auto; /* Enables horizontal scrolling */
+    overflow-y: hidden; /* Prevents vertical scrolling */
+    white-space: nowrap; /* Keeps children in a single line */
+    margin-left: calc(10% + 20px);
+    max-height: calc(40vh - 40px);
+  }
 `;
 
 const BaseBox = styled.div`
@@ -110,25 +119,55 @@ const BaseBox = styled.div`
   background-color: #fff;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   border: 2px solid black;
+
+  @media screen and (max-width: 481px) {
+    width: 80%;
+    height: 150px;
+    flex: 0 0 auto; /* Prevents shrinking and keeps the box in its width */
+    margin-right: 20px; /* Adds spacing between boxes */
+  }
 `;
 
 const Box = styled(BaseBox)`
   cursor: pointer;
-
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: flex-start; /* Align items to the start */
+  gap: 5px; /* Add smaller space between elements */
   transition: transform 0.2s ease;
 
   &:hover {
     transform: translateY(5px);
   }
 
+  @media screen and (max-width: 481px) {
+    padding: 10px; /* Adjust padding for mobile */
+    gap: 0;
+  }
+
   h2 {
     font-size: 20px;
-    margin-bottom: 10px;
+    margin-bottom: 4px; /* Reduced margin for closer spacing */
+    @media screen and (max-width: 481px) {
+      font-size: 16px; /* Reduced font size for mobile */
+      margin-bottom: 0;
+    }
   }
 
   p {
     font-size: 16px;
-    margin-bottom: 15px;
+    margin-bottom: 4px; /* Reduced margin for closer spacing */
+    @media screen and (max-width: 481px) {
+      margin-bottom: 0;
+      font-size: 12px; /* Reduced font size for mobile */
+    }
+  }
+
+  .rating {
+    @media screen and (max-width: 481px) {
+      margin-bottom: 0;
+      display: none; /* Hide rating on mobile */
+    }
   }
 `;
 
@@ -136,6 +175,17 @@ const Image = styled.img`
   width: 100%;
   height: auto;
   border-radius: 8px;
+  object-fit: cover; /* Ensures the image is properly contained */
+  margin-top: 8px; /* Add space above the image */
+
+  @media screen and (max-width: 481px) {
+    width: 100%; /* Full width for better view on mobile */
+    height: 70%; /* Maintain aspect ratio */
+    margin-bottom: 0; /* Add space below the image */
+    margin-left: auto; /* Center image horizontally */
+    margin-right: auto; /* Center image horizontally */
+    margin-top: 2px;
+  }
 `;
 
 const RestaurantDetails = styled.div`
@@ -143,15 +193,4 @@ const RestaurantDetails = styled.div`
   position: fixed;
   z-index: 9999999;
   width: 300px;
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 5px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
 `;

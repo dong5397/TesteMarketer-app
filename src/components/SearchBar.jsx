@@ -59,7 +59,9 @@ const SearchBar = ({ onRestaurantClick }) => {
           {filteredRestaurants.length === 0 ? (
             <NoResultMessage>검색 결과가 없습니다.</NoResultMessage>
           ) : (
-            <RestaurantContainer>
+            <RestaurantContainer
+              style={{ display: searchTerm.length > 0 ? "block" : "none" }}
+            >
               {filteredRestaurants.map((restaurant) => (
                 <RestaurantItem
                   key={restaurant.restaurants_id}
@@ -69,7 +71,7 @@ const SearchBar = ({ onRestaurantClick }) => {
                   <RestaurantDetail>
                     주소: {restaurant.address}
                   </RestaurantDetail>
-                  <RestaurantDetail>
+                  <RestaurantDetail className="mobile-hidden">
                     전화번호: {restaurant.phone}
                   </RestaurantDetail>
                 </RestaurantItem>
@@ -115,6 +117,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media screen and (max-width: 481px) {
+    width: 100%;
+  }
 `;
 
 const SearchInput = styled.input`
@@ -127,13 +132,23 @@ const SearchInput = styled.input`
   outline: none;
   transition: border-color 0.3s ease;
   margin-left: 20px;
+  @media screen and (max-width: 481px) {
+    width: 108%;
+    margin-left: 60px;
+  }
 
   &:focus {
     border-color: #f1c40f;
   }
 `;
 
-const RestaurantContainer = styled.div``;
+const RestaurantContainer = styled.div`
+  @media screen and (max-width: 481px) {
+    display: none;
+    margin-left: 10%;
+    width: 100%;
+  }
+`;
 
 const NoResultMessage = styled.p`
   font-size: 18px;
@@ -150,6 +165,10 @@ const RestaurantItem = styled.div`
   cursor: pointer;
   border: 1px solid #eee;
   transition: box-shadow 0.3s ease;
+  @media screen and (max-width: 481px) {
+    width: 110%;
+    margin-left: 0px;
+  }
 
   &:hover {
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
@@ -164,6 +183,11 @@ const RestaurantName = styled.h2`
 const RestaurantDetail = styled.p`
   margin-bottom: 4px;
   font-size: 16px;
+  @media screen and (max-width: 481px) {
+    &.mobile-hidden {
+      display: none;
+    }
+  }
 `;
 
 const StyledModal = styled(Modal)`

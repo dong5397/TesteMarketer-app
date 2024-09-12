@@ -117,46 +117,43 @@ function ReviewPage() {
       </HeaderContainer>
       <Container>
         <ContentsContainer>
-          <DeviceFrameset
-            device="iPhone X"
-            color="black"
-            width="100%"
-            height="100%"
-          >
-            <ImgSection $backgroundImage={restaurantInfo.image}>
-              <CardSection>
-                <CardTitle>{restaurantInfo.name}</CardTitle>
-                <RatingStars rating={restaurantInfo.rating} />
-                <ReviewPanel>
-                  <ToggleContainer onClick={handleToggle}>
-                    <ReviewButton $active={isActive}>
-                      리뷰 {restaurantInfo.rating}
-                    </ReviewButton>
-                    <ReviewButton $active={!isActive}>리뷰 작성</ReviewButton>
-                    <ToggleSlider $active={isActive} />
-                  </ToggleContainer>
-                </ReviewPanel>
-              </CardSection>
-            </ImgSection>
-            <AdditionalInfoBox>
-              <AdditionalInfo>
-                <InfoIcon icon={faBurger} size="2x" />
-                <InfoText>{restaurantInfo.category}</InfoText>
-              </AdditionalInfo>
-              <AdditionalInfo>
-                <InfoIcon icon={faClock} size="2x" />
-                <InfoText>영업 시간: {restaurantInfo.opening_hours}</InfoText>
-              </AdditionalInfo>
-              <AdditionalInfo>
-                <InfoIcon icon={faMapMarkerAlt} size="2x" />
-                <InfoText>위치: {restaurantInfo.address}</InfoText>
-              </AdditionalInfo>
-              <AdditionalInfo>
-                <InfoIcon icon={faPhone} size="2x" />
-                <InfoText>연락처: {restaurantInfo.phone}</InfoText>
-              </AdditionalInfo>
-            </AdditionalInfoBox>
-          </DeviceFrameset>
+          <DeviceFramesetWrapper>
+            <DeviceFrameset device="iPhone X">
+              <ImgSection $backgroundImage={restaurantInfo.image}>
+                <CardSection>
+                  <CardTitle>{restaurantInfo.name}</CardTitle>
+                  <RatingStars rating={restaurantInfo.rating} />
+                  <ReviewPanel>
+                    <ToggleContainer onClick={handleToggle}>
+                      <ReviewButton $active={isActive}>
+                        리뷰 {restaurantInfo.rating}
+                      </ReviewButton>
+                      <ReviewButton $active={!isActive}>리뷰 작성</ReviewButton>
+                      <ToggleSlider $active={isActive} />
+                    </ToggleContainer>
+                  </ReviewPanel>
+                </CardSection>
+              </ImgSection>
+              <AdditionalInfoBox>
+                <AdditionalInfo>
+                  <InfoIcon icon={faBurger} size="2x" />
+                  <InfoText>{restaurantInfo.category}</InfoText>
+                </AdditionalInfo>
+                <AdditionalInfo>
+                  <InfoIcon icon={faClock} size="2x" />
+                  <InfoText>영업 시간: {restaurantInfo.opening_hours}</InfoText>
+                </AdditionalInfo>
+                <AdditionalInfo>
+                  <InfoIcon icon={faMapMarkerAlt} size="2x" />
+                  <InfoText>위치: {restaurantInfo.address}</InfoText>
+                </AdditionalInfo>
+                <AdditionalInfo>
+                  <InfoIcon icon={faPhone} size="2x" />
+                  <InfoText>연락처: {restaurantInfo.phone}</InfoText>
+                </AdditionalInfo>
+              </AdditionalInfoBox>
+            </DeviceFrameset>
+          </DeviceFramesetWrapper>
         </ContentsContainer>
         <ReviewContainer>
           {isActive ? (
@@ -175,6 +172,7 @@ export default ReviewPage;
 
 const ReveiwP = styled.div`
   background: linear-gradient(#f0f0c3, #e7e7c9);
+  width: 100%;
 `;
 
 const Container = styled.div`
@@ -184,17 +182,12 @@ const Container = styled.div`
   padding: 20px;
   display: flex;
   gap: 100px;
-`;
 
-const HeaderContainer = styled.header`
-  max-width: 100%;
-  padding: 0 20px;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  background: linear-gradient(#e7e78b, #f0f0c3);
+  @media screen and (max-width: 768px) {
+    flex-direction: column; /* 모바일 화면에서는 상하로 배치 */
+    height: auto; /* 높이를 자동으로 설정하여 내용에 맞게 조정 */
+    gap: 20px; /* 모바일에서는 갭 크기를 줄임 */
+  }
 `;
 
 const ReviewContainer = styled.main`
@@ -208,6 +201,22 @@ const ReviewContainer = styled.main`
   flex-direction: column;
   border-radius: 60px;
   background-color: white;
+
+  @media screen and (max-width: 768px) {
+    max-width: 100%; /* 모바일에서는 최대 너비를 100%로 설정 */
+    margin-right: 0; /* 오른쪽 마진 제거 */
+  }
+`;
+
+const HeaderContainer = styled.header`
+  max-width: 100%;
+  padding: 0 20px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  background: linear-gradient(#e7e78b, #f0f0c3);
 `;
 
 const ReviewPanel = styled.div`
@@ -257,6 +266,28 @@ const ContentsContainer = styled.div`
   height: 700px;
   flex: 1;
   border-radius: 50px;
+  display: flex;
+  justify-content: center; /* Center contents horizontally */
+  align-items: center; /* Center contents vertically */
+
+  @media screen and (max-width: 768px) {
+    max-width: 100%; /* 모바일에서는 최대 너비를 100%로 설정 */
+    height: auto; /* 높이를 자동으로 설정하여 내용에 맞게 조정 */
+    padding: 0; /* 모바일에서 좌우 패딩 추가 */
+  }
+`;
+const DeviceFramesetWrapper = styled.div`
+  height: auto;
+  width: auto;
+  margin: 0 auto;
+  padding: 20px;
+  gap: 100px;
+  @media screen and (max-width: 768px) {
+    height: auto;
+    width: auto;
+    margin: 0;
+    padding: 0;
+  }
 `;
 
 const ImgSection = styled.section`
@@ -267,6 +298,10 @@ const ImgSection = styled.section`
   background-position: center;
   position: relative;
   border-radius: 20px;
+
+  @media screen and (max-width: 768px) {
+    height: 200px; /* 모바일에서는 높이를 줄임 */
+  }
 `;
 
 const Title = styled.h1`

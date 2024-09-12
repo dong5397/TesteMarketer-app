@@ -14,6 +14,10 @@ const FoodForm = () => {
 export default FoodForm;
 
 const FormContainer = styled.div`
-  width: 420px;
+  width: 350px;
   height: 10%;
+  @media screen and (max-width: 481px) {
+    width: 380px;
+    height: 40px;
+  }
 `;

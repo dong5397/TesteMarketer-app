@@ -92,12 +92,11 @@ const CardBackground = styled.div`
 `;
 
 const CardWrapper = styled.div`
-  width: 250px;
-  height: 350px;
+  width: 200px;
+  height: 340px;
   padding: 20px;
   border-radius: 20px;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 6px;
-  flex: 1;
   margin: 20px;
   display: flex;
   align-items: flex-start;
@@ -107,6 +106,13 @@ const CardWrapper = styled.div`
   overflow: hidden;
   background: rgba(255, 255, 255, 0.9);
   cursor: pointer;
+
+  @media screen and (max-width: 480px) {
+    width: 100px;
+    height: 180px;
+    padding: 0px;
+    margin: 15px;
+  }
 
   &:hover {
     transform: scale(1.05);
@@ -123,6 +129,10 @@ const CardContent = styled.div`
   z-index: 3;
   width: 100%;
   text-align: center;
+
+  @media screen and (max-width: 480px) {
+    padding: 5px;
+  }
 `;
 
 const CardInfoBox = styled.div`
@@ -131,34 +141,51 @@ const CardInfoBox = styled.div`
   left: 0;
   width: 100%;
   background-color: rgba(255, 251, 218, 0.95);
-  padding: 15px;
+  padding: 10px;
   display: flex;
   justify-content: space-around;
   border-radius: 0 0 20px 20px;
   align-items: center;
   font-family: "Comic Sans MS", cursive;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
   color: #153448;
   opacity: ${({ $showInfo }) => ($showInfo ? 1 : 0)};
   transform: ${({ $showInfo }) =>
     $showInfo ? "translateY(0)" : "translateY(100%)"};
   transition: transform 0.4s ease, opacity 0.4s ease;
+
+  @media screen and (max-width: 480px) {
+    font-size: 12px;
+    padding: 5px;
+  }
 `;
 
 const ReviewCount = styled.div`
   flex: 1;
   text-align: center;
+
+  @media screen and (max-width: 480px) {
+    font-size: 10px;
+  }
 `;
 
 const ViewCount = styled.div`
   flex: 1;
   text-align: center;
+
+  @media screen and (max-width: 480px) {
+    font-size: 10px;
+  }
 `;
 
 const Rating = styled.div`
   flex: 1;
   text-align: center;
+
+  @media screen and (max-width: 480px) {
+    font-size: 10px;
+  }
 `;
 
 const CardImg = styled.div`
@@ -171,20 +198,34 @@ const CardImg = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+
+  @media screen and (max-width: 480px) {
+    width: 60px;
+    height: 60px;
+    border: 2px solid white;
+  }
 `;
 
 const CardTitle = styled.h2`
   margin: 10px 0;
   color: white;
-  font-size: ${({ $showInfo }) => ($showInfo ? "20px" : "24px")};
+  font-size: ${({ $showInfo }) => ($showInfo ? "16px" : "20px")};
   font-family: "Uiyeun", sans-serif;
   text-align: center;
   transition: font-size 0.3s ease, color 0.3s ease;
+
+  @media screen and (max-width: 480px) {
+    font-size: ${({ $showInfo }) => ($showInfo ? "12px" : "16px")};
+  }
 `;
 
 const CardHashTag = styled.div`
   color: white;
-  font-size: 18px;
+  font-size: 14px;
   font-family: "Uiyeun", sans-serif;
   text-align: center;
+
+  @media screen and (max-width: 480px) {
+    font-size: 10px;
+  }
 `;

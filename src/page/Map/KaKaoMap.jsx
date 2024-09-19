@@ -6,7 +6,6 @@ import {
   isFromMapClickState,
   mapMoveFunctionState,
 } from "../../state/mapAtoms";
-import FoodIndex from "../../components/FoodIndex";
 import mark from "../../../public/images/mark.png";
 
 const KakaoMap = () => {
@@ -17,31 +16,43 @@ const KakaoMap = () => {
   const setMapMoveFunction = useSetRecoilState(mapMoveFunctionState);
   const mapContainer = useRef(null);
   const mapInstance = useRef(null);
-  const modalRef = useRef(null);
-  const kakaoLoaded = useRef(false);
+  const kakaoLoaded = useRef(false); // Kakao API 로드 상태를 관리하는 변수
 
   useEffect(() => {
     const script = document.createElement("script");
     script.src =
-      "https://dapi.kakao.com/v2/maps/sdk.js?appkey=4d90cac7ec413eb4aec50eac7135504d&autoload=false";
+      "https://dapi.kakao.com/v2/maps/sdk.js?appkey=4d90cac7ec413eb4aec50eac7135504d&autoload=false&libraries=services";
     script.async = true;
+
+    // Kakao 지도 로드
     script.onload = () => {
       window.kakao.maps.load(() => {
-        kakaoLoaded.current = true;
+        kakaoLoaded.current = true; // Kakao API 로드 완료 상태 설정
         initializeMap();
       });
     };
+
     script.onerror = () => {
-      console.error("Kakao script failed to load");
+      console.error("Kakao script failed to load.");
     };
+
     document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    };
   }, []);
 
   const initializeMap = () => {
-    if (!mapContainer.current || !kakaoLoaded.current) return;
+    if (!mapContainer.current || !kakaoLoaded.current) {
+      console.error(
+        "Map container is not available or Kakao API is not loaded."
+      );
+      return;
+    }
 
     const mapOption = {
-      center: new window.kakao.maps.LatLng(36.350411, 127.384548),
+      center: new window.kakao.maps.LatLng(36.350411, 127.384548), // 대전 좌표
       level: 7,
     };
 
@@ -50,8 +61,7 @@ const KakaoMap = () => {
       mapOption
     );
 
-    setMapMoveFunction(() => moveMapToLocation); // Expose the map move function
-
+    setMapMoveFunction(() => moveMapToLocation);
     loadRestaurantsAndAddMarkers();
   };
 
@@ -81,16 +91,16 @@ const KakaoMap = () => {
   const addMarkersToMap = (restaurants) => {
     if (!mapInstance.current) return;
 
-    const isMobile = window.innerWidth <= 481; // 모바일 화면 감지
+    const isMobile = window.innerWidth <= 481;
     const markerSize = isMobile
-      ? new window.kakao.maps.Size(24, 24) // 모바일에서 작은 마커 크기
-      : new window.kakao.maps.Size(40, 40); // 데스크톱 기본 크기
+      ? new window.kakao.maps.Size(24, 24)
+      : new window.kakao.maps.Size(40, 40);
 
-    const markerImageSrc = mark; // 음식 마커 이미지 URL
+    const markerImageSrc = mark;
     const markerImage = new window.kakao.maps.MarkerImage(
       markerImageSrc,
       markerSize
-    ); // 마커 이미지 설정
+    );
 
     restaurants.forEach((restaurant) => {
       const markerPosition = new window.kakao.maps.LatLng(
@@ -98,10 +108,9 @@ const KakaoMap = () => {
         parseFloat(restaurant.longitude)
       );
 
-      // 마커 생성
       const marker = new window.kakao.maps.Marker({
         position: markerPosition,
-        image: markerImage, // 마커에 이미지 적용
+        image: markerImage,
       });
 
       const infowindow = new window.kakao.maps.InfoWindow({
@@ -126,35 +135,67 @@ const KakaoMap = () => {
 
         setSelectedRestaurant(restaurant);
         setIsFromMapClick(true);
+
+        // 현재 위치에서 식당까지 길찾기 경로 표시 시작
+        findRouteToRestaurant(restaurant);
       });
 
       marker.setMap(mapInstance.current);
     });
   };
 
-  const handleClickOutside = (event) => {
-    if (modalRef.current && !modalRef.current.contains(event.target)) {
-      setSelectedRestaurant(null); // 모달을 닫음
+  const drawRouteOnMap = (startCoords, endCoords) => {
+    const linePath = [startCoords, endCoords];
+
+    // 지도에 경로를 그릴 Polyline 생성
+    const polyline = new window.kakao.maps.Polyline({
+      path: linePath, // 경로 좌표
+      strokeWeight: 5, // 선 두께
+      strokeColor: "#FF0000", // 선 색깔
+      strokeOpacity: 0.8, // 선 투명도
+      strokeStyle: "solid", // 선 스타일
+    });
+
+    // 지도에 경로 표시
+    polyline.setMap(mapInstance.current);
+  };
+
+  // 경로를 찾고 지도에 표시하는 함수
+  const findRouteToRestaurant = (restaurant) => {
+    if (!restaurant) {
+      console.error("No restaurant selected for route.");
+      return;
+    }
+
+    const { latitude, longitude } = restaurant;
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude: currentLat, longitude: currentLng } =
+            position.coords;
+
+          const startCoords = new window.kakao.maps.LatLng(
+            currentLat,
+            currentLng
+          );
+          const endCoords = new window.kakao.maps.LatLng(latitude, longitude);
+
+          // 지도에 경로 그리기
+          drawRouteOnMap(startCoords, endCoords);
+        },
+        (error) => {
+          console.error("Error fetching current location:", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
     }
   };
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   return (
     <Container>
-      <H1>Maketer</H1>
-      <H2>대전 전체의 맛집을 찾아줍니다</H2>
-      <MapContainer id="map" ref={mapContainer} />
-      {selectedRestaurant && (
-        <FoodIndexContainer ref={modalRef}>
-          <FoodIndex />
-        </FoodIndexContainer>
-      )}
+      <MapContainer ref={mapContainer} />
     </Container>
   );
 };

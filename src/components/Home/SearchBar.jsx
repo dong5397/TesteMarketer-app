@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Modal from "react-modal";
-import KakaoMap from "../page/Map/KaKaoMap";
+import KakaoMap from "../../page/Map/KaKaoMap";
 
 Modal.setAppElement("#root");
 

@@ -5,8 +5,8 @@ import {
   selectedRestaurantFromButtonState,
   isDetailModalOpenState,
   mapMoveFunctionState,
-} from "../state/mapAtoms";
-import FoodIndex from "./FoodIndex";
+} from "../../state/mapAtoms";
+import FoodIndex from "../Home/FoodIndex";
 import { useNavigate } from "react-router-dom";
 
 function FoodDetail() {

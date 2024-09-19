@@ -6,6 +6,13 @@ import React, { useState } from "react";
 import styled, { css, keyframes } from "styled-components";
 import RatingStars from "./RatingStars";
 
+// bounceAnimation 애니메이션 정의
+const bounceAnimation = keyframes`
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+`;
+
 function ReviewItem({ review, onDelete }) {
   const {
     review_id,
@@ -50,7 +57,6 @@ function ReviewItem({ review, onDelete }) {
         ))}
       </HashTagsContainer>
       <ActionButtonsContainer>
-        {/* isClicked 대신 $isClicked로 전달 */}
         <DeleteButton $isClicked={isClicked} onClick={reviewDeleteHandler}>
           <TrashIcon icon={faTrash} size="2xl" $isClicked={isClicked} />
         </DeleteButton>
@@ -66,26 +72,47 @@ const ReviewItemContainer = styled.div`
   border-radius: 20px;
   background-color: #f6f5f2;
   padding: 20px;
+
+  @media screen and (max-width: 768px) {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
 `;
 
 const Username = styled.span`
   font-weight: bold;
   font-size: 34px;
+
+  @media screen and (max-width: 768px) {
+    font-size: 28px;
+  }
 `;
 
 const Content = styled.div`
   font-size: 22px;
+
+  @media screen and (max-width: 768px) {
+    font-size: 18px;
+  }
 `;
 
 const Date = styled.span`
   color: gray;
   font-size: 18px;
+
+  @media screen and (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 const HashTagsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin-top: 10px;
+
+  @media screen and (max-width: 768px) {
+    margin-top: 5px;
+  }
 `;
 
 const HashTag = styled.p`
@@ -94,6 +121,12 @@ const HashTag = styled.p`
   padding: 5px 10px;
   cursor: pointer;
   margin: 5px;
+
+  @media screen and (max-width: 768px) {
+    padding: 3px 8px;
+    margin: 3px;
+    font-size: 14px;
+  }
 `;
 
 const ActionButtonsContainer = styled.div`
@@ -101,29 +134,23 @@ const ActionButtonsContainer = styled.div`
   justify-content: space-around;
   align-items: center;
   margin-top: 10px;
+
+  @media screen and (max-width: 768px) {
+    margin-top: 5px;
+  }
 `;
 
-// isClicked를 $isClicked로 변경
 const DeleteButton = styled.button`
   border-radius: 100px;
   padding: 10px;
   background-color: ${({ $isClicked }) => ($isClicked ? "red" : "white")};
   transition: transform 0.3s ease;
-`;
 
-const bounceAnimation = keyframes`
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-25px);
-  }
-  60% {
-    transform: translateY(-10px);
+  @media screen and (max-width: 768px) {
+    padding: 8px;
   }
 `;
 
-// isClicked를 $isClicked로 변경
 const TrashIcon = styled(FontAwesomeIcon)`
   color: #ff0000;
   ${({ $isClicked }) =>
@@ -132,4 +159,8 @@ const TrashIcon = styled(FontAwesomeIcon)`
       color: white;
       animation: ${bounceAnimation} 0.5s;
     `}
+
+  @media screen and (max-width: 768px) {
+    font-size: 18px;
+  }
 `;

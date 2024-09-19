@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import FoodForm from "./FoodForm";
-import SearchBar from "../../components/SearchBar";
+import SearchBar from "../../components/Home/SearchBar";
 import { useRecoilState } from "recoil";
 import {
   isOpenState,
   isSearchOpenState,
   selectedRestaurantState,
 } from "../../state/mapAtoms";
-import FoodDetail from "../../components/FoodDetail";
+import FoodDetail from "../../components/Home/FoodDetail";
+import DirectionsFinderModal from "../../components/Home/DirectionsFinderModal"; // 모달 import
 
 const Home = () => {
   const [isOpen, setIsOpen] = useRecoilState(isOpenState);
   const [isSearchOpen, setIsSearchOpen] = useRecoilState(isSearchOpenState);
   const selectedRestaurant = useRecoilState(selectedRestaurantState)[0];
+
+  // 모달 상태 추가
+  const [showModal, setShowModal] = useState(false);
 
   // 새로운 상태 추가: windowWidth
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -38,6 +42,12 @@ const Home = () => {
     }
   };
 
+  // 모달 열기 함수
+  const openModal = () => setShowModal(true);
+
+  // 모달 닫기 함수
+  const closeModal = () => setShowModal(false);
+
   return (
     <Container $isOpen={isOpen}>
       <ToggleButton onClick={togglePanel}>
@@ -51,21 +61,32 @@ const Home = () => {
       </ToggleButton>
 
       {isOpen && (
-        <SearchButton onClick={toggleSearch}>
-          {isSearchOpen ? "닫기" : "검색"}
-        </SearchButton>
+        <>
+          <SearchButton onClick={toggleSearch}>
+            {isSearchOpen ? "닫기" : "검색"}
+          </SearchButton>
+
+          {/* 길찾기 버튼 추가 */}
+          <DirectionsButton onClick={openModal}>길찾기</DirectionsButton>
+        </>
       )}
+
       <Content>
         <FoodForm />
       </Content>
+
       {isSearchOpen && (
         <SearchContainer>
           <SearchBar />
         </SearchContainer>
       )}
+
       {selectedRestaurant && (
         <FoodDetail triggerModal={false} /> // 모달이 아닌 일반 컴포넌트로 렌더링
       )}
+
+      {/* DirectionsFinder 모달 */}
+      <DirectionsFinderModal showModal={showModal} closeModal={closeModal} />
     </Container>
   );
 };
@@ -128,6 +149,24 @@ const SearchButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   border: 1px solid black;
+`;
+
+const DirectionsButton = styled.button`
+  position: absolute;
+  top: 110px; /* SearchButton 아래에 위치하도록 조정 */
+  left: 10px;
+  background-color: #041c11;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid black;
+
+  @media screen and (max-width: 481px) {
+    top: 90px; /* 모바일에서도 검색 버튼 아래에 위치 */
+    left: 10px;
+  }
 `;
 
 const Content = styled.div`

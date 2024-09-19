@@ -8,7 +8,7 @@ import {
   loadingState,
   errorState,
   isFromMapClickState, // 추가
-} from "../state/mapAtoms";
+} from "../../state/mapAtoms";
 import FoodDetail from "./FoodDetail";
 
 const FoodBox = () => {

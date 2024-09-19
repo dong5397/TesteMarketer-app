@@ -6,13 +6,17 @@
     <link rel="stylesheet" href="/index.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>대전 맛집</title>
+    <!-- Kakao SDK 로드 -->
     <script
       src="https://t1.kakaocdn.net/kakao_js_sdk/2.5.0/kakao.min.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+
     <script>
-      Kakao.init("92be558050bf327c8f008ccd01021afd");
-      console.log(Kakao.isInitialized());
+      // Kakao SDK 초기화 (하드코딩된 JavaScript API 키 사용)
+      Kakao.init("4d90cac7ec413eb4aec50eac7135504d");
+      console.log("Kakao SDK initialized:", Kakao.isInitialized());
     </script>
   </head>
   <body>

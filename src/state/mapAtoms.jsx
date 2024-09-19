@@ -118,3 +118,17 @@ export const selectedRestaurantFromBoxState = atom({
   key: "selectedRestaurantFromBoxState",
   default: null,
 });
+export const startLocationState = atom({
+  key: "startLocationState",
+  default: { x: "", y: "" },
+});
+
+export const endLocationState = atom({
+  key: "endLocationState",
+  default: { x: "", y: "" },
+});
+
+export const directionsState = atom({
+  key: "directionsState",
+  default: null,
+});

@@ -16,6 +16,7 @@ import {
   faBurger,
 } from "@fortawesome/free-solid-svg-icons";
 import { DeviceFrameset } from "react-device-frameset";
+
 import "react-device-frameset/styles/marvel-devices.min.css";
 
 function ReviewPage() {
@@ -112,49 +113,47 @@ function ReviewPage() {
 
   return (
     <ReveiwP>
-      <HeaderContainer>
-        <Title>식당 리뷰</Title>
-      </HeaderContainer>
+      <H1>Maketer</H1>
+      <H2>대전 전체의 맛집을 찾아줍니다</H2>
       <Container>
-        <ContentsContainer>
-          <DeviceFramesetWrapper>
-            <DeviceFrameset device="iPhone X">
-              <ImgSection $backgroundImage={restaurantInfo.image}>
-                <CardSection>
-                  <CardTitle>{restaurantInfo.name}</CardTitle>
-                  <RatingStars rating={restaurantInfo.rating} />
-                  <ReviewPanel>
-                    <ToggleContainer onClick={handleToggle}>
-                      <ReviewButton $active={isActive}>
-                        리뷰 {restaurantInfo.rating}
-                      </ReviewButton>
-                      <ReviewButton $active={!isActive}>리뷰 작성</ReviewButton>
-                      <ToggleSlider $active={isActive} />
-                    </ToggleContainer>
-                  </ReviewPanel>
-                </CardSection>
-              </ImgSection>
-              <AdditionalInfoBox>
-                <AdditionalInfo>
-                  <InfoIcon icon={faBurger} size="2x" />
-                  <InfoText>{restaurantInfo.category}</InfoText>
-                </AdditionalInfo>
-                <AdditionalInfo>
-                  <InfoIcon icon={faClock} size="2x" />
-                  <InfoText>영업 시간: {restaurantInfo.opening_hours}</InfoText>
-                </AdditionalInfo>
-                <AdditionalInfo>
-                  <InfoIcon icon={faMapMarkerAlt} size="2x" />
-                  <InfoText>위치: {restaurantInfo.address}</InfoText>
-                </AdditionalInfo>
-                <AdditionalInfo>
-                  <InfoIcon icon={faPhone} size="2x" />
-                  <InfoText>연락처: {restaurantInfo.phone}</InfoText>
-                </AdditionalInfo>
-              </AdditionalInfoBox>
-            </DeviceFrameset>
-          </DeviceFramesetWrapper>
-        </ContentsContainer>
+        <DeviceFramesetWrapper>
+          <DeviceFrameset device="iPhone X">
+            <ImgSection $backgroundImage={restaurantInfo.image}>
+              <CardSection>
+                <CardTitle>{restaurantInfo.name}</CardTitle>
+                <RatingStars rating={restaurantInfo.rating} />
+                <ReviewPanel>
+                  <ToggleContainer onClick={handleToggle}>
+                    <ReviewButton $active={isActive}>
+                      리뷰 {restaurantInfo.rating}
+                    </ReviewButton>
+                    <ReviewButton $active={!isActive}>리뷰 작성</ReviewButton>
+                    <ToggleSlider $active={isActive} />
+                  </ToggleContainer>
+                </ReviewPanel>
+              </CardSection>
+            </ImgSection>
+            <AdditionalInfoBox>
+              <AdditionalInfo>
+                <InfoIcon icon={faBurger} size="2x" />
+                <InfoText>{restaurantInfo.category}</InfoText>
+              </AdditionalInfo>
+              <AdditionalInfo>
+                <InfoIcon icon={faClock} size="2x" />
+                <InfoText>영업 시간: {restaurantInfo.opening_hours}</InfoText>
+              </AdditionalInfo>
+              <AdditionalInfo>
+                <InfoIcon icon={faMapMarkerAlt} size="2x" />
+                <InfoText>위치: {restaurantInfo.address}</InfoText>
+              </AdditionalInfo>
+              <AdditionalInfo>
+                <InfoIcon icon={faPhone} size="2x" />
+                <InfoText>연락처: {restaurantInfo.phone}</InfoText>
+              </AdditionalInfo>
+            </AdditionalInfoBox>
+          </DeviceFrameset>
+        </DeviceFramesetWrapper>
+
         <ReviewContainer>
           {isActive ? (
             <WriteReview onSubmit={onSubmit} />
@@ -172,12 +171,34 @@ export default ReviewPage;
 
 const ReveiwP = styled.div`
   background: linear-gradient(#f0f0c3, #e7e7c9);
-  width: 100%;
+  width: auto;
+`;
+const H1 = styled.h1`
+  display: none; /* 기본적으로 숨김 처리 */
+
+  @media screen and (max-width: 481px) {
+    display: block; /* 모바일에서만 표시 */
+    font-size: 40px;
+    line-height: 1.2;
+    padding-top: 3%;
+    margin-bottom: 0.3rem;
+    font-family: "GowunDodum-Regular";
+    text-align: center;
+  }
 `;
 
+const H2 = styled.h2`
+  display: none; /* 기본적으로 숨김 처리 */
+
+  @media screen and (max-width: 481px) {
+    display: block; /* 모바일에서만 표시 */
+    text-align: center;
+    font-weight: 300;
+    font-size: 20px;
+    font-family: "GowunDodum-Regular";
+  }
+`;
 const Container = styled.div`
-  max-width: 1280px;
-  height: 1200px;
   margin: 0 auto;
   padding: 20px;
   display: flex;
@@ -185,15 +206,12 @@ const Container = styled.div`
 
   @media screen and (max-width: 768px) {
     flex-direction: column; /* 모바일 화면에서는 상하로 배치 */
-    height: auto; /* 높이를 자동으로 설정하여 내용에 맞게 조정 */
-    gap: 20px; /* 모바일에서는 갭 크기를 줄임 */
+    height: auto;
+    gap: 0px; /* 모바일에서는 갭 크기를 줄임 */
   }
 `;
 
 const ReviewContainer = styled.main`
-  max-width: 85%;
-  min-height: 750px;
-  margin-right: 40px;
   max-height: 750px;
   overflow: auto;
   flex: 1;
@@ -205,18 +223,8 @@ const ReviewContainer = styled.main`
   @media screen and (max-width: 768px) {
     max-width: 100%; /* 모바일에서는 최대 너비를 100%로 설정 */
     margin-right: 0; /* 오른쪽 마진 제거 */
+    margin-bottom: 200px;
   }
-`;
-
-const HeaderContainer = styled.header`
-  max-width: 100%;
-  padding: 0 20px;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  background: linear-gradient(#e7e78b, #f0f0c3);
 `;
 
 const ReviewPanel = styled.div`
@@ -261,38 +269,24 @@ const ToggleSlider = styled.div`
     $active ? "translateX(50%)" : "translateX(-50%)"};
 `;
 
-const ContentsContainer = styled.div`
-  max-width: 30%;
-  height: 700px;
-  flex: 1;
-  border-radius: 50px;
-  display: flex;
-  justify-content: center; /* Center contents horizontally */
-  align-items: center; /* Center contents vertically */
-
-  @media screen and (max-width: 768px) {
-    max-width: 100%; /* 모바일에서는 최대 너비를 100%로 설정 */
-    height: auto; /* 높이를 자동으로 설정하여 내용에 맞게 조정 */
-    padding: 0; /* 모바일에서 좌우 패딩 추가 */
-  }
-`;
 const DeviceFramesetWrapper = styled.div`
-  height: auto;
   width: auto;
+  height: auto;
   margin: 0 auto;
   padding: 20px;
   gap: 100px;
   @media screen and (max-width: 768px) {
-    height: auto;
-    width: auto;
+    transform: scale(0.8); /* 모바일에서는 더 작게 축소 */
+    transform-origin: top left;
     margin: 0;
     padding: 0;
+    gap: 0px;
   }
 `;
 
 const ImgSection = styled.section`
-  max-width: 100%;
-  height: 300px;
+  max-width: 100%; /* 내부 콘텐츠의 넓이를 줄임 */
+  height: 270px; /* 높이도 줄여서 조정 */
   background-image: url(${(props) => props.$backgroundImage});
   background-size: cover;
   background-position: center;
@@ -300,7 +294,7 @@ const ImgSection = styled.section`
   border-radius: 20px;
 
   @media screen and (max-width: 768px) {
-    height: 200px; /* 모바일에서는 높이를 줄임 */
+    height: 40%; /* 모바일에서는 높이를 줄임 */
   }
 `;
 
@@ -315,8 +309,8 @@ const Title = styled.h1`
 `;
 
 const CardSection = styled.section`
-  max-width: 340px;
-  height: 180px;
+  max-width: 90%;
+  height: 160px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -329,7 +323,7 @@ const CardSection = styled.section`
   left: 0;
   right: 0;
   margin: 0 auto;
-  padding: 30px;
+  padding: 20px; /* 패딩도 줄여서 조정 */
   box-shadow: rgba(10, 100, 90, 0.5) 0px 7px 29px 0px;
 `;
 

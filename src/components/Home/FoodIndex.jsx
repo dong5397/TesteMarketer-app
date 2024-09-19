@@ -5,7 +5,7 @@ import {
   selectedRestaurantFromButtonState,
   selectedRestaurantFromMapState,
   isFromMapClickState,
-} from "../state/mapAtoms";
+} from "../../state/mapAtoms";
 
 function FoodIndex() {
   const isFromMapClick = useRecoilValue(isFromMapClickState);

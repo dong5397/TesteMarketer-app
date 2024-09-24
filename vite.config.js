@@ -1,7 +1,15 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-})
+  server: {
+    proxy: {
+      "/api": {
+        target: "https://makterbackend.fly.dev", // 배포된 백엔드 서버 주소
+        changeOrigin: true, // CORS 문제 해결
+        rewrite: (path) => path.replace(/^\/api/, ""), // '/api'를 제거하고 백엔드로 전달
+      },
+    },
+  },
+});

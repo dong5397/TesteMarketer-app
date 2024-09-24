@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import {
@@ -6,6 +6,7 @@ import {
   isFromMapClickState,
   mapMoveFunctionState,
 } from "../../state/mapAtoms";
+import FoodIndex from "../../components/Home/FoodIndex"; // 모달에 사용할 컴포넌트
 import mark from "../../../public/images/mark.png";
 
 const KakaoMap = () => {
@@ -17,14 +18,16 @@ const KakaoMap = () => {
   const mapContainer = useRef(null);
   const mapInstance = useRef(null);
   const kakaoLoaded = useRef(false); // Kakao API 로드 상태를 관리하는 변수
+  const modalRef = useRef(null); // 모달 영역을 감지할 Ref
+  const [currentPosition, setCurrentPosition] = useState(null); // 현재 위치 상태
 
+  // Kakao 지도 로드
   useEffect(() => {
     const script = document.createElement("script");
     script.src =
       "https://dapi.kakao.com/v2/maps/sdk.js?appkey=4d90cac7ec413eb4aec50eac7135504d&autoload=false&libraries=services";
     script.async = true;
 
-    // Kakao 지도 로드
     script.onload = () => {
       window.kakao.maps.load(() => {
         kakaoLoaded.current = true; // Kakao API 로드 완료 상태 설정
@@ -43,6 +46,7 @@ const KakaoMap = () => {
     };
   }, []);
 
+  // 지도 초기화
   const initializeMap = () => {
     if (!mapContainer.current || !kakaoLoaded.current) {
       console.error(
@@ -63,12 +67,32 @@ const KakaoMap = () => {
 
     setMapMoveFunction(() => moveMapToLocation);
     loadRestaurantsAndAddMarkers();
+    updateCurrentLocation(); // 지도 초기화 시 현재 위치로 이동
   };
 
+  // 현재 위치로 지도를 이동하는 함수
   const moveMapToLocation = (latitude, longitude) => {
     const position = new window.kakao.maps.LatLng(latitude, longitude);
     mapInstance.current.setCenter(position);
     mapInstance.current.setLevel(4); // Zoom in to the selected restaurant
+  };
+
+  // 현재 위치 갱신 함수
+  const updateCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setCurrentPosition({ latitude, longitude }); // 현재 위치 갱신
+          moveMapToLocation(latitude, longitude); // 지도를 현재 위치로 이동
+        },
+        (error) => {
+          console.error("Error fetching current location:", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
   };
 
   const loadRestaurantsAndAddMarkers = () => {
@@ -133,41 +157,24 @@ const KakaoMap = () => {
         mapInstance.current.setCenter(position);
         mapInstance.current.setLevel(4);
 
-        setSelectedRestaurant(restaurant);
+        setSelectedRestaurant(restaurant); // 식당 선택
         setIsFromMapClick(true);
 
-        // 현재 위치에서 식당까지 길찾기 경로 표시 시작
-        findRouteToRestaurant(restaurant);
+        // 길찾기 경로 표시
+        findDrivingRouteToRestaurant(restaurant);
       });
 
       marker.setMap(mapInstance.current);
     });
   };
 
-  const drawRouteOnMap = (startCoords, endCoords) => {
-    const linePath = [startCoords, endCoords];
-
-    // 지도에 경로를 그릴 Polyline 생성
-    const polyline = new window.kakao.maps.Polyline({
-      path: linePath, // 경로 좌표
-      strokeWeight: 5, // 선 두께
-      strokeColor: "#FF0000", // 선 색깔
-      strokeOpacity: 0.8, // 선 투명도
-      strokeStyle: "solid", // 선 스타일
-    });
-
-    // 지도에 경로 표시
-    polyline.setMap(mapInstance.current);
-  };
-
-  // 경로를 찾고 지도에 표시하는 함수
-  const findRouteToRestaurant = (restaurant) => {
+  const findDrivingRouteToRestaurant = (restaurant) => {
     if (!restaurant) {
       console.error("No restaurant selected for route.");
       return;
     }
 
-    const { latitude, longitude } = restaurant;
+    const { latitude: destLat, longitude: destLng } = restaurant;
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -175,14 +182,71 @@ const KakaoMap = () => {
           const { latitude: currentLat, longitude: currentLng } =
             position.coords;
 
-          const startCoords = new window.kakao.maps.LatLng(
-            currentLat,
-            currentLng
-          );
-          const endCoords = new window.kakao.maps.LatLng(latitude, longitude);
+          const directionsUrl = `https://apis-navi.kakaomobility.com/v1/directions?origin=${currentLng},${currentLat}&destination=${destLng},${destLat}&waypoints=&priority=RECOMMEND&car_fuel=GASOLINE&car_hipass=false&alternatives=false&road_details=false`;
 
-          // 지도에 경로 그리기
-          drawRouteOnMap(startCoords, endCoords);
+          fetch(directionsUrl, {
+            method: "GET",
+            headers: {
+              Authorization: "KakaoAK 92be558050bf327c8f008ccd01021afd", // REST API 키 설정
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Received route data:", data);
+              if (data && data.routes && data.routes.length > 0) {
+                const path = [];
+                data.routes[0].sections.forEach((section) => {
+                  section.roads.forEach((road) => {
+                    for (let i = 0; i < road.vertexes.length; i += 2) {
+                      const lng = parseFloat(road.vertexes[i]);
+                      const lat = parseFloat(road.vertexes[i + 1]);
+
+                      if (!isNaN(lat) && !isNaN(lng)) {
+                        path.push(new window.kakao.maps.LatLng(lat, lng));
+                      }
+                    }
+                  });
+                });
+
+                if (path.length > 0) {
+                  if (window.polyline) {
+                    window.polyline.setMap(null); // 기존 경로 제거
+                  }
+                  if (window.outline) {
+                    window.outline.setMap(null); // 외곽선 제거
+                  }
+
+                  window.polyline = new window.kakao.maps.Polyline({
+                    map: mapInstance.current,
+                    path: path,
+                    strokeWeight: 6,
+                    strokeColor: "#FF6347",
+                    strokeOpacity: 0.9,
+                    strokeStyle: "solid",
+                    zIndex: 2,
+                  });
+
+                  window.outline = new window.kakao.maps.Polyline({
+                    map: mapInstance.current,
+                    path: path,
+                    strokeWeight: 10,
+                    strokeColor: "#000000",
+                    strokeOpacity: 0.5,
+                    strokeStyle: "solid",
+                    zIndex: 1,
+                  });
+
+                  window.polyline.setMap(mapInstance.current);
+                } else {
+                  console.warn("경로를 그릴 좌표가 없습니다.");
+                }
+              } else {
+                console.error("경로 데이터를 찾을 수 없습니다.", data);
+              }
+            })
+            .catch((error) => {
+              console.error("경로 요청 중 오류 발생:", error);
+            });
         },
         (error) => {
           console.error("Error fetching current location:", error);
@@ -193,15 +257,41 @@ const KakaoMap = () => {
     }
   };
 
+  // 모달 외부 클릭 시 닫기
+  const handleClickOutside = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      setSelectedRestaurant(null); // 모달 닫기
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // 현재 위치 갱신하는 버튼 추가
   return (
     <Container>
+      <H1>Maketer</H1>
+      <H2>대전 전체의 맛집을 찾아줍니다</H2>
       <MapContainer ref={mapContainer} />
+      <UpdateLocationButton onClick={updateCurrentLocation}>
+        현재 위치 갱신
+      </UpdateLocationButton>
+      {selectedRestaurant && (
+        <FoodIndexContainer ref={modalRef}>
+          <FoodIndex restaurant={selectedRestaurant} />
+        </FoodIndexContainer>
+      )}
     </Container>
   );
 };
 
 export default KakaoMap;
 
+// styled-components
 const Container = styled.div`
   width: 100%;
   height: calc(100vh - 60px);
@@ -211,11 +301,12 @@ const Container = styled.div`
   background: linear-gradient(#e7e78b, #f0f0c3);
   position: relative;
 `;
+
 const H1 = styled.h1`
-  display: none; /* 기본적으로 숨김 처리 */
+  display: none;
 
   @media screen and (max-width: 481px) {
-    display: block; /* 모바일에서만 표시 */
+    display: block;
     font-size: 40px;
     line-height: 1.2;
     margin-bottom: 0.3rem;
@@ -225,10 +316,10 @@ const H1 = styled.h1`
 `;
 
 const H2 = styled.h2`
-  display: none; /* 기본적으로 숨김 처리 */
+  display: none;
 
   @media screen and (max-width: 481px) {
-    display: block; /* 모바일에서만 표시 */
+    display: block;
     text-align: center;
     font-weight: 300;
     font-size: 20px;
@@ -255,6 +346,17 @@ const FoodIndexContainer = styled.div`
   width: 300px;
   height: auto;
   overflow-y: auto;
-  @media screen and (max-width: 481px) {
-  }
+`;
+
+const UpdateLocationButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px 20px;
+  background-color: #041c11;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 999;
 `;

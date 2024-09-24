@@ -1,24 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import DirectionsFinder from "./DirectionsFinder"; // DirectionsFinder 컴포넌트를 import
 
 const DirectionsFinderModal = ({ showModal, closeModal }) => {
-  if (!showModal) return null; // 모달이 열리지 않으면 아무것도 렌더링하지 않음
+  const [origin, setOrigin] = useState(""); // 출발지 상태
+  const [destination, setDestination] = useState(""); // 도착지 상태
+
+  const handleFindDirections = () => {
+    if (!origin || !destination) {
+      alert("출발지와 도착지를 입력해주세요.");
+      return;
+    }
+
+    // 여기에 출발지(origin)와 도착지(destination)를 가지고 길찾기 API를 호출하는 로직 추가
+    console.log("출발지:", origin, "도착지:", destination);
+    closeModal(); // 모달 닫기
+  };
+
+  if (!showModal) {
+    return null; // 모달이 안보일 때는 아무것도 렌더링하지 않음
+  }
 
   return (
-    <ModalOverlay>
+    <ModalContainer>
       <ModalContent>
-        <CloseButton onClick={closeModal}>X</CloseButton>
-        <DirectionsFinder />
+        <h2>길찾기</h2>
+        <label>
+          출발지:
+          <input
+            type="text"
+            value={origin}
+            onChange={(e) => setOrigin(e.target.value)}
+            placeholder="출발지를 입력하세요"
+          />
+        </label>
+        <label>
+          도착지:
+          <input
+            type="text"
+            value={destination}
+            onChange={(e) => setDestination(e.target.value)}
+            placeholder="도착지를 입력하세요"
+          />
+        </label>
+        <Buttons>
+          <button onClick={handleFindDirections}>길찾기</button>
+          <button onClick={closeModal}>닫기</button>
+        </Buttons>
       </ModalContent>
-    </ModalOverlay>
+    </ModalContainer>
   );
 };
 
 export default DirectionsFinderModal;
 
-// Styled components for the modal
-const ModalOverlay = styled.div`
+// 스타일링 컴포넌트
+const ModalContainer = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -28,26 +64,32 @@ const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1001;
+  z-index: 1000;
 `;
 
 const ModalContent = styled.div`
   background-color: white;
   padding: 20px;
   border-radius: 10px;
-  width: 90%;
-  max-width: 500px;
-  position: relative;
+  width: 400px;
+  text-align: center;
 `;
 
-const CloseButton = styled.button`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: red;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 5px;
+const Buttons = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+
+  button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
 `;

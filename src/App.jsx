@@ -14,8 +14,33 @@ import EditPage from "./components/Community/EditPage";
 import DetailPost from "./components/Community/DetailPost";
 
 import ServiceFoods from "./components/ServiceFoods";
-
+import Mypage from "./components/User/Mypage";
+import ResetPasswordPage from "./components/User/ResetPassword";
 function App() {
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await fetch(
+          "https://makterbackend.fly.dev/api/v1/check-session",
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+
+        const result = await response.json();
+        if (result.isAuthenticated) {
+          setAuth(true);
+        } else {
+          setAuth(false);
+        }
+      } catch (error) {
+        setAuth(false);
+      }
+    };
+
+    checkSession();
+  }, []);
   return (
     <BrowserRouter>
       <Routes>
@@ -30,6 +55,8 @@ function App() {
         <Route path="/category/:category" element={<CategoryReviewHN />} />
         <Route path="/EditPage/:postId" element={<EditPageHN />} />
         <Route path="/Post/:postId" element={<DetailPostPageHN />} />
+        <Route path="/mypage" element={<MypageHN />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
       </Routes>
     </BrowserRouter>
   );
@@ -114,5 +141,9 @@ const DetailPostPageHN = () => (
     <DetailPost />
   </div>
 );
-
+const MypageHN = () => (
+  <div>
+    <Mypage />
+  </div>
+);
 export default App;

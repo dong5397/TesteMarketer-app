@@ -1,44 +1,39 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { toast } from "react-toastify";
-import Potodance from "../components/Home/Potodance";
-import TopNav from "../components/TopNav"; // 하단 네비게이션 컴포넌트 추가
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignInAlt, faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import Potodance from "../components/Potodance";
+import ProfileModal from "../components/User/ProfileModal";
+import AuthModal from "../components/User/AuthModal";
+import { useEffect } from "react";
+import Mypage from "../components/User/Mypage";
 
-const Header = ({ setAuth, isAuthenticated }) => {
-  const [name, setName] = useState("");
+// Header Component
+const Header = ({ isAuthenticated, setAuth }) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
-  const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 768); // 모바일 뷰 감지
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobileView(window.innerWidth <= 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const [moveMypage, setMoveMypage] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false); // Toggle for dropdown
 
   const logoutSuccessfully = () => toast("로그아웃 성공!");
 
   const logout = async (e) => {
     e.preventDefault();
     try {
-      await fetch("http://localhost:3000/api/v1/logout", {
+      await fetch("https://makterbackend.fly.dev/api/v1/logout", {
         method: "GET",
-        credentials: "include",
+        credentials: "include", // Include session cookie
       });
-      localStorage.removeItem("sessionId");
       setAuth(false);
-      console.log("로그아웃 성공!");
       logoutSuccessfully();
     } catch (err) {
       console.error(err.message);
     }
   };
+
+  const navigate = useNavigate();
 
   const handleLoginClick = () => {
     setShowLoginModal(true);
@@ -49,49 +44,114 @@ const Header = ({ setAuth, isAuthenticated }) => {
   };
 
   const handleProfileClick = () => {
-    setShowProfileModal(true);
+    setShowDropdown((prev) => !prev); // Toggle dropdown visibility
   };
 
   const closeProfileModal = () => {
     setShowProfileModal(false);
   };
 
-  return (
-    <>
-      {/* 모바일 뷰가 아닐 경우 상단 네비게이션 렌더링 */}
-      {!isMobileView && (
-        <HeaderContainer>
-          <LogoContainer to={"/"}>
-            <Potodance />
-          </LogoContainer>
-          <NavLinks>
-            <NavLink to="/food">식당보기</NavLink>
-            <NavLink to="/review">탐색 & 리뷰작성</NavLink>
-            <NavLink to="/MainListPage">커뮤니티</NavLink>
-            <NavLink to="/service">맛 설정 모드</NavLink>
-          </NavLinks>
-          <UserActions>
-            {isAuthenticated ? (
-              <>
-                <UserAction as="div" onClick={handleProfileClick}>
-                  프로필
-                </UserAction>
-                <UserAction as="div" onClick={logout}>
-                  로그아웃
-                </UserAction>
-              </>
-            ) : (
-              <UserAction as="div" onClick={handleLoginClick}>
-                로그인
-              </UserAction>
-            )}
-          </UserActions>
-        </HeaderContainer>
-      )}
+  const handleMypageClick = () => {
+    navigate("/mypage");
+  };
 
-      {/* 모바일 뷰일 경우 하단 네비게이션 렌더링 */}
+  return (
+    <HeaderContainer>
+      <LogoContainer to={"/"}>
+        <Potodance />
+      </LogoContainer>
+
+      <NavLinks>
+        <NavLink to="/food">식당보기</NavLink>
+        <NavLink to="/review">맛집 탐색</NavLink>
+        <NavLink to="/MainListPage">커뮤니티</NavLink>
+        <NavLink to="/service">맛 설정 모드</NavLink>
+      </NavLinks>
+
+      <ProfileContainer>
+        <ProfileImage onClick={handleProfileClick}>
+          {isAuthenticated ? (
+            <FontAwesomeIcon icon={faUserCircle} size="2x" />
+          ) : (
+            <PlaceholderCircle>
+              <FontAwesomeIcon icon={faUserCircle} size="2x" />
+            </PlaceholderCircle>
+          )}
+        </ProfileImage>
+
+        {showDropdown && (
+          <DropdownMenu>
+            {/* If the user is logged in, show account info, otherwise show placeholder */}
+            {isAuthenticated ? (
+              <DropdownHeader>
+                <ProfileImageCircle>
+                  <FontAwesomeIcon icon={faUserCircle} size="2x" />
+                </ProfileImageCircle>
+                <UserInfo>
+                  <UserName>사용자 이름</UserName>
+                  <UserEmail>rabbittby@email.com</UserEmail>
+                </UserInfo>
+              </DropdownHeader>
+            ) : (
+              <DropdownHeader>
+                <ProfileImageCircle>
+                  <FontAwesomeIcon icon={faUserCircle} size="3x" />
+                </ProfileImageCircle>
+                <UserInfo>
+                  <UserName>로그인이 필요합니다</UserName>
+                  <UserEmail>계정이 없으신가요?</UserEmail>
+                </UserInfo>
+              </DropdownHeader>
+            )}
+
+            <DropdownItems>
+              {isAuthenticated ? (
+                <>
+                  <DropdownItem onClick={() => handleMypageClick()}>
+                    <img
+                      src="public/images/Users/archive.png"
+                      alt="https://www.flaticon.com/kr/free-icon/settings_3171061?term=%EC%84%A4%EC%A0%95&page=1&position=4&origin=search&related_id=3171061"
+                    />{" "}
+                    My page
+                  </DropdownItem>
+                  <DropdownItem onClick={() => setShowProfileModal()}>
+                    <img
+                      src="public/images/Users/setting.png"
+                      alt="https://www.flaticon.com/kr/free-icon/setting_11539964?term=%EC%84%A4%EC%A0%95&page=1&position=33&origin=search&related_id=11539964"
+                    />{" "}
+                    계정 설정
+                  </DropdownItem>
+
+                  <DropdownItem onClick={logout}>
+                    <img
+                      src="public/images/Users/logout.png"
+                      alt="https://www.flaticon.com/kr/free-icon/setting_11539964?term=%EC%84%A4%EC%A0%95&page=1&position=33&origin=search&related_id=11539964"
+                    />{" "}
+                    로그아웃
+                  </DropdownItem>
+                </>
+              ) : (
+                <>
+                  <DropdownItem>
+                    <SmallText>
+                      로그인 후 채널을 만들고 관리할 수 있습니다.
+                    </SmallText>
+                  </DropdownItem>
+                  <DropdownItem onClick={handleLoginClick}>
+                    <LoginButton>
+                      <FontAwesomeIcon icon={faSignInAlt} />
+                      로그인
+                    </LoginButton>
+                  </DropdownItem>
+                </>
+              )}
+            </DropdownItems>
+          </DropdownMenu>
+        )}
+      </ProfileContainer>
+
       {showLoginModal && (
-        <LoginModal
+        <AuthModal
           show={showLoginModal}
           onClose={closeLoginModal}
           setAuth={setAuth}
@@ -100,96 +160,185 @@ const Header = ({ setAuth, isAuthenticated }) => {
       {showProfileModal && (
         <ProfileModal show={showProfileModal} onClose={closeProfileModal} />
       )}
-      {isMobileView && <TopNav />}
-    </>
+    </HeaderContainer>
   );
 };
 
 export default Header;
 
-// 스타일 컴포넌트 정의
+// Styled Components
 const HeaderContainer = styled.div`
   display: flex;
-  justify-content: space-between; /* 로고, 네비게이션, 사용자 인터랙션을 양 끝과 가운데에 배치 */
+  justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 10px;
   background: linear-gradient(#b6b654, #e7e78b);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-  @media screen and (max-width: 768px) {
-    display: none; /* 모바일에서 숨김 */
-  }
 `;
 
 const LogoContainer = styled(Link)`
   display: flex;
   align-items: center;
-
   cursor: pointer;
   transition: transform 0.3s;
 
   &:hover {
     transform: scale(1.05);
   }
-
-  @media screen and (max-width: 480px) {
-    width: 120px;
-  }
 `;
 
 const NavLinks = styled.div`
   display: flex;
-  justify-content: center; /* 중앙 정렬 */
   align-items: center;
-  gap: 30px; /* 간격을 넓혀 더 여유 있게 */
-  flex-grow: 1; /* 가운데 공간을 차지하도록 설정 */
-
-  @media screen and (max-width: 768px) {
-    display: none; /* 모바일에서 숨김 */
-  }
+  justify-content: center;
 `;
 
 const NavLink = styled(Link)`
   text-decoration: none;
-  padding: 10px 15px;
-  font-size: 18px;
+  padding: 0 25px;
+  font-size: 20px;
   font-weight: bold;
-  transition: color 0.3s ease, transform 0.3s ease;
   font-family: "GowunDodum-Regular";
-  color: #333;
-  white-space: nowrap;
+  transition: transform 0.3s ease;
 
   &:hover {
     transform: scale(1.1);
-    color: #555;
-  }
-
-  @media screen and (max-width: 768px) {
-    display: none; /* 모바일에서 숨김 */
   }
 `;
 
-const UserActions = styled.div`
+const ProfileContainer = styled.div`
+  position: relative;
+`;
+
+const ProfileImage = styled.div`
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+`;
+
+const PlaceholderCircle = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #ccc; /* Gray circle for placeholder */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+`;
+
+const DropdownMenu = styled.div`
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  width: 250px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: 15px;
+`;
+
+// Header section for authenticated user
+const DropdownHeader = styled.div`
   display: flex;
   align-items: center;
-  gap: 15px; /* 사용자 인터랙션 버튼 사이의 간격 */
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+`;
 
-  @media screen and (max-width: 768px) {
-    display: none; /* 모바일에서 숨김 */
+const ProfileImageCircle = styled.div`
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
   }
 `;
 
-const UserAction = styled.div`
-  cursor: pointer;
-  padding: 8px 12px;
-  font-size: 16px;
+const UserInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+const UserName = styled.div`
+  font-size: 18px;
   font-weight: bold;
-  transition: color 0.3s ease, transform 0.3s ease;
+`;
+
+const UserEmail = styled.div`
+  font-size: 14px;
+  color: #666;
+`;
+
+const DropdownItems = styled.div`
+  margin-top: 15px;
+`;
+
+const DropdownItem = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  font-size: 18px;
   font-family: "GowunDodum-Regular";
+
   color: #333;
 
+  img {
+    width: 18px;
+    margin-right: 10px;
+  }
+
   &:hover {
-    transform: scale(1.1);
-    color: #555;
+    background-color: #f0f0f0;
+  }
+`;
+
+const SmallText = styled.div`
+  font-size: 14px;
+  color: #666;
+  padding: 10px 0;
+`;
+
+const LoginButton = styled.button`
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  font-size: 18px;
+  background-color: #e7e78b;
+  border: none;
+  border-radius: 5px;
+  color: #333;
+  font-family: "GowunDodum-Regular";
+  cursor: pointer;
+  width: 100%;
+
+  svg {
+    margin-right: 8px;
+  }
+
+  &:hover {
+    background-color: #d6d670;
   }
 `;

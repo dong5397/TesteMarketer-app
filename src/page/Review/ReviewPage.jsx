@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { reviewsState, isActiveState } from "../../state/reviewAtoms";
+import { authState } from "../../state/userAtoms"; // Recoil의 authState 추가
 import styled from "styled-components";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -16,16 +17,17 @@ import {
   faBurger,
 } from "@fortawesome/free-solid-svg-icons";
 import { DeviceFrameset } from "react-device-frameset";
-
+import LoginRequiredOverlay from "../../components/LoginRequiredOverlay"; // 로그인 요청 모달 추가
 import "react-device-frameset/styles/marvel-devices.min.css";
 
 function ReviewPage() {
   const location = useLocation();
   const restaurantInfo = { ...location.state };
-  const { id } = useParams(); // restaurant_id 값으로 사용됩니다.
+  const { id } = useParams();
 
   const [reviews, setReviews] = useRecoilState(reviewsState);
   const [isActive, setIsActive] = useRecoilState(isActiveState);
+  const [auth] = useRecoilState(authState); // 로그인 상태 확인
   const lastId = useRef(4);
 
   const handleToggle = () => {
@@ -35,13 +37,10 @@ function ReviewPage() {
   const fetchReviews = async (restaurant_Id) => {
     try {
       const response = await fetch(
-        `https://makterbackend.fly.dev/api/v1/reviews/${restaurant_Id}`
+        `https://maketerbackend.fly.dev/api/v1/reviews/${restaurant_Id}`
       );
-
       if (!response.ok) {
-        throw new Error(
-          `Failed to fetch reviews: ${response.status} - ${response.statusText}`
-        );
+        throw new Error(`Failed to fetch reviews: ${response.status}`);
       }
       const data = await response.json();
       setReviews(data.reviews);
@@ -52,11 +51,16 @@ function ReviewPage() {
 
   useEffect(() => {
     if (id) {
-      fetchReviews(id); // useParams로 받은 id로 fetchReviews 호출
+      fetchReviews(id);
     }
-  }, [id]); // restaurantInfo.id 대신 id로 변경
+  }, [id]);
 
   const onSubmit = (username, content, hashtags, rating) => {
+    if (!auth.isAuthenticated) {
+      // 로그인이 안되어 있으면 LoginRequiredOverlay 표시
+      return;
+    }
+
     const updatedReviews = [
       ...reviews,
       { id: lastId.current, username, content, hashtags, rating },
@@ -65,13 +69,13 @@ function ReviewPage() {
     setReviews(updatedReviews);
     lastId.current++;
 
-    fetch("https://makterbackend.fly.dev/api/v1/reviews", {
+    fetch("https://maketerbackend.fly.dev/api/v1/reviews", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        restaurant_id: id, // 여기도 id를 사용하도록 수정
+        restaurant_id: id,
         contents: content,
         username: username,
         rating: rating,
@@ -97,7 +101,7 @@ function ReviewPage() {
   const OnDelete = async (review_id) => {
     try {
       const response = await fetch(
-        `https://makterbackend.fly.dev/api/v1/reviews/${review_id}`,
+        `https://maketerbackend.fly.dev/api/v1/reviews/${review_id}`,
         {
           method: "DELETE",
         }
@@ -105,7 +109,7 @@ function ReviewPage() {
       if (!response.ok) {
         throw new Error(`Failed to delete review: ${response.statusText}`);
       }
-      fetchReviews(id); // 삭제 후 리뷰 목록을 새로 가져옴
+      fetchReviews(id);
     } catch (error) {
       console.error("Error deleting review:", error.message);
     }
@@ -133,30 +137,17 @@ function ReviewPage() {
                 </ReviewPanel>
               </CardSection>
             </ImgSection>
-            <AdditionalInfoBox>
-              <AdditionalInfo>
-                <InfoIcon icon={faBurger} size="2x" />
-                <InfoText>{restaurantInfo.category}</InfoText>
-              </AdditionalInfo>
-              <AdditionalInfo>
-                <InfoIcon icon={faClock} size="2x" />
-                <InfoText>영업 시간: {restaurantInfo.opening_hours}</InfoText>
-              </AdditionalInfo>
-              <AdditionalInfo>
-                <InfoIcon icon={faMapMarkerAlt} size="2x" />
-                <InfoText>위치: {restaurantInfo.address}</InfoText>
-              </AdditionalInfo>
-              <AdditionalInfo>
-                <InfoIcon icon={faPhone} size="2x" />
-                <InfoText>연락처: {restaurantInfo.phone}</InfoText>
-              </AdditionalInfo>
-            </AdditionalInfoBox>
+            <AdditionalInfoBox>{/* 추가 정보 */}</AdditionalInfoBox>
           </DeviceFrameset>
         </DeviceFramesetWrapper>
 
         <ReviewContainer>
           {isActive ? (
-            <WriteReview onSubmit={onSubmit} />
+            auth.isAuthenticated ? (
+              <WriteReview onSubmit={onSubmit} />
+            ) : (
+              <LoginRequiredOverlay />
+            )
           ) : (
             <ReviewList reviews={reviews} onDelete={OnDelete} />
           )}
@@ -170,7 +161,7 @@ function ReviewPage() {
 export default ReviewPage;
 
 const ReveiwP = styled.div`
-  background: linear-gradient(#f0f0c3, #e7e7c9);
+  background: linear-gradient(#e7e78b, #f0f0c3);
   width: auto;
 `;
 const H1 = styled.h1`

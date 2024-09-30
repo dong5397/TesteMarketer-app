@@ -1,54 +1,58 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react"; // useState 임포트 추가
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt, faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import Potodance from "../components/Potodance";
+import Potodance from "../components/Home/Potodance";
 import ProfileModal from "../components/User/ProfileModal";
-import AuthModal from "../components/User/AuthModal";
-import { useEffect } from "react";
+import AuthModal from "../components/User/AuthModal.jsx";
 import Mypage from "../components/User/Mypage";
+import { useRecoilState } from "recoil"; // Recoil 사용
+import {
+  loginModalState,
+  profileModalState,
+  authState,
+} from "../state/userAtoms.jsx"; // Recoil atom 불러오기
 
-// Header Component
-const Header = ({ isAuthenticated, setAuth }) => {
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showProfileModal, setShowProfileModal] = useState(false);
-  const [moveMypage, setMoveMypage] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false); // Toggle for dropdown
+const Header = () => {
+  const [showLoginModal, setShowLoginModal] = useRecoilState(loginModalState); // Recoil 상태 사용
+  const [showProfileModal, setShowProfileModal] =
+    useRecoilState(profileModalState);
+  const [isAuthenticated, setAuth] = useRecoilState(authState);
+  const [showDropdown, setShowDropdown] = useState(false); // 상태를 Recoil로 옮기지 않아도 됨
+  const navigate = useNavigate();
 
   const logoutSuccessfully = () => toast("로그아웃 성공!");
 
   const logout = async (e) => {
     e.preventDefault();
     try {
-      await fetch("https://makterbackend.fly.dev/api/v1/logout", {
+      await fetch("https://maketerbackend.fly.dev/api/v1/logout", {
         method: "GET",
         credentials: "include", // Include session cookie
       });
-      setAuth(false);
+      setAuth(false); // Recoil 상태 업데이트
       logoutSuccessfully();
     } catch (err) {
       console.error(err.message);
     }
   };
 
-  const navigate = useNavigate();
-
   const handleLoginClick = () => {
-    setShowLoginModal(true);
+    setShowLoginModal(true); // Recoil 상태 업데이트
   };
 
   const closeLoginModal = () => {
-    setShowLoginModal(false);
+    setShowLoginModal(false); // Recoil 상태 업데이트
   };
 
   const handleProfileClick = () => {
-    setShowDropdown((prev) => !prev); // Toggle dropdown visibility
+    setShowDropdown((prev) => !prev); // 상태 유지
   };
 
   const closeProfileModal = () => {
-    setShowProfileModal(false);
+    setShowProfileModal(false); // Recoil 상태 업데이트
   };
 
   const handleMypageClick = () => {
@@ -66,89 +70,87 @@ const Header = ({ isAuthenticated, setAuth }) => {
         <NavLink to="/review">맛집 탐색</NavLink>
         <NavLink to="/MainListPage">커뮤니티</NavLink>
         <NavLink to="/service">맛 설정 모드</NavLink>
-      </NavLinks>
-
-      <ProfileContainer>
-        <ProfileImage onClick={handleProfileClick}>
-          {isAuthenticated ? (
-            <FontAwesomeIcon icon={faUserCircle} size="2x" />
-          ) : (
-            <PlaceholderCircle>
-              <FontAwesomeIcon icon={faUserCircle} size="2x" />
-            </PlaceholderCircle>
-          )}
-        </ProfileImage>
-
-        {showDropdown && (
-          <DropdownMenu>
-            {/* If the user is logged in, show account info, otherwise show placeholder */}
+        <ProfileContainer>
+          <ProfileImage onClick={handleProfileClick}>
             {isAuthenticated ? (
-              <DropdownHeader>
-                <ProfileImageCircle>
-                  <FontAwesomeIcon icon={faUserCircle} size="2x" />
-                </ProfileImageCircle>
-                <UserInfo>
-                  <UserName>사용자 이름</UserName>
-                  <UserEmail>rabbittby@email.com</UserEmail>
-                </UserInfo>
-              </DropdownHeader>
+              <FontAwesomeIcon icon={faUserCircle} size="2x" />
             ) : (
-              <DropdownHeader>
-                <ProfileImageCircle>
-                  <FontAwesomeIcon icon={faUserCircle} size="3x" />
-                </ProfileImageCircle>
-                <UserInfo>
-                  <UserName>로그인이 필요합니다</UserName>
-                  <UserEmail>계정이 없으신가요?</UserEmail>
-                </UserInfo>
-              </DropdownHeader>
+              <PlaceholderCircle>
+                <FontAwesomeIcon icon={faUserCircle} size="2x" />
+              </PlaceholderCircle>
             )}
+          </ProfileImage>
 
-            <DropdownItems>
+          {showDropdown && (
+            <DropdownMenu>
               {isAuthenticated ? (
-                <>
-                  <DropdownItem onClick={() => handleMypageClick()}>
-                    <img
-                      src="public/images/Users/archive.png"
-                      alt="https://www.flaticon.com/kr/free-icon/settings_3171061?term=%EC%84%A4%EC%A0%95&page=1&position=4&origin=search&related_id=3171061"
-                    />{" "}
-                    My page
-                  </DropdownItem>
-                  <DropdownItem onClick={() => setShowProfileModal()}>
-                    <img
-                      src="public/images/Users/setting.png"
-                      alt="https://www.flaticon.com/kr/free-icon/setting_11539964?term=%EC%84%A4%EC%A0%95&page=1&position=33&origin=search&related_id=11539964"
-                    />{" "}
-                    계정 설정
-                  </DropdownItem>
-
-                  <DropdownItem onClick={logout}>
-                    <img
-                      src="public/images/Users/logout.png"
-                      alt="https://www.flaticon.com/kr/free-icon/setting_11539964?term=%EC%84%A4%EC%A0%95&page=1&position=33&origin=search&related_id=11539964"
-                    />{" "}
-                    로그아웃
-                  </DropdownItem>
-                </>
+                <DropdownHeader>
+                  <ProfileImageCircle>
+                    <FontAwesomeIcon icon={faUserCircle} size="2x" />
+                  </ProfileImageCircle>
+                  <UserInfo>
+                    <UserName>사용자 이름</UserName>
+                    <UserEmail>rabbittby@email.com</UserEmail>
+                  </UserInfo>
+                </DropdownHeader>
               ) : (
-                <>
-                  <DropdownItem>
-                    <SmallText>
-                      로그인 후 채널을 만들고 관리할 수 있습니다.
-                    </SmallText>
-                  </DropdownItem>
-                  <DropdownItem onClick={handleLoginClick}>
-                    <LoginButton>
-                      <FontAwesomeIcon icon={faSignInAlt} />
-                      로그인
-                    </LoginButton>
-                  </DropdownItem>
-                </>
+                <DropdownHeader>
+                  <ProfileImageCircle>
+                    <FontAwesomeIcon icon={faUserCircle} size="3x" />
+                  </ProfileImageCircle>
+                  <UserInfo>
+                    <UserName>로그인이 필요합니다</UserName>
+                    <UserEmail>계정이 없으신가요?</UserEmail>
+                  </UserInfo>
+                </DropdownHeader>
               )}
-            </DropdownItems>
-          </DropdownMenu>
-        )}
-      </ProfileContainer>
+
+              <DropdownItems>
+                {isAuthenticated ? (
+                  <>
+                    <DropdownItem onClick={() => handleMypageClick()}>
+                      <img
+                        src="public/images/Users/archive.png"
+                        alt="My page"
+                      />{" "}
+                      My page
+                    </DropdownItem>
+                    <DropdownItem onClick={() => setShowProfileModal(true)}>
+                      <img
+                        src="public/images/Users/setting.png"
+                        alt="계정 설정"
+                      />{" "}
+                      계정 설정
+                    </DropdownItem>
+
+                    <DropdownItem onClick={logout}>
+                      <img
+                        src="public/images/Users/logout.png"
+                        alt="로그아웃"
+                      />{" "}
+                      로그아웃
+                    </DropdownItem>
+                  </>
+                ) : (
+                  <>
+                    <DropdownItem>
+                      <SmallText>
+                        로그인 후 채널을 만들고 관리할 수 있습니다.
+                      </SmallText>
+                    </DropdownItem>
+                    <DropdownItem onClick={handleLoginClick}>
+                      <LoginButton>
+                        <FontAwesomeIcon icon={faSignInAlt} />
+                        로그인
+                      </LoginButton>
+                    </DropdownItem>
+                  </>
+                )}
+              </DropdownItems>
+            </DropdownMenu>
+          )}
+        </ProfileContainer>
+      </NavLinks>
 
       {showLoginModal && (
         <AuthModal
@@ -194,7 +196,7 @@ const NavLinks = styled.div`
 
 const NavLink = styled(Link)`
   text-decoration: none;
-  padding: 0 25px;
+  padding: 0 20px;
   font-size: 20px;
   font-weight: bold;
   font-family: "GowunDodum-Regular";

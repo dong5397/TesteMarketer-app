@@ -26,7 +26,7 @@ function MainListpage() {
     }
     try {
       const response = await fetch(
-        `https://makterbackend.fly.dev/api/v1/posts?title=${encodeURIComponent(
+        `https://maketerbackend.fly.dev/api/v1/posts?title=${encodeURIComponent(
           searchQuery
         )}`
       );

@@ -67,7 +67,6 @@ const Home = () => {
           </SearchButton>
 
           {/* 길찾기 버튼 추가 */}
-          <DirectionsButton onClick={openModal}>길찾기</DirectionsButton>
         </>
       )}
 

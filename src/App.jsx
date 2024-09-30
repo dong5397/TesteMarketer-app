@@ -12,37 +12,61 @@ import ReviewPage from "./page/Review/ReviewPage";
 import MainReviewPages from "./page/Review/MainReviewPages";
 import EditPage from "./components/Community/EditPage";
 import DetailPost from "./components/Community/DetailPost";
-
+import { ToastContainer } from "react-toastify";
 import ServiceFoods from "./components/ServiceFoods";
 import Mypage from "./components/User/Mypage";
 import ResetPasswordPage from "./components/User/ResetPassword";
+import { useRecoilState } from "recoil";
+import { authState } from "./state/userAtoms"; // Import the Recoil state
+import TopNav from "./components/TopNav";
+
 function App() {
+  const [isAuthenticated, setAuth] = useRecoilState(authState);
+
+  // Check session and load authentication state on mount
   useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const response = await fetch(
-          "https://makterbackend.fly.dev/api/v1/check-session",
-          {
-            method: "GET",
-            credentials: "include",
-          }
-        );
+    const savedAuthState = sessionStorage.getItem("isAuthenticated");
+    if (savedAuthState) {
+      setAuth(true);
+    } else {
+      checkSession(); // 서버에서 세션 확인
+    }
+  }, [setAuth]);
 
-        const result = await response.json();
-        if (result.isAuthenticated) {
-          setAuth(true);
-        } else {
-          setAuth(false);
+  // Persist authentication state in session storage
+  // Persist authentication state in session storage
+  useEffect(() => {
+    sessionStorage.setItem(
+      "isAuthenticated",
+      isAuthenticated ? "true" : "false"
+    );
+  }, [isAuthenticated]);
+
+  const checkSession = async () => {
+    try {
+      const response = await fetch(
+        "https://maketerbackend.fly.dev/api/v1/check-session",
+        {
+          method: "GET",
+          credentials: "include",
         }
-      } catch (error) {
-        setAuth(false);
-      }
-    };
+      );
 
-    checkSession();
-  }, []);
+      const result = await response.json();
+      if (result.isAuthenticated) {
+        setAuth(true); // Set to true if session is valid
+      } else {
+        setAuth(false); // Set to false if not authenticated
+      }
+    } catch (error) {
+      setAuth(false); // Handle error and set as unauthenticated
+    }
+  };
+
   return (
     <BrowserRouter>
+      <ToastContainer position="top-right" autoClose={5000} />
+      <Header isAuthenticated={isAuthenticated} setAuth={setAuth} />
       <Routes>
         <Route path="/" element={<MainHN />} />
         <Route path="/food" element={<FoodHN />} />
@@ -58,27 +82,25 @@ function App() {
         <Route path="/mypage" element={<MypageHN />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
       </Routes>
+      <TopNav />
     </BrowserRouter>
   );
 }
 
 const MainHN = () => (
   <div>
-    <Header />
     <Main />
   </div>
 );
 
 const ReviewHN = () => (
   <div>
-    <Header />
     <ReviewPage />
   </div>
 );
 
 const FullReviewHN = () => (
   <div>
-    <Header />
     <MainReviewPages />
   </div>
 );
@@ -86,7 +108,6 @@ const FullReviewHN = () => (
 const FoodHN = () => {
   return (
     <div>
-      <Header />
       <Home />
       <KakaoMap />
     </div>
@@ -95,55 +116,50 @@ const FoodHN = () => {
 
 const ServiceHN = () => (
   <div>
-    <Header />
     <ServicePage />
   </div>
 );
 
 const ServiceFoodHN = () => (
   <div>
-    <Header />
     <ServiceFoods />
   </div>
 );
 
 const CommunityListHN = () => (
   <div>
-    <Header />
     <MainListPage />
   </div>
 );
 
 const CommunityWriteHN = () => (
   <div>
-    <Header />
     <MainWritePage />
   </div>
 );
 
 const CategoryReviewHN = () => (
   <div>
-    <Header />
     <CategoryReviewPage />
   </div>
 );
 
 const EditPageHN = () => (
   <div>
-    <Header />
     <EditPage />
   </div>
 );
 
 const DetailPostPageHN = () => (
   <div>
-    <Header />
     <DetailPost />
   </div>
 );
+
 const MypageHN = () => (
   <div>
     <Mypage />
   </div>
 );
+
 export default App;

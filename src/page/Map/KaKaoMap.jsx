@@ -96,7 +96,7 @@ const KakaoMap = () => {
   };
 
   const loadRestaurantsAndAddMarkers = () => {
-    fetch("https://makterbackend.fly.dev/api/v1/restaurants")
+    fetch("https://maketerbackend.fly.dev/api/v1/restaurants")
       .then((response) => response.json())
       .then((data) => {
         if (data && Array.isArray(data.data)) {
@@ -278,7 +278,7 @@ const KakaoMap = () => {
       <H2>대전 전체의 맛집을 찾아줍니다</H2>
       <MapContainer ref={mapContainer} />
       <UpdateLocationButton onClick={updateCurrentLocation}>
-        현재 위치 갱신
+        위치 갱신
       </UpdateLocationButton>
       {selectedRestaurant && (
         <FoodIndexContainer ref={modalRef}>
@@ -352,7 +352,7 @@ const UpdateLocationButton = styled.button`
   position: absolute;
   top: 10px;
   right: 10px;
-  padding: 10px 20px;
+  padding: 10px 10px;
   background-color: #041c11;
   color: white;
   border: none;

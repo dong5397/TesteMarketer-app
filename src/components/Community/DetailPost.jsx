@@ -18,7 +18,7 @@ function DetailPost() {
 
   useEffect(() => {
     // 게시물 가져오기
-    fetch(`https://makterbackend.fly.dev/api/v1/post/${postId}`)
+    fetch(`https://maketerbackend.fly.dev/api/v1/post/${postId}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch post");
@@ -33,7 +33,7 @@ function DetailPost() {
       });
 
     // 댓글 가져오기
-    fetch(`https://makterbackend.fly.dev/api/v1/post/${postId}/comments`)
+    fetch(`https://maketerbackend.fly.dev/api/v1/post/${postId}/comments`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch comments");
@@ -59,7 +59,7 @@ function DetailPost() {
       return; // 댓글이 비어 있으면 아무 작업도 하지 않음
     }
 
-    fetch(`https://makterbackend.fly.dev/api/v1/post/${postId}/comments`, {
+    fetch(`https://maketerbackend.fly.dev/api/v1/post/${postId}/comments`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -91,7 +91,7 @@ function DetailPost() {
     }
 
     fetch(
-      `https://makterbackend.fly.dev/api/v1/post/${post_id}/comments/${commentid}`,
+      `https://maketerbackend.fly.dev/api/v1/post/${post_id}/comments/${commentid}`,
       {
         method: "DELETE",
       }

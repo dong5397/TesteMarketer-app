@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Main from "./page/Main";
 import KakaoMap from "../src/page/Map/KaKaoMap";
+import KakaoMap2 from "../src/page/Map/KaKaoMap2";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "../src/page/Map/Home";
 import Header from "./page/Header";
@@ -19,7 +20,7 @@ import ResetPasswordPage from "./components/User/ResetPassword";
 import { useRecoilState } from "recoil";
 import { authState } from "./state/userAtoms"; // Import the Recoil state
 import TopNav from "./components/TopNav";
-
+import styled from "styled-components";
 function App() {
   const [isAuthenticated, setAuth] = useRecoilState(authState);
 
@@ -70,6 +71,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainHN />} />
         <Route path="/food" element={<FoodHN />} />
+        <Route path="/bicycle" element={<Bicycle />} />
         <Route path="/service" element={<ServiceHN />} />
         <Route path="/servicefoods" element={<ServiceFoodHN />} />
         <Route path="/review" element={<FullReviewHN />} />
@@ -82,7 +84,9 @@ function App() {
         <Route path="/mypage" element={<MypageHN />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
       </Routes>
-      <TopNav />
+      <MobileOnlyWrapper>
+        <TopNav />
+      </MobileOnlyWrapper>
     </BrowserRouter>
   );
 }
@@ -110,6 +114,14 @@ const FoodHN = () => {
     <div>
       <Home />
       <KakaoMap />
+    </div>
+  );
+};
+const Bicycle = () => {
+  return (
+    <div>
+      <Home />
+      <KakaoMap2 />
     </div>
   );
 };
@@ -163,3 +175,10 @@ const MypageHN = () => (
 );
 
 export default App;
+const MobileOnlyWrapper = styled.div`
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;

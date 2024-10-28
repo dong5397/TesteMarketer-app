@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { useRecoilState, useSetRecoilState } from "recoil";
 import {
   selectedRestaurantFromMapState,
@@ -8,6 +9,7 @@ import {
 } from "../../state/mapAtoms";
 import FoodIndex from "../../components/Home/FoodIndex"; // 모달에 사용할 컴포넌트
 import mark from "../../../public/images/mark.png";
+import markerImageSrc from "../../../public/images/start4.png";
 
 const KakaoMap = () => {
   const [selectedRestaurant, setSelectedRestaurant] = useRecoilState(
@@ -17,9 +19,11 @@ const KakaoMap = () => {
   const setMapMoveFunction = useSetRecoilState(mapMoveFunctionState);
   const mapContainer = useRef(null);
   const mapInstance = useRef(null);
-  const kakaoLoaded = useRef(false); // Kakao API 로드 상태를 관리하는 변수
-  const modalRef = useRef(null); // 모달 영역을 감지할 Ref
-  const [currentPosition, setCurrentPosition] = useState(null); // 현재 위치 상태
+  const kakaoLoaded = useRef(false);
+  const modalRef = useRef(null);
+  const [currentPosition, setCurrentPosition] = useState(null);
+
+  const navigate = useNavigate(); // Initialize useNavigate
 
   // Kakao 지도 로드
   useEffect(() => {
@@ -30,7 +34,7 @@ const KakaoMap = () => {
 
     script.onload = () => {
       window.kakao.maps.load(() => {
-        kakaoLoaded.current = true; // Kakao API 로드 완료 상태 설정
+        kakaoLoaded.current = true;
         initializeMap();
       });
     };
@@ -56,8 +60,8 @@ const KakaoMap = () => {
     }
 
     const mapOption = {
-      center: new window.kakao.maps.LatLng(36.350411, 127.384548), // 대전 좌표
-      level: 7,
+      center: new window.kakao.maps.LatLng(36.328468, 127.424753),
+      level: 8,
     };
 
     mapInstance.current = new window.kakao.maps.Map(
@@ -67,24 +71,38 @@ const KakaoMap = () => {
 
     setMapMoveFunction(() => moveMapToLocation);
     loadRestaurantsAndAddMarkers();
-    updateCurrentLocation(); // 지도 초기화 시 현재 위치로 이동
   };
 
-  // 현재 위치로 지도를 이동하는 함수
   const moveMapToLocation = (latitude, longitude) => {
     const position = new window.kakao.maps.LatLng(latitude, longitude);
     mapInstance.current.setCenter(position);
-    mapInstance.current.setLevel(4); // Zoom in to the selected restaurant
+    mapInstance.current.setLevel(8);
   };
 
-  // 현재 위치 갱신 함수
+  const addCurrentLocationMarker = (latitude, longitude) => {
+    const markerPosition = new window.kakao.maps.LatLng(latitude, longitude);
+    const markerSize = new window.kakao.maps.Size(30, 30);
+    const markerImage = new window.kakao.maps.MarkerImage(
+      markerImageSrc,
+      markerSize
+    );
+
+    const marker = new window.kakao.maps.Marker({
+      position: markerPosition,
+      image: markerImage,
+    });
+
+    marker.setMap(mapInstance.current);
+  };
+
   const updateCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          setCurrentPosition({ latitude, longitude }); // 현재 위치 갱신
-          moveMapToLocation(latitude, longitude); // 지도를 현재 위치로 이동
+          setCurrentPosition({ latitude, longitude });
+          moveMapToLocation(latitude, longitude);
+          addCurrentLocationMarker(latitude, longitude);
         },
         (error) => {
           console.error("Error fetching current location:", error);
@@ -94,24 +112,6 @@ const KakaoMap = () => {
       console.error("Geolocation is not supported by this browser.");
     }
   };
-
-  const loadRestaurantsAndAddMarkers = () => {
-    fetch("https://maketerbackend.fly.dev/api/v1/restaurants")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data && Array.isArray(data.data)) {
-          addMarkersToMap(data.data);
-        } else if (data && !Array.isArray(data.data)) {
-          addMarkersToMap([data.data]);
-        } else {
-          console.error("Unexpected data format:", data);
-        }
-      })
-      .catch((error) => {
-        console.error("API 요청 중 오류 발생:", error);
-      });
-  };
-
   const addMarkersToMap = (restaurants) => {
     if (!mapInstance.current) return;
 
@@ -155,7 +155,7 @@ const KakaoMap = () => {
           parseFloat(restaurant.longitude)
         );
         mapInstance.current.setCenter(position);
-        mapInstance.current.setLevel(4);
+        mapInstance.current.setLevel(8);
 
         setSelectedRestaurant(restaurant); // 식당 선택
         setIsFromMapClick(true);
@@ -168,6 +168,27 @@ const KakaoMap = () => {
     });
   };
 
+  // Navigate to the bicycle location page
+  const goToBicycleLocation = () => {
+    navigate("/bicycle"); // Update with the correct path for the bicycle location page
+  };
+
+  const loadRestaurantsAndAddMarkers = () => {
+    fetch("https://maketerbackend.fly.dev/api/v1/restaurants")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data && Array.isArray(data.data)) {
+          addMarkersToMap(data.data);
+        } else if (data && !Array.isArray(data.data)) {
+          addMarkersToMap([data.data]);
+        } else {
+          console.error("Unexpected data format:", data);
+        }
+      })
+      .catch((error) => {
+        console.error("API 요청 중 오류 발생:", error);
+      });
+  };
   const findDrivingRouteToRestaurant = (restaurant) => {
     if (!restaurant) {
       console.error("No restaurant selected for route.");
@@ -256,11 +277,10 @@ const KakaoMap = () => {
       console.error("Geolocation is not supported by this browser.");
     }
   };
-
   // 모달 외부 클릭 시 닫기
   const handleClickOutside = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
-      setSelectedRestaurant(null); // 모달 닫기
+      setSelectedRestaurant(null);
     }
   };
 
@@ -271,7 +291,6 @@ const KakaoMap = () => {
     };
   }, []);
 
-  // 현재 위치 갱신하는 버튼 추가
   return (
     <Container>
       <H1>Maketer</H1>
@@ -280,6 +299,9 @@ const KakaoMap = () => {
       <UpdateLocationButton onClick={updateCurrentLocation}>
         위치 갱신
       </UpdateLocationButton>
+      <BicycleLocationButton onClick={goToBicycleLocation}>
+        자전거 위치 보기
+      </BicycleLocationButton>
       {selectedRestaurant && (
         <FoodIndexContainer ref={modalRef}>
           <FoodIndex restaurant={selectedRestaurant} />
@@ -351,6 +373,19 @@ const FoodIndexContainer = styled.div`
 const UpdateLocationButton = styled.button`
   position: absolute;
   top: 10px;
+  right: 10px;
+  padding: 10px 10px;
+  background-color: #041c11;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 999;
+`;
+
+const BicycleLocationButton = styled.button`
+  position: absolute;
+  top: 50px;
   right: 10px;
   padding: 10px 10px;
   background-color: #041c11;

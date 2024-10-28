@@ -20,7 +20,7 @@ function MainReviewPages() {
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [restaurants, setRestaurants] = useState({});
-  const [searchTerm, setSearchTerm] = useState("");
+
   const [categories, setCategories] = useState([
     "한식",
     "일식",

@@ -132,3 +132,17 @@ export const directionsState = atom({
   key: "directionsState",
   default: null,
 });
+
+export const restaurantInfoState = atom({
+  key: "restaurantInfoState",
+  default: {
+    id: null,
+    name: "",
+    image: "",
+    rating: 0,
+    opening_hours: "",
+    phone: "",
+    address: "",
+    category: "",
+  },
+});

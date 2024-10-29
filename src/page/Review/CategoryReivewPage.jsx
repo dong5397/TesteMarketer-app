@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
   currentPageState,
   filterState,
@@ -8,27 +8,25 @@ import {
 } from "../../state/reviewAtoms";
 import { faArrowLeft, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { DeviceFrameset } from "react-device-frameset"; // Keep this import
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { DeviceFrameset } from "react-device-frameset";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ReviewCard from "../../components/Review/ReviewCard";
 
 function CategoryReviewPage() {
-  const location = useLocation();
   const navigate = useNavigate();
-  const { restaurants = [] } = location.state || {};
-  console.log("Fetched restaurants:", restaurants);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [isPressed, setIsPressed] = useState(false);
-
-  // Recoil 상태 사용
+  // Recoil states
   const [currentPage, setCurrentPage] = useRecoilState(currentPageState);
   const [filter, setFilter] = useRecoilState(filterState);
   const [sortedRestaurants, setSortedRestaurants] = useRecoilState(
     reviewRestaurantsState
   );
   const [cardInfo, setCardInfo] = useRecoilState(cardInfoState);
+
+  // Local states
+  const [isLoading, setIsLoading] = useState(false);
+  const [isPressed, setIsPressed] = useState(false);
 
   const itemsPerPage = 4;
 
@@ -39,6 +37,7 @@ function CategoryReviewPage() {
     }, 100);
   };
 
+  // Scroll event handler for loading
   const handleScroll = () => {
     const scrollTop = document.documentElement.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight;
@@ -54,15 +53,13 @@ function CategoryReviewPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    if (location.state) {
-      setCardInfo({
-        reviewCount: location.state.reviewCount,
-        viewCount: location.state.viewCount,
-        rating: location.state.rating,
-      });
-    }
-  }, [location.state]);
+  // Pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = sortedRestaurants.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
   const handleNextPage = () => {
     setCurrentPage((prevPage) => prevPage + 1);
@@ -72,16 +69,13 @@ function CategoryReviewPage() {
     setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : 1));
   };
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = restaurants.slice(indexOfFirstItem, indexOfLastItem);
-
+  // Filter sorting
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);
   };
 
   useEffect(() => {
-    let sortedArray = [...restaurants];
+    let sortedArray = [...sortedRestaurants];
     switch (filter) {
       case "rating":
         sortedArray.sort((a, b) => b.rating - a.rating);
@@ -93,16 +87,11 @@ function CategoryReviewPage() {
         sortedArray.sort((a, b) => b.viewCount - a.viewCount);
         break;
       default:
-        sortedArray = restaurants;
+        sortedArray = sortedRestaurants;
         break;
     }
     setSortedRestaurants(sortedArray);
-  }, [filter, restaurants, setSortedRestaurants]);
-
-  const handleCategoryClick = (category) => {
-    console.log("Category clicked:", category);
-    navigate(`/review/category/${category}`);
-  };
+  }, [filter, sortedRestaurants, setSortedRestaurants]);
 
   return (
     <ReviewPage>
@@ -148,12 +137,7 @@ function CategoryReviewPage() {
                     {restaurant.menus &&
                       restaurant.menus.length > 0 &&
                       restaurant.menus.map((menu, menuIndex) => (
-                        <TagButton
-                          key={menuIndex}
-                          onClick={() => handleCategoryClick(menu)}
-                        >
-                          {menu}
-                        </TagButton>
+                        <TagButton key={menuIndex}>{menu}</TagButton>
                       ))}
                   </div>
                 ))}
@@ -174,7 +158,7 @@ function CategoryReviewPage() {
                 </PageButton>
                 <PageButton
                   onClick={handleNextPage}
-                  disabled={indexOfLastItem >= restaurants.length}
+                  disabled={indexOfLastItem >= sortedRestaurants.length}
                 >
                   다음 페이지
                 </PageButton>
@@ -188,6 +172,8 @@ function CategoryReviewPage() {
 }
 
 export default CategoryReviewPage;
+
+// 스타일 컴포넌트 정의 생략
 
 // 스타일 컴포넌트 정의
 const ReviewPage = styled.div`

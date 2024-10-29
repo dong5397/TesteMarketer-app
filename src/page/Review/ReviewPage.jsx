@@ -1,34 +1,37 @@
 import React, { useEffect, useRef } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { selectedRestaurantState } from "../../state/mapAtoms";
 import { reviewsState, isActiveState } from "../../state/reviewAtoms";
-import { authState } from "../../state/userAtoms"; // Recoil의 authState 추가
+import { authState } from "../../state/userAtoms";
 import styled from "styled-components";
-import { Carousel } from "react-responsive-carousel";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import RatingStars from "../../components/Review/RatingStars";
 import ReviewList from "../../components/Review/ReviewList";
 import WriteReview from "../../components/Review/WriteReview";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Carousel } from "react-responsive-carousel";
 import {
+  faBurger,
   faPhone,
   faClock,
   faMapMarkerAlt,
-  faBurger,
 } from "@fortawesome/free-solid-svg-icons";
 import { DeviceFrameset } from "react-device-frameset";
-import LoginRequiredOverlay from "../../components/LoginRequiredOverlay"; // 로그인 요청 모달 추가
 import "react-device-frameset/styles/marvel-devices.min.css";
+import LoginRequiredOverlay from "../../components/LoginRequiredOverlay";
 
 function ReviewPage() {
-  const location = useLocation();
-  const restaurantInfo = { ...location.state };
+  const restaurantInfo = useRecoilValue(selectedRestaurantState); // selectedRestaurantState 사용
   const { id } = useParams();
 
   const [reviews, setReviews] = useRecoilState(reviewsState);
   const [isActive, setIsActive] = useRecoilState(isActiveState);
-  const [auth] = useRecoilState(authState); // 로그인 상태 확인
+  const [auth] = useRecoilState(authState);
   const lastId = useRef(4);
+
+  useEffect(() => {
+    console.log("restaurantInfo:", restaurantInfo); // 데이터가 제대로 들어오는지 확인
+  }, [restaurantInfo]);
 
   const handleToggle = () => {
     setIsActive(!isActive);
@@ -57,13 +60,18 @@ function ReviewPage() {
 
   const onSubmit = (username, content, hashtags, rating) => {
     if (!auth.isAuthenticated) {
-      // 로그인이 안되어 있으면 LoginRequiredOverlay 표시
-      return;
+      return <LoginRequiredOverlay />;
     }
 
     const updatedReviews = [
       ...reviews,
-      { id: lastId.current, username, content, hashtags, rating },
+      {
+        id: lastId.current,
+        username: auth.username,
+        content,
+        hashtags,
+        rating,
+      },
     ];
 
     setReviews(updatedReviews);
@@ -71,15 +79,14 @@ function ReviewPage() {
 
     fetch("https://maketerbackend.fly.dev/api/v1/reviews", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({
         restaurant_id: id,
         contents: content,
-        username: username,
-        rating: rating,
-        hashtags: hashtags,
+        username: auth.username,
+        rating,
+        hashtags,
       }),
     })
       .then((response) => {
@@ -88,9 +95,8 @@ function ReviewPage() {
         }
         return response.json();
       })
-      .then((data) => {
-        console.log("Success:", data);
-        fetchReviews(id); // 리뷰 작성 후 다시 리뷰 목록을 가져옴
+      .then(() => {
+        fetchReviews(id);
         handleToggle();
       })
       .catch((error) => {
@@ -98,12 +104,18 @@ function ReviewPage() {
       });
   };
 
-  const OnDelete = async (review_id) => {
+  const OnDelete = async (review_id, review_username) => {
+    if (auth.username !== review_username) {
+      alert("본인이 작성한 리뷰만 삭제할 수 있습니다.");
+      return;
+    }
+
     try {
       const response = await fetch(
         `https://maketerbackend.fly.dev/api/v1/reviews/${review_id}`,
         {
           method: "DELETE",
+          credentials: "include",
         }
       );
       if (!response.ok) {
@@ -114,33 +126,60 @@ function ReviewPage() {
       console.error("Error deleting review:", error.message);
     }
   };
-
+  if (!restaurantInfo) {
+    return <div>로딩 중...</div>; // 또는 빈 상태로 반환할 수 있습니다.
+  }
   return (
     <ReveiwP>
-      <H1>Maketer</H1>
-      <H2>대전 전체의 맛집을 찾아줍니다</H2>
+      <HeaderContainer>
+        <Title>식당 리뷰</Title>
+      </HeaderContainer>
+
       <Container>
-        <DeviceFramesetWrapper>
-          <DeviceFrameset device="iPhone X">
-            <ImgSection $backgroundImage={restaurantInfo.image}>
+        <ContentsContainer>
+          <DeviceFrameset
+            device="iPhone X"
+            color="black"
+            width="100%"
+            height="100%"
+          >
+            <ImgSection backgroundImage={restaurantInfo.image}>
               <CardSection>
                 <CardTitle>{restaurantInfo.name}</CardTitle>
                 <RatingStars rating={restaurantInfo.rating} />
                 <ReviewPanel>
                   <ToggleContainer onClick={handleToggle}>
-                    <ReviewButton $active={isActive}>
+                    <ReviewButton active={isActive.toString()}>
                       리뷰 {restaurantInfo.rating}
                     </ReviewButton>
-                    <ReviewButton $active={!isActive}>리뷰 작성</ReviewButton>
-                    <ToggleSlider $active={isActive} />
+                    <ReviewButton active={(!isActive).toString()}>
+                      리뷰 작성
+                    </ReviewButton>
+                    <ToggleSlider active={isActive.toString()} />
                   </ToggleContainer>
                 </ReviewPanel>
               </CardSection>
             </ImgSection>
-            <AdditionalInfoBox>{/* 추가 정보 */}</AdditionalInfoBox>
+            <AdditionalInfoBox>
+              <AdditionalInfo>
+                <InfoIcon icon={faBurger} size="2x" />
+                <InfoText>{restaurantInfo.category}</InfoText>
+              </AdditionalInfo>
+              <AdditionalInfo>
+                <InfoIcon icon={faClock} size="2x" />
+                <InfoText>영업 시간: {restaurantInfo.opening_hours}</InfoText>
+              </AdditionalInfo>
+              <AdditionalInfo>
+                <InfoIcon icon={faMapMarkerAlt} size="2x" />
+                <InfoText>위치: {restaurantInfo.address}</InfoText>
+              </AdditionalInfo>
+              <AdditionalInfo>
+                <InfoIcon icon={faPhone} size="2x" />
+                <InfoText>연락처: {restaurantInfo.phone}</InfoText>
+              </AdditionalInfo>
+            </AdditionalInfoBox>
           </DeviceFrameset>
-        </DeviceFramesetWrapper>
-
+        </ContentsContainer>
         <ReviewContainer>
           {isActive ? (
             auth.isAuthenticated ? (
@@ -152,6 +191,7 @@ function ReviewPage() {
             <ReviewList reviews={reviews} onDelete={OnDelete} />
           )}
         </ReviewContainer>
+
         <Carousel autoPlay />
       </Container>
     </ReveiwP>
@@ -161,48 +201,33 @@ function ReviewPage() {
 export default ReviewPage;
 
 const ReveiwP = styled.div`
-  background: linear-gradient(#e7e78b, #f0f0c3);
-  width: auto;
-`;
-const H1 = styled.h1`
-  display: none; /* 기본적으로 숨김 처리 */
-
-  @media screen and (max-width: 481px) {
-    display: block; /* 모바일에서만 표시 */
-    font-size: 40px;
-    line-height: 1.2;
-    padding-top: 3%;
-    margin-bottom: 0.3rem;
-    font-family: "GowunDodum-Regular";
-    text-align: center;
-  }
+  background: linear-gradient(#f0f0c3, #e7e7c9);
 `;
 
-const H2 = styled.h2`
-  display: none; /* 기본적으로 숨김 처리 */
-
-  @media screen and (max-width: 481px) {
-    display: block; /* 모바일에서만 표시 */
-    text-align: center;
-    font-weight: 300;
-    font-size: 20px;
-    font-family: "GowunDodum-Regular";
-  }
-`;
 const Container = styled.div`
+  max-width: 1280px;
+  height: 1200px;
   margin: 0 auto;
   padding: 20px;
   display: flex;
   gap: 100px;
+`;
 
-  @media screen and (max-width: 768px) {
-    flex-direction: column; /* 모바일 화면에서는 상하로 배치 */
-    height: auto;
-    gap: 0px; /* 모바일에서는 갭 크기를 줄임 */
-  }
+const HeaderContainer = styled.header`
+  max-width: 100%;
+  padding: 0 20px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  background: linear-gradient(#e7e78b, #f0f0c3);
 `;
 
 const ReviewContainer = styled.main`
+  max-width: 85%;
+  min-height: 750px;
+  margin-right: 40px;
   max-height: 750px;
   overflow: auto;
   flex: 1;
@@ -210,12 +235,6 @@ const ReviewContainer = styled.main`
   flex-direction: column;
   border-radius: 60px;
   background-color: white;
-
-  @media screen and (max-width: 768px) {
-    max-width: 100%; /* 모바일에서는 최대 너비를 100%로 설정 */
-    margin-right: 0; /* 오른쪽 마진 제거 */
-    margin-bottom: 200px;
-  }
 `;
 
 const ReviewPanel = styled.div`
@@ -244,7 +263,7 @@ const ReviewButton = styled.button`
   border: none;
   border-radius: 50px;
   background-color: transparent;
-  color: ${({ $active }) => ($active ? "#dd5746" : "black")};
+  color: ${({ active }) => (active === "true" ? "#dd5746" : "black")};
   transition: color 0.5s ease-in-out;
   z-index: 1;
 `;
@@ -256,37 +275,25 @@ const ToggleSlider = styled.div`
   background-color: #f4ce14;
   border-radius: 50px;
   transition: transform 0.4s cubic-bezier(0.24, 0, 0.5, 1);
-  transform: ${({ $active }) =>
-    $active ? "translateX(50%)" : "translateX(-50%)"};
+  transform: ${({ active }) =>
+    active === "true" ? "translateX(50%)" : "translateX(-50%)"};
 `;
 
-const DeviceFramesetWrapper = styled.div`
-  width: auto;
-  height: auto;
-  margin: 0 auto;
-  padding: 20px;
-  gap: 100px;
-  @media screen and (max-width: 768px) {
-    transform: scale(0.8); /* 모바일에서는 더 작게 축소 */
-    transform-origin: top left;
-    margin: 0;
-    padding: 0;
-    gap: 0px;
-  }
+const ContentsContainer = styled.div`
+  max-width: 30%;
+  height: 700px;
+  flex: 1;
+  border-radius: 50px;
 `;
 
 const ImgSection = styled.section`
-  max-width: 100%; /* 내부 콘텐츠의 넓이를 줄임 */
-  height: 270px; /* 높이도 줄여서 조정 */
-  background-image: url(${(props) => props.$backgroundImage});
+  max-width: 100%;
+  height: 300px;
+  background-image: url(${(props) => props.backgroundImage});
   background-size: cover;
   background-position: center;
   position: relative;
   border-radius: 20px;
-
-  @media screen and (max-width: 768px) {
-    height: 40%; /* 모바일에서는 높이를 줄임 */
-  }
 `;
 
 const Title = styled.h1`
@@ -300,8 +307,8 @@ const Title = styled.h1`
 `;
 
 const CardSection = styled.section`
-  max-width: 90%;
-  height: 160px;
+  max-width: 340px;
+  height: 180px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -314,7 +321,7 @@ const CardSection = styled.section`
   left: 0;
   right: 0;
   margin: 0 auto;
-  padding: 20px; /* 패딩도 줄여서 조정 */
+  padding: 30px;
   box-shadow: rgba(10, 100, 90, 0.5) 0px 7px 29px 0px;
 `;
 

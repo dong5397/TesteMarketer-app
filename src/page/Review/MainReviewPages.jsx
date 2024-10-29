@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { DeviceFrameset } from "react-device-frameset"; // Keep this import
+import React from "react";
+import { DeviceFrameset } from "react-device-frameset";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUtensils,
@@ -14,14 +14,20 @@ import {
   faCoffee,
   faHamburger,
 } from "@fortawesome/free-solid-svg-icons";
+import {
+  selectedCategoryState,
+  reviewRestaurantsState,
+} from "../../state/reviewAtoms";
+import { useNavigate } from "react-router-dom";
 
 function MainReviewPages() {
   const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useRecoilState(
+    selectedCategoryState
+  );
+  const [restaurants, setRestaurants] = useRecoilState(reviewRestaurantsState);
 
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [restaurants, setRestaurants] = useState({});
-
-  const [categories, setCategories] = useState([
+  const categories = [
     "한식",
     "일식",
     "중식",
@@ -30,7 +36,7 @@ function MainReviewPages() {
     "디저트",
     "음료",
     "버거",
-  ]);
+  ];
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -44,23 +50,19 @@ function MainReviewPages() {
         throw new Error("Network response was not ok.");
       })
       .then((data) => {
-        console.log(data.data.map((el) => el));
-        setRestaurants(data.data);
-        navigate(`/category/${category}`, {
-          state: {
-            restaurants: data.data.map((el) => ({
-              id: el.restaurants_id,
-              name: el.restaurants_name,
-              phone: el.phone,
-              opening_hours: el.opening_hours,
-              rating: el.rating,
-              category: el.category,
-              address: el.address,
-              image: el.image,
-              menus: el.food_menu.menus.map((menu) => menu.name),
-            })),
-          },
-        });
+        const formattedData = data.data.map((el) => ({
+          id: el.restaurants_id,
+          name: el.restaurants_name,
+          phone: el.phone,
+          opening_hours: el.opening_hours,
+          rating: el.rating,
+          category: el.category,
+          address: el.address,
+          image: el.image,
+          menus: el.food_menu.menus.map((menu) => menu.name),
+        }));
+        setRestaurants(formattedData); // Recoil 상태에 데이터 저장
+        navigate(`/category/${category}`);
       })
       .catch((error) => {
         console.error(
@@ -69,6 +71,8 @@ function MainReviewPages() {
         );
       });
   };
+
+  // 생략: getCategoryIcon 함수, JSX 구조 및 스타일 정의
 
   const getCategoryIcon = (category) => {
     switch (category) {
@@ -103,16 +107,12 @@ function MainReviewPages() {
             <GreenContainer>
               <FontAwesomeIcon icon={faUtensils} size="2x" />
             </GreenContainer>
-
             <CategoriesGridContainer>
               <CategoriesGrid>
                 {categories.map((category, index) => (
                   <CategoryContainer key={index}>
                     <CategoryButton
                       onClick={() => handleCategorySelect(category)}
-                      active={
-                        selectedCategory === category ? "true" : undefined
-                      }
                     >
                       <FontAwesomeIcon
                         icon={getCategoryIcon(category)}
@@ -132,7 +132,6 @@ function MainReviewPages() {
 }
 
 export default MainReviewPages;
-
 // 스타일 컴포넌트 정의
 const ReviewPage = styled.div`
   background: linear-gradient(#e7e78b, #f0f0c3);

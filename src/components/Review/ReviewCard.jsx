@@ -1,33 +1,46 @@
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
-import { cardInfoState } from "../../state/reviewAtoms";
+import { selectedRestaurantState } from "../../state/mapAtoms";
+import { useNavigate } from "react-router-dom"; // useNavigate 추가
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
 import click from "../../images/review/click.gif";
 
 const ReviewCard = ({ restaurant }) => {
-  const { id, name, image, rating, opening_hours, phone, address, category } =
-    restaurant;
+  const {
+    id,
+    name,
+    image,
+    rating,
+    opening_hours,
+    phone,
+    address,
+    category,
+    reviewCount,
+    viewCount,
+  } = restaurant;
 
   const navigate = useNavigate();
   const [showCardInfo, setShowCardInfo] = useState(false);
-  const [cardInfo, setCardInfo] = useRecoilState(cardInfoState);
+  const [selectedRestaurant, setSelectedRestaurant] = useRecoilState(
+    selectedRestaurantState
+  );
 
   const handleDetailPost = () => {
-    navigate(`/review/${id}`, {
-      state: {
-        id,
-        name,
-        opening_hours,
-        rating,
-        image,
-        phone,
-        address,
-        category,
-      },
+    setSelectedRestaurant({
+      id,
+      name,
+      opening_hours,
+      rating,
+      image,
+      phone,
+      address,
+      category,
+      reviewCount,
+      viewCount,
     });
+    navigate(`/review/${id}`); // 페이지 이동
   };
 
   return (
@@ -42,21 +55,20 @@ const ReviewCard = ({ restaurant }) => {
           {showCardInfo ? "클릭하여 리뷰보기" : name}
         </CardTitle>
         <CardHashTag $showInfo={showCardInfo}>
-          {showCardInfo ? "" : `#${restaurant.menus.join(" #")}`}
+          {showCardInfo ? "" : `#${restaurant.menus?.join(" #")}`}
         </CardHashTag>
         <CardImg $backgroundImage={showCardInfo ? click : image} />
       </CardContent>
       <CardInfoBox $showInfo={showCardInfo}>
-        <ReviewCount>리뷰 {cardInfo.reviewCount}개</ReviewCount>
-        <ViewCount>조회 {cardInfo.viewCount}회</ViewCount>
+        <ReviewCount>리뷰 {reviewCount}개</ReviewCount>
+        <ViewCount>조회 {viewCount}회</ViewCount>
         <Rating>
           <FontAwesomeIcon
             icon={solidStar}
-            flip="horizontal"
             size="2x"
             style={{ color: "#FFD43B" }}
           />{" "}
-          {restaurant.rating}
+          {rating}
         </Rating>
       </CardInfoBox>
     </CardWrapper>
@@ -64,6 +76,10 @@ const ReviewCard = ({ restaurant }) => {
 };
 
 export default ReviewCard;
+
+// Styled components remain the same...
+
+// Styled components remain the same...
 
 // 스타일 컴포넌트
 const CardBackground = styled.div`

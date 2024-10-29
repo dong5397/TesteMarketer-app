@@ -2,7 +2,7 @@
 
 import { atom } from "recoil";
 
-// 리뷰 관련 상태들
+// 기존 리뷰 관련 상태들
 export const reviewsState = atom({
   key: "reviewsState",
   default: [],
@@ -38,9 +38,16 @@ export const reviewsearchResultsState = atom({
 export const cardInfoState = atom({
   key: "cardInfoState",
   default: {
+    id: null,
+    name: "",
+    opening_hours: "",
+    rating: 0,
+    image: "",
+    phone: "",
+    address: "",
+    category: "",
     reviewCount: 0,
     viewCount: 0,
-    rating: 0,
   },
 });
 
@@ -67,13 +74,38 @@ export const isActiveState = atom({
   key: "isActiveState",
   default: true,
 });
+
 export const selectedCategoryState = atom({
   key: "selectedCategoryState",
   default: null, // Default value
 });
 
-// Define an atom to store the restaurant data
+// 모든 레스토랑 데이터를 저장하는 상태
 export const restaurantDataState = atom({
   key: "restaurantDataState",
-  default: [], // Default empty array
+  default: [], // 기본값은 빈 배열
+});
+
+// 새로운 상태 추가 예시
+
+// 리뷰 작성 중 임시 상태를 저장하는 상태 (리뷰 텍스트 임시 저장 등)
+export const draftReviewState = atom({
+  key: "draftReviewState",
+  default: {
+    content: "",
+    rating: 0,
+    hashtags: [],
+  },
+});
+
+// 특정 레스토랑의 상세 리뷰를 로드하는 상태
+export const selectedRestaurantReviewsState = atom({
+  key: "selectedRestaurantReviewsState",
+  default: [],
+});
+
+// 리뷰 작성 성공 여부를 확인하는 상태
+export const reviewSubmissionStatusState = atom({
+  key: "reviewSubmissionStatusState",
+  default: null, // 'success', 'error' 등의 상태를 저장할 수 있음
 });

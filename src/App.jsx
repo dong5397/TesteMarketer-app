@@ -24,45 +24,39 @@ import styled from "styled-components";
 function App() {
   const [isAuthenticated, setAuth] = useRecoilState(authState);
 
-  // Check session and load authentication state on mount
   useEffect(() => {
-    const savedAuthState = sessionStorage.getItem("isAuthenticated");
-    if (savedAuthState) {
-      setAuth(true);
-    } else {
-      checkSession(); // 서버에서 세션 확인
-    }
-  }, [setAuth]);
+    const checkSession = async () => {
+      try {
+        const response = await fetch(
+          "https://maketerbackend.fly.dev/api/v1/check-session",
+          {
+            method: "GET",
+            credentials: "include", // 세션 쿠키를 포함하여 요청
+          }
+        );
 
-  // Persist authentication state in session storage
-  // Persist authentication state in session storage
-  useEffect(() => {
-    sessionStorage.setItem(
-      "isAuthenticated",
-      isAuthenticated ? "true" : "false"
-    );
-  }, [isAuthenticated]);
-
-  const checkSession = async () => {
-    try {
-      const response = await fetch(
-        "https://maketerbackend.fly.dev/api/v1/check-session",
-        {
-          method: "GET",
-          credentials: "include",
+        const result = await response.json();
+        if (result.isAuthenticated) {
+          setAuth((prevState) => ({
+            ...prevState,
+            isAuthenticated: true,
+          }));
+        } else {
+          setAuth((prevState) => ({
+            ...prevState,
+            isAuthenticated: false,
+          }));
         }
-      );
-
-      const result = await response.json();
-      if (result.isAuthenticated) {
-        setAuth(true); // Set to true if session is valid
-      } else {
-        setAuth(false); // Set to false if not authenticated
+      } catch (error) {
+        setAuth((prevState) => ({
+          ...prevState,
+          isAuthenticated: false,
+        }));
       }
-    } catch (error) {
-      setAuth(false); // Handle error and set as unauthenticated
-    }
-  };
+    };
+
+    checkSession(); // 새로고침 시 세션 확인
+  }, [setAuth]);
 
   return (
     <BrowserRouter>

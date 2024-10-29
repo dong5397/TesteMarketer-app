@@ -1,9 +1,9 @@
-// 파일: src/components/Review/ReviewItem.jsx
-
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import styled, { css, keyframes } from "styled-components";
+import { useRecoilState } from "recoil";
+import { reviewsState } from "../../state/reviewAtoms";
 import RatingStars from "./RatingStars";
 
 // bounceAnimation 애니메이션 정의
@@ -13,7 +13,7 @@ const bounceAnimation = keyframes`
   60% { transform: translateY(-5px); }
 `;
 
-function ReviewItem({ review, onDelete }) {
+function ReviewItem({ review }) {
   const {
     review_id,
     username,
@@ -22,27 +22,26 @@ function ReviewItem({ review, onDelete }) {
     hashtags,
     rating,
   } = review;
+  const [reviews, setReviews] = useRecoilState(reviewsState);
+  const [isClicked, setIsClicked] = useState(false);
 
   const formatDate = (dateString) => {
     if (!dateString) {
       return "";
     }
-    const dateParts = dateString.split("T")[0].split("-");
-    const year = dateParts[0];
-    const month = dateParts[1];
-    const day = dateParts[2];
+    const [year, month, day] = dateString.split("T")[0].split("-");
     return `${year}-${month}-${day}`;
   };
-
-  const [isClicked, setIsClicked] = useState(false);
 
   const reviewDeleteHandler = (event) => {
     event.preventDefault();
     setIsClicked(true);
-    setTimeout(() => {
-      setIsClicked(false);
-    }, 500);
-    onDelete(review_id);
+    setTimeout(() => setIsClicked(false), 500);
+
+    // Update the Recoil state to remove the review
+    setReviews((prevReviews) =>
+      prevReviews.filter((r) => r.review_id !== review_id)
+    );
   };
 
   return (
@@ -66,6 +65,8 @@ function ReviewItem({ review, onDelete }) {
 }
 
 export default ReviewItem;
+
+// 스타일 컴포넌트 정의 생략...
 
 const ReviewItemContainer = styled.div`
   margin-bottom: 20px;

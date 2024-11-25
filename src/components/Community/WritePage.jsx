@@ -1,16 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useRecoilState } from "recoil";
-import {
-  titleState,
-  contentsState,
-  messageState,
-} from "../../state/communityAtom"; // Adjust the path as needed
 
 function WritePage() {
-  const [title, setTitle] = useRecoilState(titleState);
-  const [contents, setContents] = useRecoilState(contentsState);
-  const [message, setMessage] = useRecoilState(messageState);
+  const [title, setTitle] = useState("");
+  const [contents, setContents] = useState("");
+  const [message, setMessage] = useState("");
 
   const onInsert = async () => {
     if (!title || !contents) {
@@ -23,7 +17,6 @@ function WritePage() {
       post_content: contents,
       post_date: now,
     };
-    console.log("Data to Send:", dataToSend); // 전송 데이터 확인을 위한 로그
 
     try {
       const response = await fetch(
@@ -34,6 +27,7 @@ function WritePage() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(dataToSend),
+          credentials: "include", // 세션 쿠키 포함 (세션 기반 인증 시 필요)
         }
       );
 

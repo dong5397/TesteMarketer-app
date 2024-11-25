@@ -1,18 +1,12 @@
 import { DeviceFrameset } from "react-device-frameset";
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import {
-  postState,
-  commentsState,
-  newCommentState,
-} from "../../state/communityAtom";
 
 function DetailPost() {
-  const [post, setPost] = useRecoilState(postState);
-  const [comments, setComments] = useRecoilState(commentsState);
-  const [newComment, setNewComment] = useRecoilState(newCommentState);
+  const [post, setPost] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
   const navigate = useNavigate();
   const { postId } = useParams();
 
@@ -46,7 +40,7 @@ function DetailPost() {
       .catch((error) => {
         console.error("Error fetching comments:", error);
       });
-  }, [postId, setPost, setComments]);
+  }, [postId]);
 
   const handleRouter = () => {
     navigate("../MainListPage");
@@ -64,6 +58,7 @@ function DetailPost() {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({
         comment_text: newComment,
         comment_date: new Date().toISOString(),
@@ -84,16 +79,17 @@ function DetailPost() {
       });
   };
 
-  const handleDeleteComment = (post_id, commentid) => {
-    if (!commentid) {
-      console.error("commentIdToDelete가 유효하지 않습니다.");
+  const handleDeleteComment = (post_id, comment_id) => {
+    if (!comment_id) {
+      console.error("comment_id가 일치하지않습니다. ");
       return;
     }
 
     fetch(
-      `https://maketerbackend.fly.dev/api/v1/post/${post_id}/comments/${commentid}`,
+      `https://maketerbackend.fly.dev/api/v1/post/${post_id}/comments/${comment_id}`,
       {
         method: "DELETE",
+        credentials: "include",
       }
     )
       .then((response) => {
@@ -106,7 +102,7 @@ function DetailPost() {
         if (data.resultCode === "S-1") {
           // 댓글 삭제 성공 시, 클라이언트 상태 업데이트 로직 추가
           setComments((prevComments) =>
-            prevComments.filter((comment) => comment.commentid !== commentid)
+            prevComments.filter((comment) => comment.id !== comment_id)
           );
         } else {
           console.error("Failed to delete comment:", data.msg);
@@ -154,16 +150,17 @@ function DetailPost() {
                     </CommentForm>
                     <CommentList>
                       {comments.map((comment) => (
-                        <Comment key={comment.commentid}>
+                        <Comment key={comment.id}>
                           <CommentContent>
+                            <strong>{comment.username} : </strong>
                             {comment.comment_text}
                           </CommentContent>
                           <CommentDate>
-                            {new Date(comment.comment_date).toLocaleString()}
+                            {comment.comment_date.toLocaleString()}
                           </CommentDate>
                           <DeleteButton
                             onClick={() =>
-                              handleDeleteComment(postId, comment.commentid)
+                              handleDeleteComment(postId, comment.id)
                             }
                           >
                             삭제

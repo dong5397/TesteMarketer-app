@@ -162,7 +162,7 @@ function ReviewPage() {
           >
             <ImgSection backgroundImage={restaurantInfo.image}>
               <CardSection>
-                <CardTitle>{restaurantInfo.restaurants_name}</CardTitle>
+                <CardTitle>{restaurantInfo.name}</CardTitle>
                 <RatingStars rating={restaurantInfo.rating} />
 
                 <ReviewPanel>

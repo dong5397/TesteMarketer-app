@@ -1,14 +1,13 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import { DeviceFrameset } from "react-device-frameset";
+import React, { useState } from "react";
+import styled from "styled-components";
 import WritePage from "../../components/Community/WritePage";
 import ListPage2 from "../../components/Community/ListPage2";
+import { useNavigate } from "react-router-dom";
 
-function MainWritePage() {
+function MainWritePage({ isAuthenticated }) {
   const navigate = useNavigate();
-
-  const handleRouter = () => {
+  const handleRouter = (e) => {
     navigate("../MainListPage");
   };
 
@@ -27,7 +26,7 @@ function MainWritePage() {
                 <Container>
                   <Header>
                     <h1>Community</h1>
-                    <Button onClick={handleRouter}>글목록</Button>
+                    <Button onClick={handleRouter}>글목록</Button>{" "}
                   </Header>
                   <ListPage2 />
                   <WritePage />
@@ -42,12 +41,10 @@ function MainWritePage() {
 }
 
 export default MainWritePage;
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
 `;
-
 const Header = styled.header`
   padding: 20px;
   background-color: #e9e5a9;
@@ -56,13 +53,11 @@ const Header = styled.header`
   font-size: 1.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
-
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
   background-color: #fff;
-  overflow: auto; /* Enable scrolling if content overflows */
 `;
 
 const DivContainer = styled.div`
@@ -73,7 +68,6 @@ const DivContainer = styled.div`
 const MainContainer = styled.div`
   height: 1200px;
   background: linear-gradient(#e7e78b, #f0f0c3);
-  overflow: auto; /* Enable scrolling for the main container */
 `;
 
 const DeviceContent = styled.div`
@@ -90,11 +84,7 @@ const Button = styled.button`
   cursor: pointer;
   margin-top: 20px;
   align-self: center;
-  &:hover {
-    background-color: #357e7e;
-  }
 `;
-
 const WritePageWrapper = styled.div`
   max-width: 1000px;
   height: 1000px;

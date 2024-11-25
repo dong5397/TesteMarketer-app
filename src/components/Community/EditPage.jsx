@@ -1,26 +1,19 @@
-import React, { useEffect } from "react";
+// EditPage.jsx
+
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { DeviceFrameset } from "react-device-frameset";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import {
-  postTitleState,
-  postContentState,
-  messageState,
-} from "../../state/communityAtom";
-
 function EditPage() {
-  const [title, setTitle] = useRecoilState(postTitleState);
-  const [contents, setContents] = useRecoilState(postContentState);
-  const [message, setMessage] = useRecoilState(messageState);
+  const [title, setTitle] = useState("");
+  const [contents, setContents] = useState("");
+  const [message, setMessage] = useState("");
   const { postId } = useParams();
   const navigate = useNavigate();
-
-  const handleRouter = () => {
+  const handleRouter = (e) => {
     navigate("../MainListPage");
   };
-
   useEffect(() => {
     if (postId) {
       fetch(`https://maketerbackend.fly.dev/api/v1/post/${postId}`)
@@ -31,8 +24,8 @@ function EditPage() {
           return response.json();
         })
         .then((data) => {
-          setTitle(data.title || ""); // 기본값으로 빈 문자열을 설정
-          setContents(data.content || ""); // 기본값으로 빈 문자열을 설정
+          setTitle(data.title);
+          setContents(data.content);
         })
         .catch((error) => {
           console.error(error);
@@ -42,7 +35,7 @@ function EditPage() {
       setTitle("");
       setContents("");
     }
-  }, [postId, setTitle, setContents, setMessage]);
+  }, [postId]);
 
   const onUpdate = async () => {
     if (!title || !contents) {
@@ -50,7 +43,7 @@ function EditPage() {
     }
 
     const dataToSend = {
-      postId: postId,
+      postId: postId, // postId를 데이터에 포함시켜서 서버로 보냅니다.
       post_title: title,
       post_content: contents,
     };
@@ -66,6 +59,7 @@ function EditPage() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(dataToSend),
+          credentials: "include", // 세션 쿠키 포함 (세션 기반 인증 시 필요)
         }
       );
 
@@ -80,6 +74,7 @@ function EditPage() {
 
       if (data.resultCode === "S-1") {
         setMessage("글이 성공적으로 수정되었습니다.");
+        handleRouter();
       } else {
         setMessage("글 수정 중 오류가 발생했습니다.");
       }
@@ -117,19 +112,19 @@ function EditPage() {
                 <Container2>
                   <Header>
                     <h1>Community</h1>
-                    <Button onClick={handleRouter}>글목록</Button>
+                    <Button onClick={handleRouter}>글목록</Button>{" "}
                   </Header>
                   <Container>
                     <Form onSubmit={onSubmit}>
                       <Input
                         placeholder="제목을 입력해주세요."
                         type="text"
-                        value={title || ""} // undefined가 되지 않도록 보장
+                        value={title}
                         onChange={onTitleChange}
                       />
                       <TextArea
                         placeholder="내용을 작성해주세요."
-                        value={contents || ""} // undefined가 되지 않도록 보장
+                        value={contents}
                         onChange={onContentsChange}
                         rows={8}
                       />
@@ -148,8 +143,6 @@ function EditPage() {
 }
 
 export default EditPage;
-
-// Styled Components
 const MainContainer = styled.div`
   height: 1200px;
   background: linear-gradient(#e7e78b, #f0f0c3);

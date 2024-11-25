@@ -1,7 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { useRecoilState } from "recoil";
-import { postsState } from "../state/postAtoms"; // 경로는 적절히 수정해주세요
 
 const DeleteButton = styled.button`
   background-color: #74a7a7;
@@ -31,9 +29,7 @@ const Content = styled.p`
   margin-top: 0.5rem;
 `;
 
-function CommunityReview({ post }) {
-  const [posts, setPosts] = useRecoilState(postsState);
-
+function CommunityReview({ post, onDelete }) {
   const handleDelete = async () => {
     try {
       const response = await fetch(
@@ -45,9 +41,9 @@ function CommunityReview({ post }) {
       if (!response.ok) {
         throw new Error("게시물 삭제 요청이 실패했습니다.");
       }
-
-      // 서버 응답이 성공하면 상태를 업데이트하여 삭제된 게시물을 반영합니다.
-      setPosts((prevPosts) => prevPosts.filter((p) => p.id !== post.id));
+      const data = await response.json();
+      console.log(data); // 서버에서 반환한 데이터 확인
+      onDelete(post.id);
     } catch (error) {
       console.error(error);
     }

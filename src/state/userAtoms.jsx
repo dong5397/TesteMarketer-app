@@ -12,5 +12,12 @@ export const profileModalState = atom({
 
 export const authState = atom({
   key: "authState",
-  default: false, // 사용자가 로그인되었는지 여부
+  default: {
+    isAuthenticated: false,
+    isLoading: false,
+    showAuthModal: false,
+    userId: null,
+    username: "",
+    email: "",
+  },
 });

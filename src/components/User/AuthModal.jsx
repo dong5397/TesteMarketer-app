@@ -15,9 +15,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons"; // 아이콘 임포트
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { authState } from "../../state/userAtoms";
 
-function AuthModal({ show, onClose, setAuth }) {
+function AuthModal({ show, onClose }) {
   const [loading, setLoading] = useState(false); // 로딩 상태 관리
+  const [auth, setAuth] = useRecoilState(authState);
 
   const [loginData, setLoginData] = useState({ username: "", password: "" });
   const [registerData, setRegisterData] = useState({
@@ -263,18 +266,23 @@ function AuthModal({ show, onClose, setAuth }) {
 
       if (parseRes.resultCode === "S-1") {
         if (isLogin) {
-          setAuth(true);
+          setAuth({
+            isAuthenticated: true,
+            userId: parseRes.data.userId, // 서버에서 받은 userId 저장
+            username: parseRes.data.username,
+            email: parseRes.data.email,
+          });
           toast.success("로그인 성공!");
+
           onClose();
-        } else {
-          toast.success("회원가입 성공!");
-          setIsLogin(true); // 회원가입 성공 시 로그인 모드로 전환
         }
+      } else if (parseRes.resultCode === "S-1" && !isLogin) {
+        toast.success("회원가입 성공!");
+        setIsLogin(true); // 회원가입 후 로그인 모드로 전환
       } else {
         toast.error(isLogin ? "로그인 실패!" : "회원가입 실패!");
       }
     } catch (err) {
-      setLoading(false);
       toast.error("서버 오류 발생: " + err.message);
     }
   };

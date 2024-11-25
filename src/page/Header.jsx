@@ -20,6 +20,7 @@ const Header = () => {
   const [showProfileModal, setShowProfileModal] =
     useRecoilState(profileModalState);
   const [isAuthenticated, setAuth] = useRecoilState(authState);
+
   const [showDropdown, setShowDropdown] = useState(false); // 상태를 Recoil로 옮기지 않아도 됨
   const navigate = useNavigate();
 
@@ -28,14 +29,27 @@ const Header = () => {
   const logout = async (e) => {
     e.preventDefault();
     try {
-      await fetch("https://maketerbackend.fly.dev/api/v1/logout", {
-        method: "GET",
-        credentials: "include", // Include session cookie
-      });
-      setAuth(false); // Recoil 상태 업데이트
-      logoutSuccessfully();
+      const response = await fetch(
+        "https://maketerbackend.fly.dev/api/v1/logout",
+        {
+          method: "POST",
+          credentials: "include", // Include session cookie
+        }
+      );
+
+      if (response.ok) {
+        setAuth({
+          isAuthenticated: false,
+          userId: null,
+          username: "",
+          email: "",
+        });
+        logoutSuccessfully(); // 로그아웃 성공 메시지
+      } else {
+        console.error("로그아웃 실패");
+      }
     } catch (err) {
-      console.error(err.message);
+      console.error("로그아웃 요청 중 오류:", err.message);
     }
   };
 
@@ -72,7 +86,7 @@ const Header = () => {
         <NavLink to="/service">맛 설정 모드</NavLink>
         <ProfileContainer>
           <ProfileImage onClick={handleProfileClick}>
-            {isAuthenticated ? (
+            {isAuthenticated.isAuthenticated ? (
               <FontAwesomeIcon icon={faUserCircle} size="2x" />
             ) : (
               <PlaceholderCircle>
@@ -83,14 +97,14 @@ const Header = () => {
 
           {showDropdown && (
             <DropdownMenu>
-              {isAuthenticated ? (
+              {isAuthenticated.isAuthenticated ? (
                 <DropdownHeader>
                   <ProfileImageCircle>
                     <FontAwesomeIcon icon={faUserCircle} size="2x" />
                   </ProfileImageCircle>
                   <UserInfo>
-                    <UserName>사용자 이름</UserName>
-                    <UserEmail>rabbittby@email.com</UserEmail>
+                    <UserName>{isAuthenticated.username}</UserName>
+                    <UserEmail>{isAuthenticated.email}</UserEmail>
                   </UserInfo>
                 </DropdownHeader>
               ) : (
@@ -106,7 +120,7 @@ const Header = () => {
               )}
 
               <DropdownItems>
-                {isAuthenticated ? (
+                {isAuthenticated.isAuthenticated ? (
                   <>
                     <DropdownItem onClick={() => handleMypageClick()}>
                       <img
@@ -153,11 +167,7 @@ const Header = () => {
       </NavLinks>
 
       {showLoginModal && (
-        <AuthModal
-          show={showLoginModal}
-          onClose={closeLoginModal}
-          setAuth={setAuth}
-        />
+        <AuthModal show={showLoginModal} onClose={closeLoginModal} />
       )}
       {showProfileModal && (
         <ProfileModal show={showProfileModal} onClose={closeProfileModal} />

@@ -1,15 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { selectedRestaurantState } from "../../state/mapAtoms";
 import { reviewsState, isActiveState } from "../../state/reviewAtoms";
-import { authState } from "../../state/userAtoms";
+import { authState } from "../../state/userAtoms"; // Recoil의 authState 추가
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { useParams, useLocation } from "react-router-dom";
 import RatingStars from "../../components/Review/RatingStars";
 import ReviewList from "../../components/Review/ReviewList";
 import WriteReview from "../../components/Review/WriteReview";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Carousel } from "react-responsive-carousel";
 import {
   faBurger,
   faPhone,
@@ -18,25 +18,36 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { DeviceFrameset } from "react-device-frameset";
 import "react-device-frameset/styles/marvel-devices.min.css";
-import LoginRequiredOverlay from "../../components/LoginRequiredOverlay";
+import LoginRequiredOverlay from "../../components/LoginRequiredOverlay"; // 로그인 요청 모달 추가
+import LoadingBurger from "../../components/LoadingBurger";
+import { selectedRestaurantState } from "../../state/mapAtoms";
 
 function ReviewPage() {
-  const restaurantInfo = useRecoilValue(selectedRestaurantState); // selectedRestaurantState 사용
+  const location = useLocation();
   const { id } = useParams();
+
+  const selectedRestaurant = useRecoilValue(selectedRestaurantState);
 
   const [reviews, setReviews] = useRecoilState(reviewsState);
   const [isActive, setIsActive] = useRecoilState(isActiveState);
-  const [auth] = useRecoilState(authState);
-  const lastId = useRef(4);
+  const [auth] = useRecoilState(authState); // 로그인 상태 확인
 
-  useEffect(() => {
-    console.log("restaurantInfo:", restaurantInfo); // 데이터가 제대로 들어오는지 확인
-  }, [restaurantInfo]);
+  // `location.state`에서 데이터 가져오기
+  const restaurantInfo = location.state?.restaurant || selectedRestaurant;
 
+  // 리뷰 작성/보기 토글
   const handleToggle = () => {
     setIsActive(!isActive);
   };
 
+  useEffect(() => {
+    console.log(restaurantInfo);
+    if (!restaurantInfo) {
+      console.error("레스토랑 정보가 없습니다.");
+    }
+  }, [restaurantInfo]);
+
+  // 리뷰를 서버에서 불러오는 함수
   const fetchReviews = async (restaurant_Id) => {
     try {
       const response = await fetch(
@@ -46,7 +57,8 @@ function ReviewPage() {
         throw new Error(`Failed to fetch reviews: ${response.status}`);
       }
       const data = await response.json();
-      setReviews(data.reviews);
+      console.log(data.reviews); // 가져온 리뷰 데이터 확인
+      setReviews(data.reviews); // 리뷰 데이터를 Recoil 상태에 저장
     } catch (error) {
       console.error("Error fetching reviews:", error.message);
     }
@@ -58,7 +70,8 @@ function ReviewPage() {
     }
   }, [id]);
 
-  const onSubmit = (username, content, hashtags, rating) => {
+  // 리뷰 작성 함수
+  const onSubmit = (content, hashtags, rating) => {
     if (!auth.isAuthenticated) {
       return <LoginRequiredOverlay />;
     }
@@ -66,8 +79,7 @@ function ReviewPage() {
     const updatedReviews = [
       ...reviews,
       {
-        id: lastId.current,
-        username: auth.username,
+        id,
         content,
         hashtags,
         rating,
@@ -75,18 +87,20 @@ function ReviewPage() {
     ];
 
     setReviews(updatedReviews);
-    lastId.current++;
 
     fetch("https://maketerbackend.fly.dev/api/v1/reviews", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       credentials: "include",
       body: JSON.stringify({
         restaurant_id: id,
         contents: content,
-        username: auth.username,
-        rating,
-        hashtags,
+        username: auth.fullName,
+        rating: rating,
+        hashtags: hashtags,
+        author_id: auth.userId, // auth에서 사용자 ID 가져와 author_id로 전달
       }),
     })
       .then((response) => {
@@ -95,8 +109,9 @@ function ReviewPage() {
         }
         return response.json();
       })
-      .then(() => {
-        fetchReviews(id);
+      .then((data) => {
+        console.log("Success:", data);
+        fetchReviews(id); // 리뷰 작성 후 다시 리뷰 목록을 불러옴
         handleToggle();
       })
       .catch((error) => {
@@ -104,8 +119,12 @@ function ReviewPage() {
       });
   };
 
-  const OnDelete = async (review_id, review_username) => {
-    if (auth.username !== review_username) {
+  // 리뷰 삭제 함수
+  const OnDelete = async (review_id, author_id) => {
+    console.log("auth.userId:", auth.userId); // 로그인한 사용자 ID
+    console.log("review.author_id:", author_id); // 리뷰 작성자 ID
+
+    if (auth.userId !== author_id) {
       alert("본인이 작성한 리뷰만 삭제할 수 있습니다.");
       return;
     }
@@ -126,9 +145,7 @@ function ReviewPage() {
       console.error("Error deleting review:", error.message);
     }
   };
-  if (!restaurantInfo) {
-    return <div>로딩 중...</div>; // 또는 빈 상태로 반환할 수 있습니다.
-  }
+
   return (
     <ReveiwP>
       <HeaderContainer>
@@ -145,17 +162,16 @@ function ReviewPage() {
           >
             <ImgSection backgroundImage={restaurantInfo.image}>
               <CardSection>
-                <CardTitle>{restaurantInfo.name}</CardTitle>
+                <CardTitle>{restaurantInfo.restaurants_name}</CardTitle>
                 <RatingStars rating={restaurantInfo.rating} />
+
                 <ReviewPanel>
                   <ToggleContainer onClick={handleToggle}>
-                    <ReviewButton active={isActive.toString()}>
-                      리뷰 {restaurantInfo.rating}
+                    <ReviewButton active={isActive}>
+                      리뷰 {restaurantInfo.rating}{" "}
                     </ReviewButton>
-                    <ReviewButton active={(!isActive).toString()}>
-                      리뷰 작성
-                    </ReviewButton>
-                    <ToggleSlider active={isActive.toString()} />
+                    <ReviewButton active={!isActive}>리뷰 작성</ReviewButton>
+                    <ToggleSlider active={isActive} />
                   </ToggleContainer>
                 </ReviewPanel>
               </CardSection>
@@ -263,7 +279,7 @@ const ReviewButton = styled.button`
   border: none;
   border-radius: 50px;
   background-color: transparent;
-  color: ${({ active }) => (active === "true" ? "#dd5746" : "black")};
+  color: ${({ active }) => (active ? "#dd5746" : "black")};
   transition: color 0.5s ease-in-out;
   z-index: 1;
 `;
@@ -276,7 +292,7 @@ const ToggleSlider = styled.div`
   border-radius: 50px;
   transition: transform 0.4s cubic-bezier(0.24, 0, 0.5, 1);
   transform: ${({ active }) =>
-    active === "true" ? "translateX(50%)" : "translateX(-50%)"};
+    active ? "translateX(50%)" : "translateX(-50%)"};
 `;
 
 const ContentsContainer = styled.div`

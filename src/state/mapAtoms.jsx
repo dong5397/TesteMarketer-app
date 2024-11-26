@@ -136,8 +136,8 @@ export const directionsState = atom({
 export const restaurantInfoState = atom({
   key: "restaurantInfoState",
   default: {
-    id: null,
-    name: "",
+    restaurants_id: null,
+    restaurants_name: "",
     image: "",
     rating: 0,
     opening_hours: "",

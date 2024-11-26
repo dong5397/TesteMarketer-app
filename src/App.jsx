@@ -21,6 +21,9 @@ import { useRecoilState } from "recoil";
 import { authState } from "./state/userAtoms"; // Import the Recoil state
 import TopNav from "./components/TopNav";
 import styled from "styled-components";
+import FavoritesPage from "./components/User/FavoritesPage";
+import ProfileEdit from "./components/User/ProfileEdit";
+import MyReviewList from "./components/User/MyReviewList";
 function App() {
   const [isAuthenticated, setAuth] = useRecoilState(authState);
 
@@ -77,6 +80,9 @@ function App() {
         <Route path="/Post/:postId" element={<DetailPostPageHN />} />
         <Route path="/mypage" element={<MypageHN />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/favorites" element={<FavoritesPageHN />} />
+        <Route path="/ProfileEdit" element={<ProfileEditHN />} />
+        <Route path="/MyReviewList" element={<MyReviewListHN />} />
       </Routes>
       <MobileOnlyWrapper>
         <TopNav />
@@ -165,6 +171,23 @@ const DetailPostPageHN = () => (
 const MypageHN = () => (
   <div>
     <Mypage />
+  </div>
+);
+const FavoritesPageHN = () => (
+  <div>
+    <FavoritesPage />
+  </div>
+);
+
+const ProfileEditHN = () => (
+  <div>
+    <ProfileEdit />
+  </div>
+);
+
+const MyReviewListHN = () => (
+  <div>
+    <MyReviewList />
   </div>
 );
 

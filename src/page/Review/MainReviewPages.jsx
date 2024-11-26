@@ -52,7 +52,7 @@ function MainReviewPages() {
       .then((data) => {
         const formattedData = data.data.map((el) => ({
           id: el.restaurants_id,
-          name: el.restaurants_name,
+          restaurants_name: el.restaurants_name,
           phone: el.phone,
           opening_hours: el.opening_hours,
           rating: el.rating,

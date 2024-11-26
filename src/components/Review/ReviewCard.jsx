@@ -10,7 +10,7 @@ import click from "../../images/review/click.gif";
 const ReviewCard = ({ restaurant }) => {
   const {
     id,
-    name,
+    restaurants_name,
     image,
     rating,
     opening_hours,
@@ -30,7 +30,7 @@ const ReviewCard = ({ restaurant }) => {
   const handleDetailPost = () => {
     setSelectedRestaurant({
       id,
-      name,
+      restaurants_name,
       opening_hours,
       rating,
       image,
@@ -52,7 +52,7 @@ const ReviewCard = ({ restaurant }) => {
       <CardBackground $backgroundImage={image} />
       <CardContent>
         <CardTitle $showInfo={showCardInfo}>
-          {showCardInfo ? "클릭하여 리뷰보기" : name}
+          {showCardInfo ? "클릭하여 리뷰보기" : restaurants_name}
         </CardTitle>
         <CardHashTag $showInfo={showCardInfo}>
           {showCardInfo ? "" : `#${restaurant.menus?.join(" #")}`}

@@ -1,125 +1,137 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft, FaTrash, FaEdit } from "react-icons/fa";
-import { DeviceFrameset } from "react-device-frameset";
+import { FaTrash, FaEdit } from "react-icons/fa";
 
-function MyReviewList() {
+function UserReviewList() {
   const navigate = useNavigate();
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // 샘플 리뷰 데이터 (API 연동 시 대체 가능)
-  const [reviews, setReviews] = useState([
-    {
-      id: 1,
-      restaurant: "김밥천국",
-      content: "맛있고 저렴한 식사가 가능했습니다!",
-      date: "2024-11-15",
-    },
-    {
-      id: 2,
-      restaurant: "홍콩반점",
-      content: "탕수육이 너무 맛있었어요.",
-      date: "2024-11-10",
-    },
-  ]);
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await fetch(
+          "https://maketerbackend.fly.dev/api/v1/user-reviews",
+          {
+            method: "GET",
+            credentials: "include", // 세션 인증
+          }
+        );
 
-  const handleGoBack = () => {
-    navigate(-1); // 이전 페이지로 이동
-  };
+        if (!response.ok) {
+          const errorText = await response.text(); // 에러 응답 읽기
+          throw new Error(
+            `HTTP error! status: ${response.status}, body: ${errorText}`
+          );
+        }
 
-  const handleDelete = (id) => {
-    if (window.confirm("정말로 이 리뷰를 삭제하시겠습니까?")) {
-      setReviews(reviews.filter((review) => review.id !== id));
+        const data = await response.json();
+
+        if (data.resultCode === "S-1" && Array.isArray(data.data)) {
+          setReviews(data.data || []); // 데이터 설정
+        } else {
+          console.error("API Error:", data.msg || "데이터 로드 실패");
+          setReviews([]);
+        }
+      } catch (error) {
+        console.error("Error fetching reviews:", error.message);
+        alert(
+          "리뷰 데이터를 불러오는 데 문제가 발생했습니다. 다시 시도해주세요."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReviews();
+  }, []);
+
+  const handleDelete = async (reviewId) => {
+    if (!window.confirm("리뷰를 삭제하시겠습니까?")) return;
+
+    try {
+      const response = await fetch(`/api/v1/reviews/${reviewId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      const data = await response.json();
+
+      if (response.ok && data.resultCode === "S-1") {
+        setReviews(reviews.filter((review) => review.review_id !== reviewId));
+        alert("리뷰가 삭제되었습니다.");
+      } else {
+        alert(data.msg || "리뷰 삭제 실패");
+      }
+    } catch (error) {
+      console.error("Error deleting review:", error.message);
+      alert("리뷰 삭제 중 오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
 
-  const handleEdit = (id) => {
-    navigate(`/edit-review/${id}`); // 리뷰 수정 페이지로 이동
+  const handleEdit = (reviewId) => {
+    navigate(`/edit-review/${reviewId}`);
   };
+
+  if (loading) {
+    return (
+      <MainContainer>
+        <LoadingSpinner>
+          <img src="/loading-spinner.gif" alt="Loading..." />
+          데이터를 불러오는 중입니다...
+        </LoadingSpinner>
+      </MainContainer>
+    );
+  }
 
   return (
     <MainContainer>
-      <DeviceFrameset device="iPad Mini">
-        <Container>
-          <Header>
-            <BackButton onClick={handleGoBack}>
-              <FaArrowLeft />
-            </BackButton>
-            <Title>내 리뷰 관리</Title>
-          </Header>
-
-          <ReviewList>
-            {reviews.length > 0 ? (
-              reviews.map((review) => (
-                <ReviewCard key={review.id}>
-                  <RestaurantName>{review.restaurant}</RestaurantName>
-                  <ReviewDate>{review.date}</ReviewDate>
-                  <ReviewContent>{review.content}</ReviewContent>
-                  <ReviewActions>
-                    <ActionButton onClick={() => handleEdit(review.id)}>
-                      <FaEdit /> 수정
-                    </ActionButton>
-                    <ActionButton onClick={() => handleDelete(review.id)}>
-                      <FaTrash /> 삭제
-                    </ActionButton>
-                  </ReviewActions>
-                </ReviewCard>
-              ))
-            ) : (
-              <NoReviews>아직 작성한 리뷰가 없습니다.</NoReviews>
-            )}
-          </ReviewList>
-        </Container>
-      </DeviceFrameset>
+      {reviews.length > 0 ? (
+        reviews.map((review) =>
+          review ? (
+            <ReviewCard key={review.review_id}>
+              <RestaurantName>
+                {review.restaurant_name || "알 수 없는 식당"}
+              </RestaurantName>
+              <ReviewDate>{review.review_date || "날짜 없음"}</ReviewDate>
+              <ReviewContent>
+                {review.review_content || "내용 없음"}
+              </ReviewContent>
+              <ReviewRating>평점: {review.rating || "N/A"}/5</ReviewRating>
+              {review.hashtags && (
+                <HashtagList>
+                  {review.hashtags.map((tag, idx) => (
+                    <Hashtag key={idx}>#{tag}</Hashtag>
+                  ))}
+                </HashtagList>
+              )}
+              <ReviewActions>
+                <ActionButton onClick={() => handleEdit(review.review_id)}>
+                  <FaEdit /> 수정
+                </ActionButton>
+                <ActionButton
+                  danger
+                  onClick={() => handleDelete(review.review_id)}
+                >
+                  <FaTrash /> 삭제
+                </ActionButton>
+              </ReviewActions>
+            </ReviewCard>
+          ) : null
+        )
+      ) : (
+        <NoReviews>작성된 리뷰가 없습니다.</NoReviews>
+      )}
     </MainContainer>
   );
 }
 
-export default MyReviewList;
+export default UserReviewList;
 
 const MainContainer = styled.div`
-  background-color: #e7e78b;
-  display: flex;
-  justify-content: center;
   padding: 20px;
-  height: 100vh;
-  overflow: hidden; /* DeviceFrameset이 영역을 벗어나지 않도록 제한 */
-`;
-
-const Container = styled.div`
-  max-width: 600px;
-  width: 100%;
-  padding: 20px;
-  color: #fff;
-  font-family: Arial, sans-serif;
-`;
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #ddd;
-`;
-
-const BackButton = styled.button`
-  background: none;
-  border: none;
-  color: #333;
-  font-size: 1.5rem;
-  cursor: pointer;
-
-  &:hover {
-    color: #1e90ff;
-  }
-`;
-
-const Title = styled.h1`
-  font-size: 1.5rem;
-  margin-left: 10px;
-`;
-
-const ReviewList = styled.div`
-  margin-top: 20px;
+  background-color: #f9f9f9;
+  min-height: 100vh;
 `;
 
 const ReviewCard = styled.div`
@@ -128,11 +140,23 @@ const ReviewCard = styled.div`
   border-radius: 8px;
   padding: 15px;
   margin-bottom: 15px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
 `;
 
 const RestaurantName = styled.h2`
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   margin-bottom: 5px;
+  color: #333;
 `;
 
 const ReviewDate = styled.p`
@@ -143,7 +167,29 @@ const ReviewDate = styled.p`
 
 const ReviewContent = styled.p`
   font-size: 1rem;
+  color: #555;
   margin-bottom: 10px;
+`;
+
+const ReviewRating = styled.p`
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 10px;
+`;
+
+const HashtagList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 10px;
+`;
+
+const Hashtag = styled.span`
+  background: #e8f5e9;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 0.85rem;
+  color: #388e3c;
 `;
 
 const ReviewActions = styled.div`
@@ -152,34 +198,38 @@ const ReviewActions = styled.div`
 `;
 
 const ActionButton = styled.button`
-  background: #1e90ff;
+  background: ${(props) => (props.danger ? "#e57373" : "#64b5f6")};
   color: #fff;
   border: none;
   border-radius: 5px;
-  padding: 8px 12px;
+  padding: 8px 15px;
   font-size: 0.9rem;
   cursor: pointer;
-
   display: flex;
   align-items: center;
   gap: 5px;
 
   &:hover {
-    background: #0056b3;
-  }
-
-  &:last-child {
-    background: #ff4d4d;
-
-    &:hover {
-      background: #b30000;
-    }
+    background: ${(props) => (props.danger ? "#d32f2f" : "#1976d2")};
   }
 `;
 
 const NoReviews = styled.p`
   text-align: center;
-  font-size: 1rem;
   color: #777;
-  margin-top: 50px;
+  font-size: 1rem;
+`;
+
+const LoadingSpinner = styled.div`
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  padding: 50px 0;
+
+  img {
+    width: 50px;
+    height: 50px;
+    display: block;
+    margin: 0 auto;
+  }
 `;

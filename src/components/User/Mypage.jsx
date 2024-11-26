@@ -1,28 +1,39 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { FaCamera, FaTh, FaStar } from "react-icons/fa";
+import { FaCamera, FaTh } from "react-icons/fa";
+import { MdOutlineRateReview } from "react-icons/md";
 import { DeviceFrameset } from "react-device-frameset";
 
 function Mypage() {
   const [selectedTab, setSelectedTab] = useState("posts");
-  const [username, setUsername] = useState("jimin2570");
+  const [username, setUsername] = useState("");
   const [posts, setPosts] = useState([]);
-  const [favorites, setFavorites] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     // API 호출하여 데이터 가져오기
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await fetch(
-          "https://maketerbackend.fly.dev/api/v1/profile"
+          "https://maketerbackend.fly.dev/api/v1/profile",
+          { credentials: "include" } // 세션 인증 포함
         );
         const data = await response.json();
-        setPosts(data.posts || []); // 데이터 구조에 따라 posts 설정
-        setFavorites(data.favorites || []); // 데이터 구조에 따라 favorites 설정
+        if (response.ok) {
+          setUsername(data.username || "익명 사용자");
+          setPosts(data.posts || []);
+          setReviews(data.reviews || []);
+        } else {
+          console.error("API Error:", data.msg);
+        }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching profile data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -32,6 +43,18 @@ function Mypage() {
   const handleNicknameClick = () => {
     navigate("/ProfileEdit");
   };
+
+  if (loading) {
+    return (
+      <MainContainer>
+        <DeviceFrameset device="iPad Mini">
+          <Container>
+            <Content>로딩 중...</Content>
+          </Container>
+        </DeviceFrameset>
+      </MainContainer>
+    );
+  }
 
   return (
     <MainContainer>
@@ -49,9 +72,6 @@ function Mypage() {
               <Username>{username}</Username>
               <EditButtons>
                 <Button onClick={handleNicknameClick}>프로필 편집</Button>
-                <Button onClick={() => navigate("/MyReviewList")}>
-                  내 리뷰관리
-                </Button>
               </EditButtons>
             </ProfileInfo>
           </ProfileHeader>
@@ -60,13 +80,13 @@ function Mypage() {
               isActive={selectedTab === "posts"}
               onClick={() => setSelectedTab("posts")}
             >
-              <FaTh />
+              <FaTh /> 포스트
             </Tab>
             <Tab
-              isActive={selectedTab === "favorites"}
-              onClick={() => setSelectedTab("favorites")}
+              isActive={selectedTab === "reviews"}
+              onClick={() => setSelectedTab("reviews")}
             >
-              <FaStar />
+              <MdOutlineRateReview /> 리뷰
             </Tab>
           </TabContainer>
           {selectedTab === "posts" ? (
@@ -79,20 +99,21 @@ function Mypage() {
                   </PostItem>
                 ))
               ) : (
-                <Content>작성된 식당 포스트가 없습니다.</Content>
+                <Content>작성한 포스트가 없습니다.</Content>
               )}
             </PostList>
           ) : (
             <PostList>
-              {favorites.length > 0 ? (
-                favorites.map((favorite, index) => (
+              {reviews.length > 0 ? (
+                reviews.map((review, index) => (
                   <PostItem key={index}>
-                    <PostTitle>{favorite.name}</PostTitle>
-                    <PostContent>{favorite.description}</PostContent>
+                    <PostTitle>{review.restaurant_name}</PostTitle>
+                    <PostContent>{review.review_content}</PostContent>
+                    <PostContent>평점: {review.rating}/5</PostContent>
                   </PostItem>
                 ))
               ) : (
-                <Content>즐겨찾기한 식당이 없습니다.</Content>
+                <Content>작성한 리뷰가 없습니다.</Content>
               )}
             </PostList>
           )}
@@ -110,7 +131,7 @@ const MainContainer = styled.div`
   justify-content: center;
   padding: 20px;
   height: 100vh;
-  overflow: hidden; /* DeviceFrameset이 영역을 벗어나지 않도록 제한 */
+  overflow: hidden;
 `;
 
 const Container = styled.div`
@@ -178,7 +199,7 @@ const Tab = styled.div`
   flex: 1;
   text-align: center;
   padding: 10px 0;
-  font-size: 1.5rem;
+  font-size: 1rem;
   color: ${(props) => (props.isActive ? "black" : "#666")};
   border-bottom: ${(props) => (props.isActive ? "2px solid #666" : "none")};
   cursor: pointer;

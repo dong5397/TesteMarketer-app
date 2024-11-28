@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { FaCamera, FaTh } from "react-icons/fa";
+import { FaCamera, FaTh, FaTrash, FaEdit } from "react-icons/fa";
 import { MdOutlineRateReview } from "react-icons/md";
 import { DeviceFrameset } from "react-device-frameset";
+import { useRecoilState } from "recoil";
+import { authState } from "../../state/userAtoms";
 
 function Mypage() {
   const [selectedTab, setSelectedTab] = useState("posts");
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useRecoilState(authState);
   const [posts, setPosts] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,14 +21,13 @@ function Mypage() {
       setLoading(true);
       try {
         const response = await fetch(
-          "https://maketerbackend.fly.dev/api/v1/profile",
+          "https://makterback.fly.dev/api/v1/profile",
           { credentials: "include" } // 세션 인증 포함
         );
         const data = await response.json();
         if (response.ok) {
           setUsername(data.username || "익명 사용자");
           setPosts(data.posts || []);
-          setReviews(data.reviews || []);
         } else {
           console.error("API Error:", data.msg);
         }
@@ -40,8 +41,77 @@ function Mypage() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (selectedTab === "reviews") {
+      // 리뷰 데이터 가져오기
+      const fetchReviews = async () => {
+        setLoading(true);
+        try {
+          const response = await fetch(
+            "https://maketerbackend.fly.dev/api/v1/user-reviews",
+            {
+              method: "GET",
+              credentials: "include", // 세션 인증
+            }
+          );
+
+          if (!response.ok) {
+            const errorText = await response.text(); // 에러 응답 읽기
+            throw new Error(
+              `HTTP error! status: ${response.status}, body: ${errorText}`
+            );
+          }
+
+          const data = await response.json();
+
+          if (data.resultCode === "S-1" && Array.isArray(data.data)) {
+            setReviews(data.data || []); // 데이터 설정
+          } else {
+            console.error("API Error:", data.msg || "데이터 로드 실패");
+            setReviews([]);
+          }
+        } catch (error) {
+          console.error("Error fetching reviews:", error.message);
+          alert(
+            "리뷰 데이터를 불러오는 데 문제가 발생했습니다. 다시 시도해주세요."
+          );
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchReviews();
+    }
+  }, [selectedTab]);
+
   const handleNicknameClick = () => {
     navigate("/ProfileEdit");
+  };
+
+  const handleDelete = async (reviewId) => {
+    if (!window.confirm("리뷰를 삭제하시겠습니까?")) return;
+
+    try {
+      const response = await fetch(`/api/v1/reviews/${reviewId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      const data = await response.json();
+
+      if (response.ok && data.resultCode === "S-1") {
+        setReviews(reviews.filter((review) => review.review_id !== reviewId));
+        alert("리뷰가 삭제되었습니다.");
+      } else {
+        alert(data.msg || "리뷰 삭제 실패");
+      }
+    } catch (error) {
+      console.error("Error deleting review:", error.message);
+      alert("리뷰 삭제 중 오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  const handleEdit = (reviewId) => {
+    navigate(`/edit-review/${reviewId}`);
   };
 
   if (loading) {
@@ -69,7 +139,7 @@ function Mypage() {
               <FaCamera />
             </ProfileImageContainer>
             <ProfileInfo>
-              <Username>{username}</Username>
+              <Username>{username.username}</Username>
               <EditButtons>
                 <Button onClick={handleNicknameClick}>프로필 편집</Button>
               </EditButtons>
@@ -110,6 +180,27 @@ function Mypage() {
                     <PostTitle>{review.restaurant_name}</PostTitle>
                     <PostContent>{review.review_content}</PostContent>
                     <PostContent>평점: {review.rating}/5</PostContent>
+                    <ReviewDate>{review.review_date || "날짜 없음"}</ReviewDate>
+                    {review.hashtags && (
+                      <HashtagList>
+                        {review.hashtags.map((tag, idx) => (
+                          <Hashtag key={idx}>#{tag}</Hashtag>
+                        ))}
+                      </HashtagList>
+                    )}
+                    <ReviewActions>
+                      <ActionButton
+                        onClick={() => handleEdit(review.review_id)}
+                      >
+                        <FaEdit /> 수정
+                      </ActionButton>
+                      <ActionButton
+                        danger
+                        onClick={() => handleDelete(review.review_id)}
+                      >
+                        <FaTrash /> 삭제
+                      </ActionButton>
+                    </ReviewActions>
                   </PostItem>
                 ))
               ) : (
@@ -129,8 +220,9 @@ const MainContainer = styled.div`
   background-color: #e7e78b;
   display: flex;
   justify-content: center;
+  align-items: center;
   padding: 20px;
-  height: 100vh;
+
   overflow: hidden;
 `;
 
@@ -234,4 +326,47 @@ const Content = styled.div`
   font-size: 1rem;
   color: #999;
   padding-top: 20px;
+`;
+
+const ReviewDate = styled.p`
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 10px;
+`;
+
+const HashtagList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 10px;
+`;
+
+const Hashtag = styled.span`
+  background: #e8f5e9;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 0.85rem;
+  color: #388e3c;
+`;
+
+const ReviewActions = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const ActionButton = styled.button`
+  background: ${(props) => (props.danger ? "#e57373" : "#64b5f6")};
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  &:hover {
+    background: ${(props) => (props.danger ? "#d32f2f" : "#1976d2")};
+  }
 `;

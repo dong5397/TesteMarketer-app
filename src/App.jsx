@@ -1,9 +1,13 @@
+// App.js
+
 import React, { useEffect } from "react";
-import Main from "./page/Main";
-import KakaoMap from "../src/page/Map/KaKaoMap";
-import KakaoMap2 from "../src/page/Map/KaKaoMap2";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "../src/page/Map/Home";
+import { useRecoilState } from "recoil";
+import { ToastContainer } from "react-toastify";
+
+import Main from "./page/Main";
+import KakaoMap from "./page/Map/KaKaoMap";
+import Home from "./page/Map/Home";
 import Header from "./page/Header";
 import ServicePage from "./page/ServicePage";
 import MainWritePage from "./page/Community/MainWritePage";
@@ -13,20 +17,17 @@ import ReviewPage from "./page/Review/ReviewPage";
 import MainReviewPages from "./page/Review/MainReviewPages";
 import EditPage from "./components/Community/EditPage";
 import DetailPost from "./components/Community/DetailPost";
-import { ToastContainer } from "react-toastify";
 import ServiceFoods from "./components/ServiceFoods";
 import Mypage from "./components/User/Mypage";
 import ResetPasswordPage from "./components/User/ResetPassword";
-import { useRecoilState } from "recoil";
-import { authState } from "./state/userAtoms"; // Import the Recoil state
 import TopNav from "./components/TopNav";
-import styled from "styled-components";
-import FavoritesPage from "./components/User/FavoritesPage";
-import ProfileEdit from "./components/User/ProfileEdit";
-import MyReviewList from "./components/User/MyReviewList";
-function App() {
-  const [isAuthenticated, setAuth] = useRecoilState(authState);
 
+import { authState } from "./state/userAtoms"; // Recoil 상태 가져오기
+
+function App() {
+  const [auth, setAuth] = useRecoilState(authState);
+
+  // 세션을 체크하는 함수 (API 호출)
   useEffect(() => {
     const checkSession = async () => {
       try {
@@ -34,168 +35,76 @@ function App() {
           "https://maketerbackend.fly.dev/api/v1/check-session",
           {
             method: "GET",
-            credentials: "include", // 세션 쿠키를 포함하여 요청
+            credentials: "include",
           }
         );
 
         const result = await response.json();
+
+        // 응답 확인
+        console.log("check-session API response:", result);
+
         if (result.isAuthenticated) {
-          setAuth((prevState) => ({
-            ...prevState,
+          setAuth({
             isAuthenticated: true,
-          }));
+            userId: result.user.id, // userId 추가
+            username: result.user.full_name,
+            email: result.user.email,
+          });
+          console.log("Updated authState with userId:", result.user.id);
         } else {
-          setAuth((prevState) => ({
-            ...prevState,
+          setAuth({
             isAuthenticated: false,
-          }));
+            userId: null,
+            username: "",
+            email: "",
+          });
+          console.log("User is not authenticated");
         }
       } catch (error) {
-        setAuth((prevState) => ({
-          ...prevState,
+        setAuth({
           isAuthenticated: false,
-        }));
+          userId: null,
+          username: "",
+          email: "",
+        });
+        console.error("Error checking session:", error);
       }
     };
 
-    checkSession(); // 새로고침 시 세션 확인
+    checkSession();
   }, [setAuth]);
 
   return (
     <BrowserRouter>
       <ToastContainer position="top-right" autoClose={5000} />
-      <Header isAuthenticated={isAuthenticated} setAuth={setAuth} />
+      <Header isAuthenticated={auth.isAuthenticated} setAuth={setAuth} />
       <Routes>
-        <Route path="/" element={<MainHN />} />
-        <Route path="/food" element={<FoodHN />} />
-        <Route path="/bicycle" element={<Bicycle />} />
-        <Route path="/service" element={<ServiceHN />} />
-        <Route path="/servicefoods" element={<ServiceFoodHN />} />
-        <Route path="/review" element={<FullReviewHN />} />
-        <Route path="/review/:id" element={<ReviewHN />} />
-        <Route path="/MainListPage" element={<CommunityListHN />} />
-        <Route path="/MainWritePage" element={<CommunityWriteHN />} />
-        <Route path="/category/:category" element={<CategoryReviewHN />} />
-        <Route path="/EditPage/:postId" element={<EditPageHN />} />
-        <Route path="/Post/:postId" element={<DetailPostPageHN />} />
-        <Route path="/mypage" element={<MypageHN />} />
+        <Route path="/" element={<Main />} />
+        <Route
+          path="/food"
+          element={
+            <>
+              <Home />
+              <KakaoMap />
+            </>
+          }
+        />
+        <Route path="/service" element={<ServicePage />} />
+        <Route path="/servicefoods" element={<ServiceFoods />} />
+        <Route path="/review" element={<MainReviewPages />} />
+        <Route path="/review/:id" element={<ReviewPage />} />
+        <Route path="/MainListPage" element={<MainListPage />} />
+        <Route path="/MainWritePage" element={<MainWritePage />} />
+        <Route path="/category/:category" element={<CategoryReviewPage />} />
+        <Route path="/EditPage/:postId" element={<EditPage />} />
+        <Route path="/Post/:postId" element={<DetailPost />} />
+        <Route path="/mypage" element={<Mypage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
-        <Route path="/favorites" element={<FavoritesPageHN />} />
-        <Route path="/ProfileEdit" element={<ProfileEditHN />} />
-        <Route path="/MyReviewList" element={<MyReviewListHN />} />
       </Routes>
-      <MobileOnlyWrapper>
-        <TopNav />
-      </MobileOnlyWrapper>
+      <TopNav />
     </BrowserRouter>
   );
 }
 
-const MainHN = () => (
-  <div>
-    <Main />
-  </div>
-);
-
-const ReviewHN = () => (
-  <div>
-    <ReviewPage />
-  </div>
-);
-
-const FullReviewHN = () => (
-  <div>
-    <MainReviewPages />
-  </div>
-);
-
-const FoodHN = () => {
-  return (
-    <div>
-      <Home />
-      <KakaoMap />
-    </div>
-  );
-};
-const Bicycle = () => {
-  return (
-    <div>
-      <Home />
-      <KakaoMap2 />
-    </div>
-  );
-};
-
-const ServiceHN = () => (
-  <div>
-    <ServicePage />
-  </div>
-);
-
-const ServiceFoodHN = () => (
-  <div>
-    <ServiceFoods />
-  </div>
-);
-
-const CommunityListHN = () => (
-  <div>
-    <MainListPage />
-  </div>
-);
-
-const CommunityWriteHN = () => (
-  <div>
-    <MainWritePage />
-  </div>
-);
-
-const CategoryReviewHN = () => (
-  <div>
-    <CategoryReviewPage />
-  </div>
-);
-
-const EditPageHN = () => (
-  <div>
-    <EditPage />
-  </div>
-);
-
-const DetailPostPageHN = () => (
-  <div>
-    <DetailPost />
-  </div>
-);
-
-const MypageHN = () => (
-  <div>
-    <Mypage />
-  </div>
-);
-const FavoritesPageHN = () => (
-  <div>
-    <FavoritesPage />
-  </div>
-);
-
-const ProfileEditHN = () => (
-  <div>
-    <ProfileEdit />
-  </div>
-);
-
-const MyReviewListHN = () => (
-  <div>
-    <MyReviewList />
-  </div>
-);
-
 export default App;
-const MobileOnlyWrapper = styled.div`
-  display: none;
-
-  @media (max-width: 768px) {
-    display: block;
-  }
-`;

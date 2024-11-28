@@ -1,12 +1,11 @@
-// App.js
-
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { ToastContainer } from "react-toastify";
-
+import styled from "styled-components";
 import Main from "./page/Main";
 import KakaoMap from "./page/Map/KaKaoMap";
+import KakaoMap2 from "../src/page/Map/KaKaoMap2";
 import Home from "./page/Map/Home";
 import Header from "./page/Header";
 import ServicePage from "./page/ServicePage";
@@ -81,15 +80,8 @@ function App() {
       <Header isAuthenticated={auth.isAuthenticated} setAuth={setAuth} />
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route
-          path="/food"
-          element={
-            <>
-              <Home />
-              <KakaoMap />
-            </>
-          }
-        />
+        <Route path="/food" element={<FoodHN />} />
+        <Route path="/bicycle" element={<Bicycle />} />
         <Route path="/service" element={<ServicePage />} />
         <Route path="/servicefoods" element={<ServiceFoods />} />
         <Route path="/review" element={<MainReviewPages />} />
@@ -102,9 +94,33 @@ function App() {
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
       </Routes>
-      <TopNav />
+      <MobileOnlyWrapper>
+        <TopNav />
+      </MobileOnlyWrapper>
     </BrowserRouter>
   );
 }
-
+const FoodHN = () => {
+  return (
+    <div>
+      <Home />
+      <KakaoMap />
+    </div>
+  );
+};
+const Bicycle = () => {
+  return (
+    <div>
+      <Home />
+      <KakaoMap2 />
+    </div>
+  );
+};
 export default App;
+const MobileOnlyWrapper = styled.div`
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;

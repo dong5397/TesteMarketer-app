@@ -122,14 +122,19 @@ function Mypage() {
   };
 
   const handleDelete = async (reviewId) => {
+    console.log("Attempting to delete review with ID:", reviewId); // 로그 추가
     if (!window.confirm("리뷰를 삭제하시겠습니까?")) return;
 
     try {
-      const response = await fetch(`/api/v1/reviews/${reviewId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
+      const response = await fetch(
+        `https://maketerbackend.fly.dev/api/v1/reviews/${reviewId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
       const data = await response.json();
+      console.log("Delete API Response:", data); // 응답 확인
 
       if (response.ok && data.resultCode === "S-1") {
         setReviews(reviews.filter((review) => review.review_id !== reviewId));
@@ -192,55 +197,59 @@ function Mypage() {
               <MdOutlineRateReview /> 리뷰
             </Tab>
           </TabContainer>
-          {selectedTab === "posts" ? (
-            <PostList>
-              {posts.length > 0 ? (
-                posts.map((post, index) => (
-                  <PostItem key={index}>
-                    <PostTitle>{post.title}</PostTitle>
-                    <PostContent>{post.content}</PostContent>
-                  </PostItem>
-                ))
-              ) : (
-                <Content>작성한 포스트가 없습니다.</Content>
-              )}
-            </PostList>
-          ) : (
-            <PostList>
-              {reviews.length > 0 ? (
-                reviews.map((review, index) => (
-                  <PostItem key={index}>
-                    <PostTitle>{review.restaurant_name}</PostTitle>
-                    <PostContent>{review.review_content}</PostContent>
-                    <PostContent>평점: {review.rating}/5</PostContent>
-                    <ReviewDate>{review.review_date || "날짜 없음"}</ReviewDate>
-                    {review.hashtags && (
-                      <HashtagList>
-                        {review.hashtags.map((tag, idx) => (
-                          <Hashtag key={idx}>#{tag}</Hashtag>
-                        ))}
-                      </HashtagList>
-                    )}
-                    <ReviewActions>
-                      <ActionButton
-                        onClick={() => handleEdit(review.review_id)}
-                      >
-                        <FaEdit /> 수정
-                      </ActionButton>
-                      <ActionButton
-                        danger
-                        onClick={() => handleDelete(review.review_id)}
-                      >
-                        <FaTrash /> 삭제
-                      </ActionButton>
-                    </ReviewActions>
-                  </PostItem>
-                ))
-              ) : (
-                <Content>작성한 리뷰가 없습니다.</Content>
-              )}
-            </PostList>
-          )}
+          <ScrollableList>
+            {selectedTab === "posts" ? (
+              <PostList>
+                {posts.length > 0 ? (
+                  posts.map((post, index) => (
+                    <PostItem key={index}>
+                      <PostTitle>{post.title}</PostTitle>
+                      <PostContent>{post.content}</PostContent>
+                    </PostItem>
+                  ))
+                ) : (
+                  <Content>작성한 포스트가 없습니다.</Content>
+                )}
+              </PostList>
+            ) : (
+              <PostList>
+                {reviews.length > 0 ? (
+                  reviews.map((review, index) => (
+                    <PostItem key={index}>
+                      <PostTitle>{review.restaurant_name}</PostTitle>
+                      <PostContent>{review.review_content}</PostContent>
+                      <PostContent>평점: {review.rating}/5</PostContent>
+                      <ReviewDate>
+                        {review.review_date || "날짜 없음"}
+                      </ReviewDate>
+                      {review.hashtags && (
+                        <HashtagList>
+                          {review.hashtags.map((tag, idx) => (
+                            <Hashtag key={idx}>#{tag}</Hashtag>
+                          ))}
+                        </HashtagList>
+                      )}
+                      <ReviewActions>
+                        <ActionButton
+                          onClick={() => handleEdit(review.review_id)}
+                        >
+                          <FaEdit /> 수정
+                        </ActionButton>
+                        <ActionButton
+                          danger
+                          onClick={() => handleDelete(review.review_id)}
+                        >
+                          <FaTrash /> 삭제
+                        </ActionButton>
+                      </ReviewActions>
+                    </PostItem>
+                  ))
+                ) : (
+                  <Content>작성한 리뷰가 없습니다.</Content>
+                )}
+              </PostList>
+            )}
+          </ScrollableList>
         </Container>
       </DeviceFrameset>
     </MainContainer>
@@ -266,7 +275,18 @@ const Container = styled.div`
   color: #fff;
   font-family: Arial, sans-serif;
 `;
-
+const ScrollableList = styled.div`
+  max-height: 500px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #aaa;
+    border-radius: 4px;
+  }
+`;
 const ProfileHeader = styled.div`
   display: flex;
   align-items: center;

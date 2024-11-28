@@ -72,15 +72,48 @@ function Mypage() {
           }
         } catch (error) {
           console.error("Error fetching reviews:", error.message);
-          alert(
-            "리뷰 데이터를 불러오는 데 문제가 발생했습니다. 다시 시도해주세요."
-          );
         } finally {
           setLoading(false);
         }
       };
 
       fetchReviews();
+    } else if (selectedTab === "posts") {
+      // 포스트 데이터 가져오기
+      const fetchPosts = async () => {
+        setLoading(true);
+        try {
+          const response = await fetch(
+            "https://maketerbackend.fly.dev/api/v1/user-posts",
+            {
+              method: "GET",
+              credentials: "include", // 세션 인증
+            }
+          );
+
+          if (!response.ok) {
+            const errorText = await response.text(); // 에러 응답 읽기
+            throw new Error(
+              `HTTP error! status: ${response.status}, body: ${errorText}`
+            );
+          }
+
+          const data = await response.json();
+
+          if (data.resultCode === "S-1" && Array.isArray(data.data)) {
+            setPosts(data.data || []); // 데이터 설정
+          } else {
+            console.error("API Error:", data.msg || "데이터 로드 실패");
+            setPosts([]);
+          }
+        } catch (error) {
+          console.error("Error fetching posts:", error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchPosts();
     }
   }, [selectedTab]);
 

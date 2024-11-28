@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FaCamera, FaTh, FaTrash, FaEdit } from "react-icons/fa";
+import { FcSurvey } from "react-icons/fc";
 import { MdOutlineRateReview } from "react-icons/md";
 import { DeviceFrameset } from "react-device-frameset";
 import { useRecoilState } from "recoil";
@@ -119,6 +120,9 @@ function Mypage() {
 
   const handleNicknameClick = () => {
     navigate("/ProfileEdit");
+  };
+  const navigateToSurvey = () => {
+    navigate(`/Service`);
   };
 
   const handleDelete = async (reviewId) => {
@@ -251,12 +255,38 @@ function Mypage() {
             )}
           </ScrollableList>
         </Container>
+        <FloatingButton onClick={navigateToSurvey}>
+          <FcSurvey />
+        </FloatingButton>
       </DeviceFrameset>
     </MainContainer>
   );
 }
 
 export default Mypage;
+const FloatingButton = styled.button`
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:active {
+    background-color: #ff6347;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+`;
 
 const MainContainer = styled.div`
   background-color: #e7e78b;

@@ -16,7 +16,6 @@ import ReviewPage from "./page/Review/ReviewPage";
 import MainReviewPages from "./page/Review/MainReviewPages";
 import EditPage from "./components/Community/EditPage";
 import DetailPost from "./components/Community/DetailPost";
-import ServiceFoods from "./components/ServiceFoods";
 import Mypage from "./components/User/Mypage";
 import ResetPasswordPage from "./components/User/ResetPassword";
 import TopNav from "./components/TopNav";
@@ -83,7 +82,6 @@ function App() {
         <Route path="/food" element={<FoodHN />} />
         <Route path="/bicycle" element={<Bicycle />} />
         <Route path="/service" element={<ServicePage />} />
-        <Route path="/servicefoods" element={<ServiceFoods />} />
         <Route path="/review" element={<MainReviewPages />} />
         <Route path="/review/:id" element={<ReviewPage />} />
         <Route path="/MainListPage" element={<MainListPage />} />

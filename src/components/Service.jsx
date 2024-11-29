@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { DeviceFrameset } from "react-device-frameset";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import {
   foodPreferencesState,
   filteredRestaurantsState,
@@ -13,7 +13,7 @@ const Service = ({ restaurantsData }) => {
   const [restaurants, setRestaurants] = useRecoilState(restaurantsState);
   const [foodPreferences, setFoodPreferences] =
     useRecoilState(foodPreferencesState);
-  const setFilteredRestaurants = useSetRecoilState(filteredRestaurantsState);
+  const [filteredRestaurants, setFilteredRestaurants] = useState([]); // 컴포넌트 내 상태로 관리
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const Service = ({ restaurantsData }) => {
           return response.json();
         })
         .then((data) => {
-          console.log("Fetched data: ", data.data); // 데이터 확인
+          console.log("Fetched data: ", data.data);
           setRestaurants(data.data);
         })
         .catch((error) => console.error("Error fetching data:", error));
@@ -43,12 +43,86 @@ const Service = ({ restaurantsData }) => {
     }));
   };
 
-  const handleSubmit = () => {
-    navigate(`/servicefoods`); // Recoil selector가 자동으로 필터링된 식당 목록을 제공합니다.
+  const handleSubmit = async () => {
+    // 설문조사 값 매핑
+    const preferenceMapping = {
+      Verygood: 5,
+      Good: 4,
+      Normal: 3,
+      Bad: 2,
+      Verybad: 1,
+    };
+
+    // foodPreferences의 값을 숫자로 변환
+    const numericPreferences = {
+      spicy: preferenceMapping[foodPreferences.spicy] || 0,
+      sweet: preferenceMapping[foodPreferences.sweet] || 0,
+      salty: preferenceMapping[foodPreferences.salty] || 0,
+      sour: preferenceMapping[foodPreferences.sour] || 0,
+      foodType: foodPreferences.foodType,
+    };
+
+    console.log("Numeric foodPreferences:", numericPreferences);
+
+    // 선호 데이터로 필터링된 식당 가져오기
+    const filteredRestaurants = restaurants.filter((restaurant) => {
+      const { spicy, sweet, sour, salty, foodType } = numericPreferences;
+
+      return (
+        spicy &&
+        sweet &&
+        sour &&
+        salty &&
+        Math.abs(restaurant.spicy - spicy) <= 2 && // 근사값 허용
+        Math.abs(restaurant.sweet - sweet) <= 2 &&
+        Math.abs(restaurant.sour - sour) <= 2 &&
+        Math.abs(restaurant.salty - salty) <= 2 &&
+        (!foodType || restaurant.food_type === foodType) // 음식 타입이 정확히 일치
+      );
+    });
+
+    console.log("Filtered restaurants:", filteredRestaurants);
+
+    if (filteredRestaurants.length === 0) {
+      console.error("No matching restaurants found.");
+      alert("선호 조건에 맞는 식당이 없습니다.");
+      return;
+    }
+
+    setFilteredRestaurants(filteredRestaurants);
+
+    const restaurantIds = filteredRestaurants.map(
+      (restaurant) => restaurant.restaurants_id
+    );
+
+    console.log("Restaurant IDs to save:", restaurantIds);
+
+    try {
+      const response = await fetch(
+        "https://maketerbackend.fly.dev/api/v1/restaurants/postlikes",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include", // 세션 인증 포함
+          body: JSON.stringify({ restaurantIds }),
+        }
+      );
+
+      if (response.ok) {
+        console.log("Favorite restaurants saved successfully");
+      } else {
+        const error = await response.json();
+        console.error("Failed to save favorite restaurants:", error.msg);
+      }
+    } catch (error) {
+      console.error("Error saving favorite restaurants:", error);
+    }
   };
+
   const handleGoBack = () => {
-    navigate(-1); // Go to the previous page
+    navigate(-1);
   };
+
   return (
     <Layout>
       <DeviceFrameset device="iPad Mini" height="100%">
@@ -189,7 +263,7 @@ const Service = ({ restaurantsData }) => {
                   Object.values(foodPreferences).filter(Boolean).length < 5
                 }
               >
-                검색하기
+                필터링하기
               </SubmitButton>
             </Buttons>
           </form>
@@ -201,14 +275,16 @@ const Service = ({ restaurantsData }) => {
 
 export default Service;
 
-// 필요한 스타일 컴포넌트를 추가합니다.
+// 스타일 컴포넌트는 동일
+
+// 스타일 컴포넌트 정의
 const Layout = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center; /* Center align the items vertically */
+  align-items: center;
   width: 100%;
   padding: 20px;
-  flex-direction: column; /* Ensure items are stacked vertically */
+  flex-direction: column;
 `;
 
 const Wrap = styled.div`

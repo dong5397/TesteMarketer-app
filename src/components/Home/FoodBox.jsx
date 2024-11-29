@@ -194,3 +194,9 @@ const RestaurantDetails = styled.div`
   z-index: 9999999;
   width: 300px;
 `;
+const LikeRestaurantDetails = styled.div`
+  border-color: #ccc;
+  position: fixed;
+  z-index: 9999999;
+  width: 300px;
+`;

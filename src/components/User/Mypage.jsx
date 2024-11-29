@@ -27,7 +27,7 @@ function Mypage() {
         );
         const data = await response.json();
         if (response.ok) {
-          setUsername(data.username || "익명 사용자");
+          setUsername(data.username);
           setPosts(data.posts || []);
         } else {
           console.error("API Error:", data.msg);

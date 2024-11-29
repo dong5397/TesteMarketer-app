@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import FoodForm from "./FoodForm";
 import SearchBar from "../../components/Home/SearchBar";
+import FavoriteRestaurants from "../../components/Home/FavoriteRestaurants";
 import { useRecoilState } from "recoil";
 import {
   isOpenState,
@@ -13,6 +14,7 @@ import FoodDetail from "../../components/Home/FoodDetail";
 const Home = () => {
   const [isOpen, setIsOpen] = useRecoilState(isOpenState);
   const [isSearchOpen, setIsSearchOpen] = useRecoilState(isSearchOpenState);
+  const [showFavorites, setShowFavorites] = useState(false);
   const selectedRestaurant = useRecoilState(selectedRestaurantState)[0];
 
   // Modal state
@@ -31,6 +33,7 @@ const Home = () => {
   const togglePanel = () => {
     setIsOpen(!isOpen);
     setIsSearchOpen(false);
+    setShowFavorites(false);
   };
 
   const toggleSearch = () => {
@@ -38,13 +41,16 @@ const Home = () => {
     if (!isSearchOpen && !isOpen) {
       setIsOpen(true);
     }
+    setShowFavorites(false);
   };
 
-  // Open modal function
-  const openModal = () => setShowModal(true);
-
-  // Close modal function
-  const closeModal = () => setShowModal(false);
+  const toggleFavorites = () => {
+    setShowFavorites(!showFavorites);
+    if (!showFavorites && !isOpen) {
+      setIsOpen(true);
+    }
+    setIsSearchOpen(false);
+  };
 
   return (
     <Container $isOpen={isOpen}>
@@ -63,11 +69,14 @@ const Home = () => {
           <SearchButton onClick={toggleSearch}>
             {isSearchOpen ? "닫기" : "검색"}
           </SearchButton>
-          {/* Additional buttons can be added here */}
+          <LikeButton onClick={toggleFavorites}>
+            {showFavorites ? "닫기" : "선호식당"}
+          </LikeButton>
         </>
       )}
 
       <Content>
+        <FavoritesHeader>인기 식당</FavoritesHeader>
         <FoodForm />
       </Content>
 
@@ -77,9 +86,14 @@ const Home = () => {
         </SearchContainer>
       )}
 
-      {selectedRestaurant && <FoodDetail />}
+      {showFavorites && (
+        <FavoritesContainer>
+          <FavoritesHeader>선호 식당</FavoritesHeader>
+          <FavoriteRestaurants />
+        </FavoritesContainer>
+      )}
 
-      {/* DirectionsFinder Modal placeholder */}
+      {selectedRestaurant && <FoodDetail />}
     </Container>
   );
 };
@@ -88,7 +102,7 @@ export default Home;
 
 // Styled Components
 const Container = styled.div`
-  width: ${(props) => (props.$isOpen ? "400px" : "50px")};
+  width: ${(props) => (props.$isOpen ? "450px" : "50px")};
   height: 100%;
   position: fixed;
   top: 15%;
@@ -133,7 +147,20 @@ const ToggleButton = styled.button`
 
 const SearchButton = styled.button`
   position: absolute;
-  top: 50px;
+  top: 80px;
+  left: 10px;
+  background-color: #041c11;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid black;
+`;
+
+const LikeButton = styled.button`
+  position: absolute;
+  top: 130px;
   left: 10px;
   background-color: #041c11;
   color: white;
@@ -146,10 +173,38 @@ const SearchButton = styled.button`
 
 const Content = styled.div`
   padding: 10px;
+  padding-left: 50px;
 `;
 
 const SearchContainer = styled.div`
   position: absolute;
   top: 10px;
   left: 50px;
+`;
+
+const FavoritesContainer = styled.div`
+  position: absolute;
+  top: 170px;
+
+  width: calc(100% - 20px);
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  overflow-y: auto;
+  max-height: 700px;
+`;
+const FavoritesHeader = styled.h1`
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  border-bottom: 2px solid #ccc;
+  font-family: "Arial", sans-serif;
+  background-color: #e7e986;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;

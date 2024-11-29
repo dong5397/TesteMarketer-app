@@ -1,19 +1,100 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FaArrowLeft } from "react-icons/fa";
 import { DeviceFrameset } from "react-device-frameset";
 
 function ProfileEdit() {
-  const [name, setName] = useState("나지민");
-  const [username, setUsername] = useState("jimin2570");
-  const [bio, setBio] = useState("");
-  const [gender, setGender] = useState("밝히고 싶지 않음");
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [loading, setLoading] = useState(true); // 로딩 상태 추가
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // 프로필 초기 데이터 가져오기
+    const fetchProfile = async () => {
+      try {
+        const response = await fetch(
+          "https://maketerbackend.fly.dev/api/v1/getprofile",
+          { credentials: "include" }
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch profile data");
+        }
+        const data = await response.json();
+        if (data.resultCode === "S-1") {
+          const { full_name, username, email, phone_number } = data.data;
+          setName(full_name || "");
+          setUsername(username || "");
+          setEmail(email || "");
+          setPhoneNumber(phone_number || "");
+        } else {
+          console.error("Failed to fetch profile:", data.msg);
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error.message);
+      } finally {
+        setLoading(false); // 로딩 상태 해제
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  const handleSave = async () => {
+    try {
+      const requestBody = {
+        full_name: name,
+        email,
+        phone_number: phoneNumber,
+      };
+
+      console.log("Updating profile with data:", requestBody); // 요청 데이터 로그
+
+      const response = await fetch(
+        "https://maketerbackend.fly.dev/api/v1/updateprofile",
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(requestBody),
+        }
+      );
+
+      console.log("Response status:", response.status); // 응답 상태 로그
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error response from server:", errorData);
+        throw new Error("Failed to update profile");
+      }
+
+      const data = await response.json();
+      if (data.resultCode === "S-1") {
+        alert("프로필이 성공적으로 업데이트되었습니다!");
+        navigate(-1); // 이전 페이지로 이동
+      } else {
+        console.error("Failed to update profile:", data.msg);
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error.message);
+    }
+  };
 
   const handleGoBack = () => {
     navigate(-1); // 이전 페이지로 이동
   };
+
+  if (loading) {
+    // 로딩 중일 때 표시
+    return (
+      <MainContainer>
+        <p>로딩 중...</p>
+      </MainContainer>
+    );
+  }
 
   return (
     <MainContainer>
@@ -42,22 +123,25 @@ function ProfileEdit() {
             <Input
               type="text"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              disabled
+              style={{ backgroundColor: "#ddd", cursor: "not-allowed" }}
             />
 
-            <InputLabel>소개</InputLabel>
-            <TextArea
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
-              placeholder="한줄 소개를 해보세요"
+            <InputLabel>이메일</InputLabel>
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
 
-            <InputLabel>성별</InputLabel>
-            <Select value={gender} onChange={(e) => setGender(e.target.value)}>
-              <option value="밝히고 싶지 않음">밝히고 싶지 않음</option>
-              <option value="남성">남성</option>
-              <option value="여성">여성</option>
-            </Select>
+            <InputLabel>전화번호</InputLabel>
+            <Input
+              type="tel"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+
+            <SaveButton onClick={handleSave}>저장</SaveButton>
           </Form>
         </DeviceFrameset>
       </Container>
@@ -73,14 +157,14 @@ const MainContainer = styled.div`
   justify-content: center;
   padding: 20px;
   height: 100vh;
-  overflow: hidden; /* DeviceFrameset이 영역을 벗어나지 않도록 제한 */
+  overflow: hidden;
 `;
 
 const Container = styled.div`
   max-width: 600px;
   width: 100%;
   padding: 20px;
-  color: #fff;
+  color: #333;
   font-family: Arial, sans-serif;
 `;
 
@@ -88,7 +172,7 @@ const BackButton = styled.button`
   background: none;
   border: none;
   color: black;
-  font-size: 1.8rem; /* 더 크게 보이도록 설정 */
+  font-size: 1.8rem;
   cursor: pointer;
 `;
 
@@ -135,25 +219,19 @@ const Input = styled.input`
   margin-bottom: 15px;
   border: 1px solid #333;
   border-radius: 5px;
-  background-color: #1c1c1c;
-  color: #fff;
 `;
 
-const TextArea = styled.textarea`
+const SaveButton = styled.button`
   width: 100%;
-  margin-bottom: 15px;
-  border: 1px solid #333;
+  padding: 12px;
+  background-color: #67ab49;
+  color: white;
+  border: none;
   border-radius: 5px;
-  background-color: #1c1c1c;
-  color: #fff;
-`;
+  font-size: 1rem;
+  cursor: pointer;
 
-const Select = styled.select`
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #333;
-  border-radius: 5px;
-  background-color: #1c1c1c;
-  color: #fff;
+  &:hover {
+    background-color: #4e8a37;
+  }
 `;

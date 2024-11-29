@@ -43,6 +43,7 @@ const Header = () => {
           userId: null,
           username: "",
           email: "",
+          full_name: "",
         });
         logoutSuccessfully(); // 로그아웃 성공 메시지
       } else {
@@ -83,7 +84,7 @@ const Header = () => {
         <NavLink to="/food">식당보기</NavLink>
         <NavLink to="/review">맛집 탐색</NavLink>
         <NavLink to="/MainListPage">커뮤니티</NavLink>
-        <NavLink to="/service">맛 설정 모드</NavLink>
+
         <ProfileContainer>
           <ProfileImage onClick={handleProfileClick}>
             {isAuthenticated.isAuthenticated ? (
@@ -103,7 +104,7 @@ const Header = () => {
                     <FontAwesomeIcon icon={faUserCircle} size="2x" />
                   </ProfileImageCircle>
                   <UserInfo>
-                    <UserName>{isAuthenticated.username}</UserName>
+                    <UserName>{isAuthenticated.full_name}</UserName>
                     <UserEmail>{isAuthenticated.email}</UserEmail>
                   </UserInfo>
                 </DropdownHeader>

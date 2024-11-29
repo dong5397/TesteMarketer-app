@@ -235,11 +235,6 @@ function Mypage() {
                       )}
                       <ReviewActions>
                         <ActionButton
-                          onClick={() => handleEdit(review.review_id)}
-                        >
-                          <FaEdit /> 수정
-                        </ActionButton>
-                        <ActionButton
                           danger
                           onClick={() => handleDelete(review.review_id)}
                         >

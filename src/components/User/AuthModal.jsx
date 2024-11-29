@@ -271,6 +271,7 @@ function AuthModal({ show, onClose }) {
             userId: parseRes.data.userId, // 서버에서 받은 userId 저장
             username: parseRes.data.username,
             email: parseRes.data.email,
+            full_name: data.fullName,
           });
           toast.success("로그인 성공!");
 

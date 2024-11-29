@@ -19,7 +19,7 @@ import DetailPost from "./components/Community/DetailPost";
 import Mypage from "./components/User/Mypage";
 import ResetPasswordPage from "./components/User/ResetPassword";
 import TopNav from "./components/TopNav";
-
+import ProfileEdit from "./components/User/ProfileEdit";
 import { authState } from "./state/userAtoms"; // Recoil 상태 가져오기
 
 function App() {
@@ -48,6 +48,7 @@ function App() {
             userId: result.user.id, // userId 추가
             username: result.user.full_name,
             email: result.user.email,
+            full_name: result.user.full_name,
           });
           console.log("Updated authState with userId:", result.user.id);
         } else {
@@ -56,6 +57,7 @@ function App() {
             userId: null,
             username: "",
             email: "",
+            full_name: result.user.full_name,
           });
           console.log("User is not authenticated");
         }
@@ -65,6 +67,7 @@ function App() {
           userId: null,
           username: "",
           email: "",
+          full_name: result.user.full_name,
         });
         console.error("Error checking session:", error);
       }
@@ -90,6 +93,7 @@ function App() {
         <Route path="/EditPage/:postId" element={<EditPage />} />
         <Route path="/Post/:postId" element={<DetailPost />} />
         <Route path="/mypage" element={<Mypage />} />
+        <Route path="/ProfileEdit" element={<ProfileEdit />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
       </Routes>
       <MobileOnlyWrapper>

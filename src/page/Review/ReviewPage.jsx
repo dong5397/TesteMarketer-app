@@ -217,7 +217,7 @@ function ReviewPage() {
 export default ReviewPage;
 
 const ReveiwP = styled.div`
-  background: linear-gradient(#f0f0c3, #e7e7c9);
+  background: linear-gradient(#e7e78b, #f0f0c3); /
 `;
 
 const Container = styled.div`
@@ -237,7 +237,7 @@ const HeaderContainer = styled.header`
   justify-content: space-between;
   align-items: center;
   position: sticky;
-  background: linear-gradient(#e7e78b, #f0f0c3);
+  background: linear-gradient(#e7e78b, #e7e78b);
 `;
 
 const ReviewContainer = styled.main`

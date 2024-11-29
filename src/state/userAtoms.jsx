@@ -19,5 +19,6 @@ export const authState = atom({
     userId: null,
     username: "",
     email: "",
+    full_name: "",
   },
 });

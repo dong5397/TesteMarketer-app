@@ -14,14 +14,15 @@ import {
   profileModalState,
   authState,
 } from "../state/userAtoms.jsx"; // Recoil atom 불러오기
+import img1 from "../.././public/images/Users/archive.png";
+import img2 from "../.././public/images/Users/logout.png";
 
 const Header = () => {
-  const [showLoginModal, setShowLoginModal] = useRecoilState(loginModalState); // Recoil 상태 사용
+  const [showLoginModal, setShowLoginModal] = useRecoilState(loginModalState);
   const [showProfileModal, setShowProfileModal] =
     useRecoilState(profileModalState);
   const [isAuthenticated, setAuth] = useRecoilState(authState);
-
-  const [showDropdown, setShowDropdown] = useState(false); // 상태를 Recoil로 옮기지 않아도 됨
+  const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
 
   const logoutSuccessfully = () => toast("로그아웃 성공!");
@@ -120,19 +121,11 @@ const Header = () => {
                 {isAuthenticated.isAuthenticated ? (
                   <>
                     <DropdownItem onClick={() => handleMypageClick()}>
-                      <img
-                        src="public/images/Users/archive.png"
-                        alt="My page"
-                      />{" "}
-                      My page
+                      <img src={img1} alt="My page" /> My page
                     </DropdownItem>
 
                     <DropdownItem onClick={logout}>
-                      <img
-                        src="public/images/Users/logout.png"
-                        alt="로그아웃"
-                      />{" "}
-                      로그아웃
+                      <img src={img2} /> 로그아웃
                     </DropdownItem>
                   </>
                 ) : (

@@ -99,7 +99,12 @@ function ProfileEdit() {
   return (
     <MainContainer>
       <Container>
-        <DeviceFrameset device="iPad Mini">
+        <DeviceFrameset
+          device="iPad Mini"
+          color="black"
+          width="90%"
+          height="80%"
+        >
           <BackButton onClick={handleGoBack}>
             <FaArrowLeft />
           </BackButton>
@@ -158,6 +163,11 @@ const MainContainer = styled.div`
   padding: 20px;
   height: 100vh;
   overflow: hidden;
+
+  @media screen and (max-width: 768px) {
+    padding: 10px;
+    height: auto;
+  }
 `;
 
 const Container = styled.div`
@@ -166,6 +176,11 @@ const Container = styled.div`
   padding: 20px;
   color: #333;
   font-family: Arial, sans-serif;
+
+  @media screen and (max-width: 768px) {
+    padding: 15px;
+    max-width: 100%;
+  }
 `;
 
 const BackButton = styled.button`
@@ -174,11 +189,19 @@ const BackButton = styled.button`
   color: black;
   font-size: 1.8rem;
   cursor: pointer;
+
+  @media screen and (max-width: 768px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const ProfileSection = styled.div`
   text-align: center;
   margin: 20px 0;
+
+  @media screen and (max-width: 768px) {
+    margin: 10px 0;
+  }
 `;
 
 const ProfileImages = styled.div`
@@ -192,6 +215,11 @@ const Avatar = styled.img`
   height: 100px;
   border-radius: 50%;
   border: 2px solid #ddd;
+
+  @media screen and (max-width: 768px) {
+    width: 80px;
+    height: 80px;
+  }
 `;
 
 const AvatarButton = styled.button`
@@ -200,10 +228,18 @@ const AvatarButton = styled.button`
   border: none;
   color: #1e90ff;
   cursor: pointer;
+
+  @media screen and (max-width: 768px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const Form = styled.div`
   margin-top: 20px;
+
+  @media screen and (max-width: 768px) {
+    margin-top: 15px;
+  }
 `;
 
 const InputLabel = styled.label`
@@ -211,6 +247,10 @@ const InputLabel = styled.label`
   font-size: 0.9rem;
   margin-bottom: 5px;
   color: black;
+
+  @media screen and (max-width: 768px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const Input = styled.input`
@@ -219,6 +259,11 @@ const Input = styled.input`
   margin-bottom: 15px;
   border: 1px solid #333;
   border-radius: 5px;
+
+  @media screen and (max-width: 768px) {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
 `;
 
 const SaveButton = styled.button`
@@ -233,5 +278,10 @@ const SaveButton = styled.button`
 
   &:hover {
     background-color: #4e8a37;
+  }
+
+  @media screen and (max-width: 768px) {
+    padding: 10px;
+    font-size: 0.9rem;
   }
 `;

@@ -99,7 +99,7 @@ const Service = ({ restaurantsData }) => {
 
     try {
       const response = await fetch(
-        "https://maketerbackend.fly.dev/api/v1/restaurants/postlikes",
+        "https://maketerbackend.fly.dev/api/v1/restaurants/likes",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

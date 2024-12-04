@@ -26,11 +26,8 @@ const TopNav = () => {
           <FontAwesomeIcon icon={faPen} />
           <span>리뷰작성</span>
         </NavItem>
-        <NavItem to="/service">
-          <FontAwesomeIcon icon={faCog} />
-          <span>설문조사</span>
-        </NavItem>
-        <NavItem to="/profile">
+
+        <NavItem to="/mypage">
           <FontAwesomeIcon icon={faUser} />
           <span>프로필</span>
         </NavItem>

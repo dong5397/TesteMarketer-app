@@ -103,7 +103,7 @@ function EditPage() {
         <DeviceFrameset
           device="iPad Mini"
           color="black"
-          width="100%"
+          width="90%"
           height="80%"
         >
           <StyledContainer>

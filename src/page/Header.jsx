@@ -66,10 +66,6 @@ const Header = () => {
     setShowDropdown((prev) => !prev); // 상태 유지
   };
 
-  const closeProfileModal = () => {
-    setShowProfileModal(false); // Recoil 상태 업데이트
-  };
-
   const handleMypageClick = () => {
     navigate("/mypage");
   };
@@ -130,13 +126,6 @@ const Header = () => {
                       />{" "}
                       My page
                     </DropdownItem>
-                    <DropdownItem onClick={() => setShowProfileModal(true)}>
-                      <img
-                        src="public/images/Users/setting.png"
-                        alt="계정 설정"
-                      />{" "}
-                      계정 설정
-                    </DropdownItem>
 
                     <DropdownItem onClick={logout}>
                       <img
@@ -186,6 +175,10 @@ const HeaderContainer = styled.div`
   align-items: center;
   padding: 10px;
   background: linear-gradient(#b6b654, #e7e78b);
+  @media screen and (max-width: 768px) {
+    align-items: flex-start;
+    padding: 10px 15px;
+  }
 `;
 
 const LogoContainer = styled(Link)`
@@ -232,6 +225,10 @@ const ProfileImage = styled.div`
     height: 100%;
     border-radius: 50%;
   }
+  @media screen and (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+  }
 `;
 
 const PlaceholderCircle = styled.div`
@@ -261,6 +258,12 @@ const DropdownMenu = styled.div`
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   padding: 15px;
+  @media screen and (max-width: 768px) {
+    top: 50px;
+    right: 10px;
+    width: 200px;
+    padding: 10px;
+  }
 `;
 
 // Header section for authenticated user
@@ -269,6 +272,9 @@ const DropdownHeader = styled.div`
   align-items: center;
   padding-bottom: 15px;
   border-bottom: 1px solid #eee;
+  @media screen and (max-width: 768px) {
+    padding-bottom: 8px;
+  }
 `;
 
 const ProfileImageCircle = styled.div`
@@ -285,6 +291,10 @@ const ProfileImageCircle = styled.div`
     width: 100%;
     height: 100%;
   }
+  @media screen and (max-width: 768px) {
+    width: 35px;
+    height: 35px;
+  }
 `;
 
 const UserInfo = styled.div`
@@ -296,11 +306,17 @@ const UserInfo = styled.div`
 const UserName = styled.div`
   font-size: 18px;
   font-weight: bold;
+  @media screen and (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 const UserEmail = styled.div`
   font-size: 14px;
   color: #666;
+  @media screen and (max-width: 768px) {
+    font-size: 11px;
+  }
 `;
 
 const DropdownItems = styled.div`
@@ -325,6 +341,10 @@ const DropdownItem = styled.div`
 
   &:hover {
     background-color: #f0f0f0;
+  }
+  @media screen and (max-width: 768px) {
+    font-size: 14px;
+    padding: 8px;
   }
 `;
 
@@ -353,5 +373,9 @@ const LoginButton = styled.button`
 
   &:hover {
     background-color: #d6d670;
+  }
+  @media screen and (max-width: 768px) {
+    font-size: 14px;
+    padding: 6px 10px;
   }
 `;

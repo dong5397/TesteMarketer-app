@@ -107,7 +107,7 @@ const Container = styled.div`
     overflow-x: auto; /* Enables horizontal scrolling */
     overflow-y: hidden; /* Prevents vertical scrolling */
     white-space: nowrap; /* Keeps children in a single line */
-    margin-left: calc(10% + 20px);
+    margin-left: calc(10%);
     max-height: calc(40vh - 40px);
   }
 `;
@@ -122,9 +122,8 @@ const BaseBox = styled.div`
 
   @media screen and (max-width: 481px) {
     width: 80%;
-    height: 150px;
+    height: 200px;
     flex: 0 0 auto; /* Prevents shrinking and keeps the box in its width */
-    margin-right: 20px; /* Adds spacing between boxes */
   }
 `;
 

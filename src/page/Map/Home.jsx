@@ -116,7 +116,7 @@ const Container = styled.div`
 
   @media screen and (max-width: 481px) {
     width: 100%;
-    height: ${(props) => (props.$isOpen ? "170px" : "50px")};
+    height: ${(props) => (props.$isOpen ? "300px" : "50px")};
     top: auto;
     bottom: 60px;
     left: 0;
@@ -194,7 +194,17 @@ const FavoritesContainer = styled.div`
   padding: 10px;
   overflow-y: auto;
   max-height: 700px;
+  @media screen and (max-width: 481px) {
+    top: 60px; /* 더 작은 화면에서 위치 조정 */
+    width: calc(100% - 50px); /* 더 작게 간격 설정 */
+    left: 60px;
+    padding: 0;
+    padding-right: 50px;
+    border-radius: 6px; /* 둥근 정도 줄임 */
+    height: 700px;
+  }
 `;
+
 const FavoritesHeader = styled.h1`
   font-size: 24px;
   font-weight: bold;
@@ -207,4 +217,10 @@ const FavoritesHeader = styled.h1`
   background-color: #e7e986;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  @media screen and (max-width: 481px) {
+    font-size: 18px; /* 더 작은 화면에서는 폰트 크기 줄임 */
+    padding: 6px 12px; /* 패딩 더 줄임 */
+    margin-bottom: 10px; /* 여백 더 줄임 */
+    border-radius: 4px; /* 둥근 정도 더 줄임 */
+  }
 `;

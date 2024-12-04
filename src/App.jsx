@@ -57,17 +57,18 @@ function App() {
             userId: null,
             username: "",
             email: "",
-            full_name: result.user.full_name,
+            full_name: "", // 수정: 인증되지 않은 경우 기본값으로 설정
           });
           console.log("User is not authenticated");
         }
       } catch (error) {
+        // 에러 발생 시 상태 초기화
         setAuth({
           isAuthenticated: false,
           userId: null,
           username: "",
           email: "",
-          full_name: result.user.full_name,
+          full_name: "", // 수정: result가 없는 경우 기본값 사용
         });
         console.error("Error checking session:", error);
       }

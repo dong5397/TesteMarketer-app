@@ -63,39 +63,60 @@ const KakaoMap2 = ({ setMapMoveFunction }) => {
 
   const loadTashuData = async () => {
     try {
-      const response = await axios.get("/tashu/v1/openapi/station", {
-        headers: {
-          "api-token": "8n4rwq2fa62l2m90",
-        },
-      });
-      const { results } = response.data;
+      // 백엔드의 엔드포인트로 요청을 보냅니다.
+      const response = await axios.get(
+        "https://maketerbackend.fly.dev/api/tashu"
+      );
 
-      results.forEach((station) => {
-        const { x_pos, y_pos, name, parking_count } = station;
-        const position = new kakao.maps.LatLng(x_pos, y_pos);
+      console.log("API 응답 데이터:", response.data);
 
-        const marker = new kakao.maps.Marker({
-          position,
-          map: mapInstance.current,
+      const data = response.data.data;
+
+      // data와 data.results가 정의되어 있는지 확인
+      if (data && data.results && Array.isArray(data.results)) {
+        data.results.forEach((station) => {
+          const { x_pos, y_pos, name, parking_count } = station;
+
+          // 좌표를 숫자로 변환
+          const x = parseFloat(x_pos);
+          const y = parseFloat(y_pos);
+
+          // 좌표가 유효한지 확인
+          if (isNaN(x) || isNaN(y)) {
+            console.error("유효하지 않은 좌표입니다:", station);
+            return;
+          }
+
+          // Kakao Maps에서 LatLng 생성 (위도, 경도 순서)
+          const position = new kakao.maps.LatLng(x, y);
+
+          const marker = new kakao.maps.Marker({
+            position,
+            map: mapInstance.current,
+          });
+
+          const infoWindowContent = `
+            <div style="padding: 10px; background-color: white; border: 2px solid #041c11; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);">
+              <strong style="font-size: 14px; color: #333;">${name}</strong><br>
+              <span style="font-size: 12px; color: #777;">대여 가능 자전거 수: ${parking_count}</span>
+            </div>`;
+
+          const infoWindow = new kakao.maps.InfoWindow({
+            content: infoWindowContent,
+          });
+
+          kakao.maps.event.addListener(marker, "mouseover", () =>
+            infoWindow.open(mapInstance.current, marker)
+          );
+          kakao.maps.event.addListener(marker, "mouseout", () =>
+            infoWindow.close()
+          );
         });
-
-        const infoWindowContent = `
-  <div style="padding: 10px; background-color: white; border: 2px solid #041c11; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);">
-    <strong style="font-size: 14px; color: #333;">${name}</strong><br>
-    <span style="font-size: 12px; color: #777;">대여 가능 자전거 수: ${parking_count}</span>
-  </div>`;
-
-        const infoWindow = new kakao.maps.InfoWindow({
-          content: infoWindowContent,
-        });
-
-        kakao.maps.event.addListener(marker, "mouseover", () =>
-          infoWindow.open(mapInstance.current, marker)
+      } else {
+        console.error(
+          "데이터 구조가 예상과 다릅니다. data 또는 data.results가 존재하지 않습니다."
         );
-        kakao.maps.event.addListener(marker, "mouseout", () =>
-          infoWindow.close()
-        );
-      });
+      }
     } catch (error) {
       console.error("Failed to fetch Tashu station data:", error);
     }

@@ -486,6 +486,14 @@ const Title = styled.h2`
   color: black;
   margin-top: 0.5rem;
   letter-spacing: 2px;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.8rem;
+  }
 `;
 const InputWrapper = styled.div`
   position: relative;
@@ -508,6 +516,30 @@ const InputWrapper = styled.div`
     top: 15px;
     color: #333;
     font-size: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    input {
+      padding: 0.4rem 0.4rem 0.4rem 2rem;
+      font-size: 1.2rem;
+    }
+
+    svg {
+      font-size: 0.9rem;
+      top: 12px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    input {
+      padding: 0.3rem 0.3rem 0.3rem 1.5rem;
+      font-size: 1rem;
+    }
+
+    svg {
+      font-size: 0.8rem;
+      top: 10px;
+    }
   }
 `;
 
@@ -543,7 +575,6 @@ const ModalOverlay = styled.div`
 const ModalContainer = styled.div`
   max-width: 468px;
   width: 100%;
-
   padding: 2rem;
   border: 0px;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
@@ -586,6 +617,30 @@ const ModalContainer = styled.div`
       }
     }
   }
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    form {
+      gap: 0.75rem;
+
+      button {
+        padding: 0.4rem 0.4rem;
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+    form {
+      gap: 0.5rem;
+
+      button {
+        padding: 0.3rem 0.3rem;
+        font-size: 1rem;
+      }
+    }
+  }
 `;
 
 const FormButton = styled.button`
@@ -610,6 +665,16 @@ const FormButton = styled.button`
     cursor: not-allowed; /* 커서 기본으로 변경 */
     pointer-events: none; /* 클릭 불가 */
   }
+
+  @media (max-width: 768px) {
+    padding: 0.4rem 0.4rem;
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.3rem 0.3rem;
+    font-size: 1rem;
+  }
 `;
 
 const CloseButton = styled.span`
@@ -630,9 +695,20 @@ const ErrorMessage = styled.div`
   border-radius: 5px;
   margin-top: 0.5rem;
   font-family: "GowunDodum-Regular", sans-serif;
+
   svg {
     margin-right: 0.5rem;
     font-size: 1rem;
     color: #d8000c;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
   }
 `;

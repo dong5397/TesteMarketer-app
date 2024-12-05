@@ -198,10 +198,9 @@ const FavoritesContainer = styled.div`
   max-height: 700px;
   @media screen and (max-width: 481px) {
     top: 60px; /* 더 작은 화면에서 위치 조정 */
-    width: calc(100% - 50px); /* 더 작게 간격 설정 */
-    left: 60px;
+    width: calc(100% - 70px); /* 더 작게 간격 설정 */
+    left: 70px;
     padding: 0;
-    padding-right: 50px;
     border-radius: 6px; /* 둥근 정도 줄임 */
     height: 700px;
   }

@@ -112,6 +112,7 @@ const ButtonContainer = styled.div`
     justify-content: center;
     width: 100%; /* 가로 전체 */
     height: auto;
+    align-items: stretch; /* 버튼 크기를 동일하게 맞춤 */
   }
 `;
 

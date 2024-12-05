@@ -379,8 +379,8 @@ const UpdateLocationButton = styled.img`
   position: absolute;
   top: 8%;
   right: 12%;
-  width: 50px; /* 이미지 크기 */
-  height: 50px;
+  width: 30px; /* 이미지 크기 */
+  height: 30px;
   border-radius: 50%; /* 동그란 버튼 모양 */
   cursor: pointer;
   z-index: 999;
@@ -400,10 +400,10 @@ const UpdateLocationButton = styled.img`
 
 const BicycleLocationButton = styled.img`
   position: absolute;
-  top: 17%;
+  top: 15%;
   right: 12%;
-  width: 50px; /* 이미지 크기 */
-  height: 50px;
+  width: 30px; /* 이미지 크기 */
+  height: 30px;
 
   cursor: pointer;
   z-index: 999;

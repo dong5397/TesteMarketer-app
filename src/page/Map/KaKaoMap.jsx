@@ -62,7 +62,7 @@ const KakaoMap = () => {
 
     const mapOption = {
       center: new window.kakao.maps.LatLng(36.328468, 127.424753),
-      level: 8,
+      level: 6,
     };
 
     mapInstance.current = new window.kakao.maps.Map(
@@ -77,7 +77,7 @@ const KakaoMap = () => {
   const moveMapToLocation = (latitude, longitude) => {
     const position = new window.kakao.maps.LatLng(latitude, longitude);
     mapInstance.current.setCenter(position);
-    mapInstance.current.setLevel(8);
+    mapInstance.current.setLevel(4);
   };
 
   const addCurrentLocationMarker = (latitude, longitude) => {
@@ -156,7 +156,7 @@ const KakaoMap = () => {
           parseFloat(restaurant.longitude)
         );
         mapInstance.current.setCenter(position);
-        mapInstance.current.setLevel(8);
+        mapInstance.current.setLevel(7);
 
         setSelectedRestaurant(restaurant); // 식당 선택
         setIsFromMapClick(true);

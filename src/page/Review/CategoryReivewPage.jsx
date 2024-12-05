@@ -113,35 +113,8 @@ function CategoryReviewPage() {
                     pressed={isPressed ? "true" : undefined}
                   />
                 </BackButton>
-
-                <FilterContainer>
-                  <FilterButton onClick={() => handleFilterChange("default")}>
-                    기본 순
-                  </FilterButton>
-                  <FilterButton onClick={() => handleFilterChange("rating")}>
-                    별점 높은 순
-                  </FilterButton>
-                  <FilterButton
-                    onClick={() => handleFilterChange("reviewCount")}
-                  >
-                    리뷰 많은 순
-                  </FilterButton>
-                  <FilterButton onClick={() => handleFilterChange("viewCount")}>
-                    찜 많은 순
-                  </FilterButton>
-                </FilterContainer>
               </Header>
-              <TagsContainer>
-                {currentItems.map((restaurant, index) => (
-                  <div key={index}>
-                    {restaurant.menus &&
-                      restaurant.menus.length > 0 &&
-                      restaurant.menus.map((menu, menuIndex) => (
-                        <TagButton key={menuIndex}>{menu}</TagButton>
-                      ))}
-                  </div>
-                ))}
-              </TagsContainer>
+
               <ReviewCardWrapper>
                 <ReviewCardContainer>
                   {currentItems.map((restaurant, index) => (
@@ -255,70 +228,27 @@ const Header = styled.div`
 
 const BackButton = styled(Link)`
   position: absolute;
-  left: 20px;
-  padding: 5px;
+  left: 10%;
+  top: 15%;
+  width: 50px;
+  height: 50px;
+  padding: 15px;
   background-color: #e9e5a9;
   border-radius: 5px;
   color: #000;
   text-decoration: none;
   transition: background-color 0.3s;
+  z-index: 3;
   @media screen and (max-width: 480px) {
     left: 5px;
-    padding: 1px;
+    width: 30px;
+    height: 30px;
+    padding: 5px;
   }
 
   &:hover {
     background-color: #d4d19a;
   }
-`;
-
-const FilterContainer = styled.div`
-  display: flex;
-  gap: 10px;
-  @media screen and (max-width: 480px) {
-    padding-left: 25px;
-  }
-`;
-
-const FilterButton = styled.button`
-  padding: 5px 10px;
-  font-size: 14px;
-  font-weight: bold;
-  background-color: #e9e5a9;
-  border: none;
-  border-radius: 5px;
-  color: #000;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  @media screen and (max-width: 480px) {
-  }
-
-  &:hover {
-    background-color: #d4d19a;
-  }
-
-  &:focus {
-    outline: none;
-    background-color: #d4d19a;
-  }
-
-  @media screen and (max-width: 480px) {
-    padding: 2px 6px; /* Reduce padding for smaller screens */
-    font-size: 10px; /* Reduce font size for smaller screens */
-  }
-`;
-
-const TagsContainer = styled.div`
-  max-width: 100%;
-  padding: 15px;
-  height: auto;
-  margin: 20px auto;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const GreenContainer = styled.div`

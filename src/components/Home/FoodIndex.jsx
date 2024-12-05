@@ -62,11 +62,15 @@ const Card = styled.div`
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 
   @media screen and (max-width: 481px) {
+    position: absolute;
+    bottom: 0; /* 화면 하단에 배치 */
+    left: 50%; /* 가운데 정렬을 위해 설정 */
+    transform: translateX(-50%); /* 가운데 정렬 */
     width: 90%; /* 모바일에서 전체 너비의 90%로 설정 */
     max-width: 300px; /* 최대 너비 제한 */
-    height: auto;
+    height: auto; /* 높이 자동 */
     padding: 10px; /* 패딩 축소 */
-    margin: 10px auto; /* 가운데 정렬을 위해 margin 설정 */
+    margin: 10px 0; /* 상단과 하단 여백 설정 */
   }
 `;
 

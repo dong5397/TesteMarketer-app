@@ -610,7 +610,7 @@ const Main1 = () => {
                     />
                   </Inner>
                   <Link className="link link-01" href="/review">
-                    리뷰 보기
+                    맛집 탐색
                   </Link>
                 </A>
               </Panel>

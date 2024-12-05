@@ -27,7 +27,7 @@ function App() {
 
   // 세션을 체크하는 함수 (API 호출)
   useEffect(() => {
-    const checkSession = async () => {
+    const checkSession = async (retries = 3) => {
       try {
         const response = await fetch(
           "https://maketerbackend.fly.dev/api/v1/check-session",
@@ -36,6 +36,10 @@ function App() {
             credentials: "include",
           }
         );
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
 
         const result = await response.json();
 
@@ -62,20 +66,25 @@ function App() {
           console.log("User is not authenticated");
         }
       } catch (error) {
-        // 에러 발생 시 상태 초기화
-        setAuth({
-          isAuthenticated: false,
-          userId: null,
-          username: "",
-          email: "",
-          full_name: "", // 수정: result가 없는 경우 기본값 사용
-        });
-        console.error("Error checking session:", error);
+        if (retries > 0) {
+          console.error("Retrying checkSession, attempts left:", retries - 1);
+          setTimeout(() => checkSession(retries - 1), 1000);
+        } else {
+          // 에러 발생 시 상태 초기화
+          setAuth({
+            isAuthenticated: false,
+            userId: null,
+            username: "",
+            email: "",
+            full_name: "", // 수정: result가 없는 경우 기본값 사용
+          });
+          console.error("Error checking session:", error);
+        }
       }
     };
 
     checkSession();
-  }, [setAuth]);
+  }, [setAuth]); // 빈 배열로 설정하여 컴포넌트가 마운트될 때마다 실행
 
   return (
     <BrowserRouter>

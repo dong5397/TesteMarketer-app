@@ -11,7 +11,7 @@ function WritePage() {
       return alert("제목과 내용을 모두 입력해주세요.");
     }
 
-    const now = new Date().toISOString(); // 현재 날짜와 시간 포맷
+    const now = new Date().toISOString();
     const dataToSend = {
       post_title: title,
       post_content: contents,

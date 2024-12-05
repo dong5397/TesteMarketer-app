@@ -2,6 +2,8 @@ import { DeviceFrameset } from "react-device-frameset";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { authState } from "../../state/userAtoms";
 
 function DetailPost() {
   const [post, setPost] = useState(null);
@@ -9,6 +11,7 @@ function DetailPost() {
   const [newComment, setNewComment] = useState("");
   const navigate = useNavigate();
   const { postId } = useParams();
+  const auth = useRecoilValue(authState); // 현재 로그인된 사용자 정보 가져오기
 
   useEffect(() => {
     // 게시물 가져오기
@@ -81,7 +84,7 @@ function DetailPost() {
 
   const handleDeleteComment = (post_id, comment_id) => {
     if (!comment_id) {
-      console.error("comment_id가 일치하지않습니다. ");
+      console.error("comment_id가 일치하지 않습니다.");
       return;
     }
 
@@ -111,6 +114,17 @@ function DetailPost() {
       .catch((error) => {
         console.error("Error deleting comment:", error);
       });
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return "Invalid Date";
+    }
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   };
 
   return (
@@ -156,15 +170,17 @@ function DetailPost() {
                             {comment.comment_text}
                           </CommentContent>
                           <CommentDate>
-                            {comment.comment_date.toLocaleString()}
-                          </CommentDate>
-                          <DeleteButton
-                            onClick={() =>
-                              handleDeleteComment(postId, comment.id)
-                            }
-                          >
-                            삭제
-                          </DeleteButton>
+                            {formatDate(comment.comment_date)}
+                          </CommentDate>{" "}
+                          {comment.author_id === auth.userId && (
+                            <DeleteButton
+                              onClick={() =>
+                                handleDeleteComment(postId, comment.id)
+                              }
+                            >
+                              삭제
+                            </DeleteButton>
+                          )}
                         </Comment>
                       ))}
                     </CommentList>

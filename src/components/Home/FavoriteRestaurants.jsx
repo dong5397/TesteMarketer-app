@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 function FavoriteRestaurants() {
   const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // 에러 상태 추가
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchFavoriteRestaurants = async () => {
+    const fetchFavoriteRestaurants = async (retries = 3) => {
       try {
         const response = await fetch(
           "https://maketerbackend.fly.dev/api/v1/restaurants/getlikes",
@@ -22,7 +22,7 @@ function FavoriteRestaurants() {
           }
         );
 
-        const text = await response.text(); // 응답 본문을 텍스트로 변환
+        const text = await response.text();
         console.log("서버 응답 본문:", text);
 
         if (!response.ok) {
@@ -31,16 +31,24 @@ function FavoriteRestaurants() {
           );
         }
 
-        const data = JSON.parse(text); // JSON으로 파싱
+        const data = JSON.parse(text);
         if (data.resultCode === "S-1") {
           setFavoriteRestaurants(data.data);
+          setError(null); // Clear previous errors
         } else {
           console.error("Failed to fetch favorite restaurants:", data.msg);
-          setError(data.msg || "Unknown error occurred");
+          throw new Error(data.msg || "Unknown error occurred");
         }
       } catch (error) {
-        console.error("Error fetching favorite restaurants:", error.message);
-        setError(error.message);
+        if (retries > 0) {
+          console.error(
+            "Retrying fetchFavoriteRestaurants, attempts left:",
+            retries - 1
+          );
+          setTimeout(() => fetchFavoriteRestaurants(retries - 1), 1000);
+        } else {
+          setError(error.message);
+        }
       } finally {
         setLoading(false);
       }
@@ -94,9 +102,9 @@ const Container = styled.div`
 
   @media screen and (max-width: 481px) {
     flex-wrap: nowrap;
-    overflow-x: auto; /* Enables horizontal scrolling */
-    overflow-y: hidden; /* Prevents vertical scrolling */
-    white-space: nowrap; /* Keeps children in a single line */
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
     margin: 0px;
     gap: 0px;
     max-height: calc(40vh);

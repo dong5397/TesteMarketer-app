@@ -98,7 +98,7 @@ const Container = styled.div`
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
-    margin-left: calc(10%);
+    margin-left: calc(5%);
     max-height: calc(40vh - 40px);
   }
 `;

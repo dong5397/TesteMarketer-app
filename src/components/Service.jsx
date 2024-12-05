@@ -125,7 +125,7 @@ const Service = ({ restaurantsData }) => {
 
   return (
     <Layout>
-      <DeviceFrameset device="iPad Mini" height="100%">
+      <DeviceFrameset device="iPad Mini" height="100%" width="80%">
         <Wrap>
           <LikertHeader>맛집 추천을 위한 설문조사</LikertHeader>
           <Progress>
@@ -274,10 +274,6 @@ const Service = ({ restaurantsData }) => {
 };
 
 export default Service;
-
-// 스타일 컴포넌트는 동일
-
-// 스타일 컴포넌트 정의
 const Layout = styled.div`
   display: flex;
   justify-content: center;
@@ -285,6 +281,10 @@ const Layout = styled.div`
   width: 100%;
   padding: 20px;
   flex-direction: column;
+
+  @media screen and (max-width: 768px) {
+    padding: 10px;
+  }
 `;
 
 const Wrap = styled.div`
@@ -293,6 +293,15 @@ const Wrap = styled.div`
   border: 5px solid black;
   width: 100%;
   padding: 20px;
+
+  @media screen and (max-width: 768px) {
+    border: 3px solid black;
+    padding: 15px;
+  }
+
+  @media screen and (max-width: 480px) {
+    padding: 10px;
+  }
 `;
 
 const LikertHeader = styled.h1`
@@ -300,6 +309,17 @@ const LikertHeader = styled.h1`
   margin: 20px 0 0;
   text-align: center;
   font-family: "GowunDodum-Regular";
+  font-size: 2rem;
+
+  @media screen and (max-width: 768px) {
+    font-size: 1.5rem;
+    padding-left: 3%;
+  }
+
+  @media screen and (max-width: 480px) {
+    font-size: 1.2rem;
+    padding-left: 2%;
+  }
 `;
 
 const Statement = styled.label`
@@ -309,6 +329,17 @@ const Statement = styled.label`
   padding: 30px 0 0 4.25%;
   margin-bottom: 25px;
   font-family: "GowunDodum-Regular";
+
+  @media screen and (max-width: 768px) {
+    font-size: 20px;
+    padding: 20px 0 0 3%;
+    margin-bottom: 20px;
+  }
+
+  @media screen and (max-width: 480px) {
+    font-size: 18px;
+    padding: 15px 0 0 2%;
+  }
 `;
 
 const LikertList = styled.ul`
@@ -321,6 +352,10 @@ const LikertList = styled.ul`
   &:last-of-type {
     border-bottom: 0;
   }
+
+  @media screen and (max-width: 768px) {
+    padding: 0 0 20px;
+  }
 `;
 
 const LikertItem = styled.li`
@@ -328,6 +363,15 @@ const LikertItem = styled.li`
   width: 20%;
   text-align: center;
   vertical-align: top;
+
+  @media screen and (max-width: 768px) {
+    width: 25%;
+  }
+
+  @media screen and (max-width: 480px) {
+    width: 50%; /* 작은 화면에서는 2줄로 나열 */
+    margin-bottom: 10px;
+  }
 `;
 
 const LikertInput = styled.input`
@@ -342,12 +386,29 @@ const LikertLabel = styled.label`
   width: 100%;
   font-family: "GowunDodum-Regular";
   font-size: 20px;
+
+  @media screen and (max-width: 768px) {
+    font-size: 18px;
+  }
+
+  @media screen and (max-width: 480px) {
+    font-size: 16px;
+  }
 `;
 
 const Buttons = styled.div`
   margin: 30px 0;
   padding: 0 4.25%;
   text-align: center;
+
+  @media screen and (max-width: 768px) {
+    margin: 20px 0;
+    padding: 0 3%;
+  }
+
+  @media screen and (max-width: 480px) {
+    margin: 15px 0;
+  }
 `;
 
 const BackButton = styled.button`
@@ -357,10 +418,21 @@ const BackButton = styled.button`
   border-radius: 5px;
   font-size: 14px;
   cursor: pointer;
+  margin-right: 10px;
 
   &:hover {
     background-color: #ccc;
     border-color: #ccc;
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 12px;
+    padding: 8px 16px;
+  }
+
+  @media screen and (max-width: 480px) {
+    font-size: 10px;
+    padding: 6px 12px;
   }
 `;
 
@@ -383,6 +455,16 @@ const SubmitButton = styled.button`
     border-color: #ccc;
     cursor: not-allowed;
   }
+
+  @media screen and (max-width: 768px) {
+    font-size: 12px;
+    padding: 8px 16px;
+  }
+
+  @media screen and (max-width: 480px) {
+    font-size: 10px;
+    padding: 6px 12px;
+  }
 `;
 
 const Progress = styled.div`
@@ -392,6 +474,16 @@ const Progress = styled.div`
   border-radius: 10px;
   margin-bottom: 20px;
   border: 2px solid black;
+
+  @media screen and (max-width: 768px) {
+    height: 15px;
+    margin-bottom: 15px;
+  }
+
+  @media screen and (max-width: 480px) {
+    height: 10px;
+    margin-bottom: 10px;
+  }
 `;
 
 const ProgressBar = styled.div`

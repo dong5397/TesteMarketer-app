@@ -20,7 +20,7 @@ function CommunityList() {
         return response.json();
       })
       .then((result) => {
-        const sortedPosts = result.data.sort((a, b) => a.post_id - b.post_id);
+        const sortedPosts = result.data.sort((a, b) => b.post_id - a.post_id);
         setPosts(sortedPosts);
       })
       .catch((error) => {
@@ -67,7 +67,7 @@ function CommunityList() {
             <PostContent>
               <RestaurantName>{post.title}</RestaurantName>
               <Date>작성자: {post.username}</Date>
-              <Date>날짜: {post.post_date}</Date>
+              <Date>날짜: {post.post_date.slice(0, 10)}</Date>
             </PostContent>
             <ButtonContainer>
               {post.author_id === auth.userId && (

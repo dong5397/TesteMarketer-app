@@ -236,7 +236,7 @@ const UpdateLocationButton = styled.img`
   cursor: pointer;
   z-index: 999;
   @media screen and (max-width: 481px) {
-    top: 36%;
+    top: 45%;
     right: 12%;
     width: 25px;
     height: 25px;
@@ -259,7 +259,7 @@ const FoodLocationButton = styled.img`
   cursor: pointer;
   z-index: 999;
   @media screen and (max-width: 481px) {
-    top: 40%;
+    top: 50%;
     right: 12%;
     width: 25px;
     height: 25px;

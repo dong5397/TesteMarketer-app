@@ -443,7 +443,6 @@ function AuthModal({ show, onClose, onLoginSuccess }) {
 
             {isLogin ? (
               <>
-                <Link to="/reset-password">비밀번호 재설정</Link>
                 <button type="submit">로그인</button>
                 <button type="button" onClick={() => setIsLogin(false)}>
                   회원가입

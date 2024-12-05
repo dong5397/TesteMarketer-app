@@ -198,6 +198,9 @@ const NavLink = styled(Link)`
   font-weight: bold;
   font-family: "GowunDodum-Regular";
   transition: transform 0.3s ease;
+  @media screen and (max-width: 768px) {
+    display: none; /* 모바일 화면에서 숨김 */
+  }
 
   &:hover {
     transform: scale(1.1);

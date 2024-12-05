@@ -62,7 +62,7 @@ const KakaoMap = () => {
 
     const mapOption = {
       center: new window.kakao.maps.LatLng(36.328468, 127.424753),
-      level: 6,
+      level: 7,
     };
 
     mapInstance.current = new window.kakao.maps.Map(

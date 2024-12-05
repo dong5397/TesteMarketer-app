@@ -2,9 +2,10 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import styled, { css, keyframes } from "styled-components";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { reviewsState } from "../../state/reviewAtoms";
 import RatingStars from "./RatingStars";
+import { authState } from "../../state/userAtoms";
 
 // bounceAnimation 애니메이션 정의
 const bounceAnimation = keyframes`
@@ -16,6 +17,7 @@ const bounceAnimation = keyframes`
 function ReviewItem({ review }) {
   const {
     review_id,
+    author_id,
     username,
     review_contents,
     review_date,
@@ -23,6 +25,8 @@ function ReviewItem({ review }) {
     rating,
   } = review;
   const [reviews, setReviews] = useRecoilState(reviewsState);
+  const auth = useRecoilValue(authState); // 현재 로그인된 사용자 정보 가져오기
+
   const [isClicked, setIsClicked] = useState(false);
 
   const formatDate = (dateString) => {
@@ -56,9 +60,11 @@ function ReviewItem({ review }) {
         ))}
       </HashTagsContainer>
       <ActionButtonsContainer>
-        <DeleteButton $isClicked={isClicked} onClick={reviewDeleteHandler}>
-          <TrashIcon icon={faTrash} size="2xl" $isClicked={isClicked} />
-        </DeleteButton>
+        {author_id === auth.userId && (
+          <DeleteButton $isClicked={isClicked} onClick={reviewDeleteHandler}>
+            <TrashIcon icon={faTrash} size="2xl" $isClicked={isClicked} />
+          </DeleteButton>
+        )}
       </ActionButtonsContainer>
     </ReviewItemContainer>
   );

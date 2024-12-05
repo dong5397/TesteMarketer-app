@@ -21,7 +21,7 @@ const FoodBox = () => {
   );
   const [loading, setLoading] = useRecoilState(loadingState);
   const [error, setError] = useRecoilState(errorState);
-  const [, setIsFromMapClick] = useRecoilState(isFromMapClickState); // 추가
+  const [, setIsFromMapClick] = useRecoilState(isFromMapClickState);
   const modalRef = useRef(null);
 
   useEffect(() => {
@@ -43,9 +43,13 @@ const FoodBox = () => {
   }, [setRestaurants, setLoading, setError]);
 
   const handleRestaurantClick = (restaurant) => {
-    setSelectedRestaurant(restaurant); // 클릭한 식당 정보를 상태에 저장
-    setIsFromMapClick(false); // 식당 박스를 클릭한 경우 false로 설정
-    setIsDetailModalOpen(true);
+    if (selectedRestaurant?.id === restaurant.id && isDetailModalOpen) {
+      setIsDetailModalOpen(false);
+    } else {
+      setSelectedRestaurant(restaurant);
+      setIsFromMapClick(false);
+      setIsDetailModalOpen(true);
+    }
   };
 
   const handleCloseDetails = () => {
@@ -65,7 +69,11 @@ const FoodBox = () => {
       {!loading &&
         !error &&
         restaurants.map((restaurant, index) => (
-          <Box key={index} onClick={() => handleRestaurantClick(restaurant)}>
+          <Box
+            key={index}
+            onClick={() => handleRestaurantClick(restaurant)}
+            onTouchStart={() => handleRestaurantClick(restaurant)}
+          >
             <h2>식당 이름: {restaurant.restaurants_name}</h2>
             <p>주소: {restaurant.address}</p>
             <p className="rating">평점: {restaurant.rating}</p>
@@ -98,7 +106,7 @@ const Container = styled.div`
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
-    margin-left: calc(5%);
+    margin-left: calc(10%);
     max-height: calc(40vh - 40px);
   }
 `;
@@ -184,9 +192,10 @@ const RestaurantDetails = styled.div`
   z-index: 9999999;
   width: 300px;
   top: 50%; /* 화면 아래쪽으로 70% */
-  left: 30%; /* 화면 오른쪽으로 70% */
+  left: 20%; /* 화면 오른쪽으로 70% */
   transform: translate(-50%, -50%); /* 위치 보정 */
   border-radius: 10px; /* 둥근 모서리 */
+
   padding: 20px; /* 내부 여백 */
 
   @media screen and (max-width: 768px) {

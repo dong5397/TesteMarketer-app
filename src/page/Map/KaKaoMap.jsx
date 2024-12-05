@@ -364,15 +364,20 @@ const MapContainer = styled.div`
 const FoodIndexContainer = styled.div`
   position: fixed;
   top: 50%;
-  left: 50%;
+  left: 60%;
   transform: translate(-50%, -50%);
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
   z-index: 100;
-  width: 300px;
-  height: auto;
+  width: 50%;
+  height: 90%;
   overflow-y: auto;
+  @media screen and (max-width: 481px) {
+    top: 40%;
+    left: 50%;
+    width: 60%;
+  }
 `;
 
 const UpdateLocationButton = styled.img`

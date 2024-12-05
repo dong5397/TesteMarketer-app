@@ -18,12 +18,17 @@ function MainListpage() {
   const navigate = useNavigate();
 
   // 글쓰기 버튼 클릭 시 실행되는 함수
-  const handleRoute = () => {
+  const handleWriteClick = () => {
     if (auth.isAuthenticated) {
       navigate("/MainWritePage");
     } else {
-      setShowOverlay(true); // 로그인되지 않은 경우 Overlay 표시
+      setShowOverlay(true);
     }
+  };
+
+  const handleLoginSuccess = () => {
+    setShowOverlay(false);
+    navigate("/MainWritePage");
   };
 
   // 검색 기능
@@ -68,7 +73,7 @@ function MainListpage() {
                 <Container>
                   <Header>
                     <h1>Community</h1>
-                    <Button onClick={handleRoute}>글쓰기</Button>
+                    <Button onClick={handleWriteClick}>글쓰기</Button>
                   </Header>
                   <SearchContainer>
                     <SearchInput

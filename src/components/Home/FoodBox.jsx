@@ -14,14 +14,13 @@ import FoodDetail from "./FoodDetail";
 const FoodBox = () => {
   const [restaurants, setRestaurants] = useRecoilState(restaurantsState);
   const [selectedRestaurant, setSelectedRestaurant] = useRecoilState(
-    selectedRestaurantFromButtonState // 수정된 부분
+    selectedRestaurantFromButtonState
   );
   const [isDetailModalOpen, setIsDetailModalOpen] = useRecoilState(
     isDetailModalOpenState
   );
   const [loading, setLoading] = useRecoilState(loadingState);
   const [error, setError] = useRecoilState(errorState);
-  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
   const [, setIsFromMapClick] = useRecoilState(isFromMapClickState); // 추가
   const modalRef = useRef(null);
 
@@ -43,11 +42,9 @@ const FoodBox = () => {
       });
   }, [setRestaurants, setLoading, setError]);
 
-  const handleRestaurantClick = (restaurant, event) => {
+  const handleRestaurantClick = (restaurant) => {
     setSelectedRestaurant(restaurant); // 클릭한 식당 정보를 상태에 저장
     setIsFromMapClick(false); // 식당 박스를 클릭한 경우 false로 설정
-    const { clientX, clientY } = event;
-    setModalPosition({ x: clientX, y: clientY });
     setIsDetailModalOpen(true);
   };
 
@@ -68,10 +65,7 @@ const FoodBox = () => {
       {!loading &&
         !error &&
         restaurants.map((restaurant, index) => (
-          <Box
-            key={index}
-            onClick={(event) => handleRestaurantClick(restaurant, event)}
-          >
+          <Box key={index} onClick={() => handleRestaurantClick(restaurant)}>
             <h2>식당 이름: {restaurant.restaurants_name}</h2>
             <p>주소: {restaurant.address}</p>
             <p className="rating">평점: {restaurant.rating}</p>
@@ -80,10 +74,7 @@ const FoodBox = () => {
         ))}
 
       {isDetailModalOpen && (
-        <RestaurantDetails
-          ref={modalRef}
-          style={{ top: `${modalPosition.y}px`, left: `${modalPosition.x}px` }}
-        >
+        <RestaurantDetails ref={modalRef}>
           <FoodDetail />
         </RestaurantDetails>
       )}
@@ -104,9 +95,9 @@ const Container = styled.div`
 
   @media screen and (max-width: 481px) {
     flex-wrap: nowrap;
-    overflow-x: auto; /* Enables horizontal scrolling */
-    overflow-y: hidden; /* Prevents vertical scrolling */
-    white-space: nowrap; /* Keeps children in a single line */
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
     margin-left: calc(10%);
     max-height: calc(40vh - 40px);
   }
@@ -130,9 +121,9 @@ const BaseBox = styled.div`
 const Box = styled(BaseBox)`
   cursor: pointer;
   display: flex;
-  flex-direction: column; /* Stack items vertically */
-  align-items: flex-start; /* Align items to the start */
-  gap: 5px; /* Add smaller space between elements */
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
   transition: transform 0.2s ease;
 
   &:hover {
@@ -140,7 +131,7 @@ const Box = styled(BaseBox)`
   }
 
   @media screen and (max-width: 481px) {
-    padding: 10px; /* Adjust padding for mobile */
+    padding: 10px;
     gap: 0;
   }
 
@@ -192,10 +183,17 @@ const RestaurantDetails = styled.div`
   position: fixed;
   z-index: 9999999;
   width: 300px;
-`;
-const LikeRestaurantDetails = styled.div`
-  border-color: #ccc;
-  position: fixed;
-  z-index: 9999999;
-  width: 300px;
+  top: 50%; /* 화면 아래쪽으로 70% */
+  left: 30%; /* 화면 오른쪽으로 70% */
+  transform: translate(-50%, -50%); /* 위치 보정 */
+  border-radius: 10px; /* 둥근 모서리 */
+  padding: 20px; /* 내부 여백 */
+
+  @media screen and (max-width: 768px) {
+    top: 80%; /* 태블릿에서는 아래쪽으로 조금 더 이동 */
+    left: 50%; /* 태블릿에서는 중앙 정렬 */
+    width: 280px; /* 태블릿 크기 조정 */
+    height: auto; /* 높이 자동 */
+    max-height: 60%; /* 최대 높이 제한 */
+  }
 `;

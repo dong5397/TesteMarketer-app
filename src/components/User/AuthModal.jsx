@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { authState } from "../../state/userAtoms";
 
-function AuthModal({ show, onClose }) {
+function AuthModal({ show, onClose, onLoginSuccess }) {
   const [loading, setLoading] = useState(false); // 로딩 상태 관리
   const [auth, setAuth] = useRecoilState(authState);
 

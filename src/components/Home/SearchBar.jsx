@@ -113,7 +113,8 @@ const SearchBar = ({ onRestaurantClick }) => {
 export default SearchBar;
 
 const Container = styled.div`
-  width: 100%;
+  width: 350px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -131,7 +132,7 @@ const SearchInput = styled.input`
   box-sizing: border-box;
   outline: none;
   transition: border-color 0.3s ease;
-  margin-left: 20px;
+  margin-left: 70px;
   @media screen and (max-width: 481px) {
     width: 108%;
     margin-left: 60px;

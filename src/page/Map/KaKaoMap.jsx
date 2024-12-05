@@ -10,7 +10,8 @@ import {
 import FoodIndex from "../../components/Home/FoodIndex"; // 모달에 사용할 컴포넌트
 import mark from "../../../public/images/mark.png";
 import markerImageSrc from "../../../public/images/start4.png";
-
+import locate from "../../../public/images/locate.png";
+import bicycle from "../../../public/images/bicycle.png";
 const KakaoMap = () => {
   const [selectedRestaurant, setSelectedRestaurant] = useRecoilState(
     selectedRestaurantFromMapState
@@ -296,12 +297,16 @@ const KakaoMap = () => {
       <H1>Maketer</H1>
       <H2>대전 전체의 맛집을 찾아줍니다</H2>
       <MapContainer ref={mapContainer} />
-      <UpdateLocationButton onClick={updateCurrentLocation}>
-        위치 갱신
-      </UpdateLocationButton>
-      <BicycleLocationButton onClick={goToBicycleLocation}>
-        자전거 위치 보기
-      </BicycleLocationButton>
+      <UpdateLocationButton
+        src={locate}
+        alt="Update Location"
+        onClick={updateCurrentLocation}
+      />
+      <BicycleLocationButton
+        src={bicycle}
+        alt="bicycle"
+        onClick={goToBicycleLocation}
+      ></BicycleLocationButton>
       {selectedRestaurant && (
         <FoodIndexContainer ref={modalRef}>
           <FoodIndex restaurant={selectedRestaurant} />
@@ -370,28 +375,48 @@ const FoodIndexContainer = styled.div`
   overflow-y: auto;
 `;
 
-const UpdateLocationButton = styled.button`
+const UpdateLocationButton = styled.img`
   position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 10px 10px;
-  background-color: #041c11;
-  color: white;
-  border: none;
-  border-radius: 5px;
+  top: 10%;
+  right: 12%;
+  width: 50px; /* 이미지 크기 */
+  height: 50px;
+  border-radius: 50%; /* 동그란 버튼 모양 */
   cursor: pointer;
   z-index: 999;
+  @media screen and (max-width: 481px) {
+    top: 21%;
+    right: 12%;
+    width: 25px;
+    height: 25px;
+  }
+
+  &:hover {
+    transform: scale(1.1); /* 호버 시 확대 효과 */
+
+    transition: transform 0.3s;
+  }
 `;
 
-const BicycleLocationButton = styled.button`
+const BicycleLocationButton = styled.img`
   position: absolute;
-  top: 50px;
-  right: 10px;
-  padding: 10px 10px;
-  background-color: #041c11;
-  color: white;
-  border: none;
-  border-radius: 5px;
+  top: 17%;
+  right: 12%;
+  width: 50px; /* 이미지 크기 */
+  height: 50px;
+
   cursor: pointer;
   z-index: 999;
+  @media screen and (max-width: 481px) {
+    top: 25%;
+    right: 12%;
+    width: 25px;
+    height: 25px;
+  }
+
+  &:hover {
+    transform: scale(1.1); /* 호버 시 확대 효과 */
+
+    transition: transform 0.3s;
+  }
 `;

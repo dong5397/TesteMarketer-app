@@ -70,7 +70,7 @@ const Home = () => {
             {isSearchOpen ? "닫기" : "검색"}
           </SearchButton>
           <LikeButton onClick={toggleFavorites}>
-            {showFavorites ? "닫기" : "선호식당"}
+            {showFavorites ? "닫기" : "선호"}
           </LikeButton>
         </>
       )}
@@ -88,7 +88,7 @@ const Home = () => {
 
       {showFavorites && (
         <FavoritesContainer>
-          <FavoritesHeader>선호 식당</FavoritesHeader>
+          <FavoritesHeader>선호식당</FavoritesHeader>
           <FavoriteRestaurants />
         </FavoritesContainer>
       )}
@@ -147,7 +147,7 @@ const ToggleButton = styled.button`
 
 const SearchButton = styled.button`
   position: absolute;
-  top: 80px;
+  top: 20px;
   left: 10px;
   background-color: #041c11;
   color: white;
@@ -160,8 +160,10 @@ const SearchButton = styled.button`
 
 const LikeButton = styled.button`
   position: absolute;
-  top: 130px;
+  top: 70px;
   left: 10px;
+  width: 50px;
+  height: 40px;
   background-color: #041c11;
   color: white;
   border: none;
@@ -184,7 +186,7 @@ const SearchContainer = styled.div`
 
 const FavoritesContainer = styled.div`
   position: absolute;
-  top: 170px;
+  top: 120px;
 
   width: calc(100% - 20px);
   background-color: #fff;
@@ -209,7 +211,8 @@ const FavoritesHeader = styled.h1`
   font-size: 24px;
   font-weight: bold;
   color: #333;
-  text-align: center;
+
+  text-align: center; /* 텍스트는 중앙 정렬 */
   margin-bottom: 20px;
   padding: 10px;
   border-bottom: 2px solid #ccc;
@@ -217,10 +220,15 @@ const FavoritesHeader = styled.h1`
   background-color: #e7e986;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 85%; /* 내용에 맞게 크기 조정 */
+  margin-left: auto; /* 박스를 오른쪽으로 이동 */
+  margin-right: 10px; /* 오른쪽 여백 추가 */
+
   @media screen and (max-width: 481px) {
     font-size: 18px; /* 더 작은 화면에서는 폰트 크기 줄임 */
     padding: 6px 12px; /* 패딩 더 줄임 */
     margin-bottom: 10px; /* 여백 더 줄임 */
     border-radius: 4px; /* 둥근 정도 더 줄임 */
+    margin-right: 5px; /* 모바일에서 오른쪽 여백 줄임 */
   }
 `;

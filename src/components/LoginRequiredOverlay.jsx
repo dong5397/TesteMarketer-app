@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { authState } from "../state/userAtoms";
@@ -7,10 +7,19 @@ import LoadingBurger from "./LoadingBurger";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const LoginRequiredOverlay = ({ onLoginSuccess }) => {
+const LoginRequiredOverlay = ({ onClose, onLoginSuccess }) => {
   const [auth, setAuth] = useRecoilState(authState);
   const { isAuthenticated, isLoading } = auth;
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      setShowAuthModal(false);
+      if (onLoginSuccess) {
+        onLoginSuccess(); // 로그인 성공 후 처리
+      }
+    }
+  }, [auth.isAuthenticated, onLoginSuccess]);
   // 콘솔 로그 추가
   useEffect(() => {
     console.log("현재 인증 상태: ", isAuthenticated);
@@ -81,21 +90,23 @@ const LoginRequiredOverlay = ({ onLoginSuccess }) => {
 
   return (
     <>
-      {isLoading && <LoadingBurger />}
-      <Overlay>
-        <OverlayContent>
-          <p>로그인이 필요합니다. 로그인 후 리뷰를 작성할 수 있습니다.</p>
-          <LoginButton onClick={handleLoginClick}>로그인</LoginButton>
-        </OverlayContent>
-      </Overlay>
-      {auth.showAuthModal && (
+      {!auth.isAuthenticated && (
+        <Overlay>
+          <OverlayContent>
+            <p>로그인이 필요합니다. 로그인 후 이용 가능합니다.</p>
+            <LoginButton onClick={() => setShowAuthModal(true)}>
+              로그인
+            </LoginButton>
+          </OverlayContent>
+        </Overlay>
+      )}
+      {showAuthModal && (
         <AuthModal
-          show={auth.showAuthModal}
-          onClose={closeAuthModal}
-          setAuth={handleLoginSuccess}
+          show={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          onLoginSuccess={onLoginSuccess}
         />
       )}
-      <ToastContainer position="top-right" />
     </>
   );
 };

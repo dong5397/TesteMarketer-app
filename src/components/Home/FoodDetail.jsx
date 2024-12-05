@@ -84,20 +84,35 @@ function FoodDetail() {
 export default FoodDetail;
 
 // 스타일 컴포넌트
+// 스타일 컴포넌트
 const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   background: none;
+  padding: 20px;
+
+  @media screen and (max-width: 768px) {
+    padding: 10px; /* 모바일에서 여백 조정 */
+  }
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* 세로 정렬 */
   align-items: center;
   justify-content: center;
-  gap: 15px;
+  gap: 15px; /* 버튼 간 간격 */
   border-radius: 10px;
+  padding: 10px;
+
+  @media screen and (max-width: 481px) {
+    flex-direction: column; /* 모바일에서도 세로 정렬 */
+    align-items: center;
+    justify-content: center;
+    width: 100%; /* 가로 전체 */
+    height: auto;
+  }
 `;
 
 const Button = styled.button`
@@ -123,5 +138,12 @@ const Button = styled.button`
   &:active {
     background-color: #9d9d4d;
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  @media screen and (max-width: 481px) {
+    width: 40%; /* 버튼 크기를 줄임 */
+    padding: 8px 5px; /* 패딩 조정 */
+    font-size: 10px; /* 폰트 크기 조정 */
+    border-radius: 6px; /* 버튼 모서리 조정 */
   }
 `;

@@ -100,10 +100,14 @@ function MainListpage() {
 
 export default MainListpage;
 
-// 스타일 컴포넌트는 그대로 유지
 const MainContainer = styled.div`
-  height: 1200px;
+  height: 100%;
   background: linear-gradient(#e7e78b, #f0f0c3);
+
+  @media screen and (max-width: 768px) {
+    height: auto;
+    padding: 20px;
+  }
 `;
 
 const StyledContainer = styled.div`
@@ -116,10 +120,19 @@ const StyledContainer = styled.div`
 const DivContainer = styled.div`
   flex: 1;
   display: flex;
+  flex-direction: column;
+
+  @media screen and (max-width: 768px) {
+    margin-bottom: 20px;
+  }
 `;
 
 const DeviceContent = styled.div`
   flex: 1;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const Container = styled.div`
@@ -134,6 +147,15 @@ const Header = styled.header`
   text-align: center;
   font-size: 1.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  @media screen and (max-width: 768px) {
+    font-size: 1.2rem;
+    padding: 15px;
+  }
+
+  @media screen and (max-width: 480px) {
+    font-size: 1rem;
+  }
 `;
 
 const Button = styled.button`
@@ -146,23 +168,51 @@ const Button = styled.button`
   cursor: pointer;
   margin-top: 20px;
   align-self: center;
+
   &:hover {
     background-color: #357e7e;
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+
+  @media screen and (max-width: 480px) {
+    font-size: 0.8rem;
+    padding: 6px 12px;
   }
 `;
 
 const ListPageWrapper = styled.div`
   max-width: 1000px;
-  height: 1000px;
+  height: 100%;
   margin: 0 auto;
   padding: 20px;
   gap: 100px;
+
+  @media screen and (max-width: 768px) {
+    padding: 10px;
+  }
+
+  @media screen and (max-width: 480px) {
+    padding: 5px;
+  }
 `;
 
 const SearchContainer = styled.div`
   display: flex;
   justify-content: center;
   margin: 20px 0;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @media screen and (max-width: 480px) {
+    margin: 15px 0;
+  }
 `;
 
 const SearchInput = styled.input`
@@ -172,6 +222,15 @@ const SearchInput = styled.input`
   border: 1px solid #ddd;
   border-radius: 4px;
   margin-right: 10px;
+
+  @media screen and (max-width: 768px) {
+    width: 80%;
+    margin-bottom: 10px;
+  }
+
+  @media screen and (max-width: 480px) {
+    width: 90%;
+  }
 `;
 
 const SearchButton = styled.button`
@@ -185,6 +244,16 @@ const SearchButton = styled.button`
 
   &:hover {
     background-color: #357e7e;
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+
+  @media screen and (max-width: 480px) {
+    font-size: 0.8rem;
+    padding: 6px 12px;
   }
 `;
 
@@ -209,5 +278,13 @@ const ScrollableList = styled.div`
 
   &::-webkit-scrollbar-thumb:hover {
     background: #555;
+  }
+
+  @media screen and (max-width: 768px) {
+    padding-left: 10px;
+  }
+
+  @media screen and (max-width: 480px) {
+    padding-left: 5px;
   }
 `;

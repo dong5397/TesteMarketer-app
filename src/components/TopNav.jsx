@@ -4,7 +4,7 @@ import {
   faHome,
   faUtensils,
   faPen,
-  faCog,
+  faComment,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
@@ -26,7 +26,10 @@ const TopNav = () => {
           <FontAwesomeIcon icon={faPen} />
           <span>리뷰작성</span>
         </NavItem>
-
+        <NavItem to="/MainListPage">
+          <FontAwesomeIcon icon={faComment} />
+          <span>커뮤</span>
+        </NavItem>
         <NavItem to="/mypage">
           <FontAwesomeIcon icon={faUser} />
           <span>프로필</span>

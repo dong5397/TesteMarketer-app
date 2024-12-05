@@ -2,8 +2,6 @@ import { DeviceFrameset } from "react-device-frameset";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { authState } from "../../state/userAtoms";
 
 function DetailPost() {
   const [post, setPost] = useState(null);
@@ -11,7 +9,6 @@ function DetailPost() {
   const [newComment, setNewComment] = useState("");
   const navigate = useNavigate();
   const { postId } = useParams();
-  const auth = useRecoilValue(authState); // 현재 로그인된 사용자 정보 가져오기
 
   useEffect(() => {
     // 게시물 가져오기
@@ -84,7 +81,7 @@ function DetailPost() {
 
   const handleDeleteComment = (post_id, comment_id) => {
     if (!comment_id) {
-      console.error("comment_id가 일치하지 않습니다.");
+      console.error("comment_id가 일치하지않습니다. ");
       return;
     }
 
@@ -114,17 +111,6 @@ function DetailPost() {
       .catch((error) => {
         console.error("Error deleting comment:", error);
       });
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    if (isNaN(date.getTime())) {
-      return "Invalid Date";
-    }
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
   };
 
   return (
@@ -170,17 +156,15 @@ function DetailPost() {
                             {comment.comment_text}
                           </CommentContent>
                           <CommentDate>
-                            {formatDate(comment.comment_date)}
-                          </CommentDate>{" "}
-                          {comment.author_id === auth.userId && (
-                            <DeleteButton
-                              onClick={() =>
-                                handleDeleteComment(postId, comment.id)
-                              }
-                            >
-                              삭제
-                            </DeleteButton>
-                          )}
+                            {comment.comment_date.slice(0, 10)}
+                          </CommentDate>
+                          <DeleteButton
+                            onClick={() =>
+                              handleDeleteComment(postId, comment.id)
+                            }
+                          >
+                            삭제
+                          </DeleteButton>
                         </Comment>
                       ))}
                     </CommentList>
@@ -201,6 +185,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
 const Header = styled.header`
   padding: 20px;
   background-color: #e9e5a9;
@@ -208,7 +193,12 @@ const Header = styled.header`
   text-align: center;
   font-size: 1.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+    padding: 15px;
+  }
 `;
+
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -222,7 +212,7 @@ const DivContainer = styled.div`
 `;
 
 const MainContainer = styled.div`
-  height: 1200px;
+  height: 100vh;
   background: linear-gradient(#e7e78b, #f0f0c3);
 `;
 
@@ -240,13 +230,22 @@ const Button = styled.button`
   cursor: pointer;
   margin-top: 20px;
   align-self: center;
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
 `;
+
 const WritePageWrapper = styled.div`
   max-width: 1000px;
-  height: 1000px;
+  height: 100%;
   margin: 0 auto;
   padding: 20px;
   gap: 100px;
+  @media (max-width: 768px) {
+    padding: 10px;
+    gap: 50px;
+  }
 `;
 
 const PostContainer = styled.div`
@@ -255,25 +254,37 @@ const PostContainer = styled.div`
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-top: 20px;
-  width: auto;
-  height: auto;
   max-width: 100%;
   max-height: 100%;
   overflow: auto;
+
+  @media (max-width: 768px) {
+    padding: 15px;
+    margin-top: 10px;
+  }
 `;
 
 const PostTitle = styled.h2`
   font-size: 24px;
   margin-bottom: 10px;
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 `;
 
 const PostContent = styled.p`
   font-size: 18px;
   line-height: 1.6;
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 
 const CommentSection = styled.div`
   margin-top: 20px;
+  @media (max-width: 768px) {
+    margin-top: 15px;
+  }
 `;
 
 const CommentForm = styled.form`
@@ -288,6 +299,11 @@ const CommentInput = styled.input`
   border-radius: 5px;
   border: 1px solid #ccc;
   margin-bottom: 10px;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    padding: 8px;
+  }
 `;
 
 const CommentButton = styled.button`
@@ -302,11 +318,20 @@ const CommentButton = styled.button`
   &:hover {
     background-color: #357e7e;
   }
+
+  @media (max-width: 768px) {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
 `;
 
 const CommentList = styled.div`
-  max-height: 300px; /* Adjust the height as needed */
+  max-height: 300px;
   overflow-y: auto;
+
+  @media (max-width: 768px) {
+    max-height: 200px;
+  }
 `;
 
 const Comment = styled.div`
@@ -314,17 +339,29 @@ const Comment = styled.div`
   background-color: #f1f1f1;
   border-radius: 5px;
   margin-bottom: 10px;
+
+  @media (max-width: 768px) {
+    padding: 8px;
+  }
 `;
 
 const CommentContent = styled.p`
   font-size: 16px;
   margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 const CommentDate = styled.span`
   font-size: 12px;
   color: #666;
   margin-top: 5px;
+
+  @media (max-width: 768px) {
+    font-size: 10px;
+  }
 `;
 
 const DeleteButton = styled.button`
@@ -338,5 +375,10 @@ const DeleteButton = styled.button`
 
   &:hover {
     background-color: #357e7e;
+  }
+
+  @media (max-width: 768px) {
+    padding: 6px 10px;
+    font-size: 0.8rem;
   }
 `;

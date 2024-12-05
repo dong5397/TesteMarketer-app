@@ -3,6 +3,8 @@ import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import markerImageSrc from "../../../public/images/start4.png";
+import locate from "../../../public/images/locate.png";
+import food from "../../../public/images/food.png";
 const KakaoMap2 = ({ setMapMoveFunction }) => {
   const [kakao, setKakao] = useState(null);
   const mapContainer = useRef(null);
@@ -167,12 +169,17 @@ const KakaoMap2 = ({ setMapMoveFunction }) => {
       <H1>Maketer</H1>
       <H2>대전 전체의 맛집을 찾아줍니다</H2>
       <MapContainer id="map" ref={mapContainer} />
-      <UpdateLocationButton onClick={updateCurrentLocation}>
-        위치 갱신
-      </UpdateLocationButton>
-      <FoodLocationButton onClick={goToFoodLocation}>
-        식당 위치 보기
-      </FoodLocationButton>
+
+      <UpdateLocationButton
+        src={locate}
+        alt="Update Location"
+        onClick={updateCurrentLocation}
+      />
+      <FoodLocationButton
+        src={food}
+        alt="food"
+        onClick={goToFoodLocation}
+      ></FoodLocationButton>
     </Container>
   );
 };
@@ -219,28 +226,48 @@ const MapContainer = styled.div`
   border: 5px solid black;
 `;
 
-const UpdateLocationButton = styled.button`
+const UpdateLocationButton = styled.img`
   position: absolute;
-  top: 100px;
-  right: 10px;
-  padding: 10px 10px;
-  background-color: #041c11;
-  color: white;
-  border: none;
-  border-radius: 5px;
+  top: 18%;
+  right: 12%;
+  width: 50px; /* 이미지 크기 */
+  height: 50px;
+  border-radius: 50%; /* 동그란 버튼 모양 */
   cursor: pointer;
   z-index: 999;
+  @media screen and (max-width: 481px) {
+    top: 32%;
+    right: 12%;
+    width: 25px;
+    height: 25px;
+  }
+
+  &:hover {
+    transform: scale(1.1); /* 호버 시 확대 효과 */
+
+    transition: transform 0.3s;
+  }
 `;
 
-const FoodLocationButton = styled.button`
+const FoodLocationButton = styled.img`
   position: absolute;
-  top: 140px;
-  right: 10px;
-  padding: 10px 10px;
-  background-color: #041c11;
-  color: white;
-  border: none;
-  border-radius: 5px;
+  top: 25%;
+  right: 12%;
+  width: 50px; /* 이미지 크기 */
+  height: 50px;
+
   cursor: pointer;
   z-index: 999;
+  @media screen and (max-width: 481px) {
+    top: 37%;
+    right: 12%;
+    width: 25px;
+    height: 25px;
+  }
+
+  &:hover {
+    transform: scale(1.1); /* 호버 시 확대 효과 */
+
+    transition: transform 0.3s;
+  }
 `;

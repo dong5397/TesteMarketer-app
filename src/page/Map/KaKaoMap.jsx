@@ -377,7 +377,7 @@ const FoodIndexContainer = styled.div`
 
 const UpdateLocationButton = styled.img`
   position: absolute;
-  top: 10%;
+  top: 8%;
   right: 12%;
   width: 50px; /* 이미지 크기 */
   height: 50px;

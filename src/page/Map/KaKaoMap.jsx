@@ -385,7 +385,7 @@ const UpdateLocationButton = styled.img`
   cursor: pointer;
   z-index: 999;
   @media screen and (max-width: 481px) {
-    top: 21%;
+    top: 25%;
     right: 12%;
     width: 25px;
     height: 25px;
@@ -408,7 +408,7 @@ const BicycleLocationButton = styled.img`
   cursor: pointer;
   z-index: 999;
   @media screen and (max-width: 481px) {
-    top: 25%;
+    top: 30%;
     right: 12%;
     width: 25px;
     height: 25px;

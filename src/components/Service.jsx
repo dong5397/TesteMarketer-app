@@ -110,6 +110,7 @@ const Service = ({ restaurantsData }) => {
 
       if (response.ok) {
         console.log("Favorite restaurants saved successfully");
+        navigate("/food");
       } else {
         const error = await response.json();
         console.error("Failed to save favorite restaurants:", error.msg);

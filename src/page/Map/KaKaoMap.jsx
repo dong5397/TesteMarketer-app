@@ -367,10 +367,10 @@ const FoodIndexContainer = styled.div`
   left: 60%;
   transform: translate(-50%, -50%);
   border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
   padding: 20px;
   z-index: 100;
-  width: 50%;
+
   height: 90%;
   overflow-y: auto;
   @media screen and (max-width: 481px) {
